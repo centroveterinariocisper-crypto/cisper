@@ -147,9 +147,9 @@ button.link { background: none; border: 0; color: var(--muted); text-decoration:
     <p>Centro Veterinário Cisper</p>
     <p id="pergQuem">Quem vai usar agora? Toque no seu nome.</p>
     <div class="quem3" id="quem3">
-      <button type="button" class="pessoa" data-p="debora" style="--c1:var(--debora);--c2:var(--debora-2)" aria-pressed="false"><span class="bola">D</span>Débora<small>Manhã</small><span class="ok"></span></button>
-      <button type="button" class="pessoa" data-p="duda" style="--c1:var(--duda);--c2:var(--duda-2)" aria-pressed="false"><span class="bola">D</span>Duda<small>Tarde</small><span class="ok"></span></button>
-      <button type="button" class="pessoa" data-p="adm" style="--c1:var(--adm);--c2:var(--adm-2)" aria-pressed="false"><span class="bola">P</span>Paulo<small>Adm</small><span class="ok"></span></button>
+      <button type="button" class="pessoa" data-p="debora" style="--c1:var(--debora);--c2:var(--debora-2)" aria-pressed="false"><span class="bola">D</span>Débora<small>Manhã</small></button>
+      <button type="button" class="pessoa" data-p="duda" style="--c1:var(--duda);--c2:var(--duda-2)" aria-pressed="false"><span class="bola">D</span>Duda<small>Tarde</small></button>
+      <button type="button" class="pessoa" data-p="adm" style="--c1:var(--adm);--c2:var(--adm-2)" aria-pressed="false"><span class="bola">P</span>Paulo<small>Adm</small></button>
     </div>
     <p id="txtSenha">Digite a <b>sua</b> senha para entrar.</p>
     <div class="campo">
@@ -315,7 +315,7 @@ async function usarEnv(env) {
   const senha = ls.get('cisper-senha', '');
   if (!senha) { pedirSenha(); return; }
   try { const d = await abrir(ENV, senha); ls.set('cisper-lista', JSON.stringify(ENV)); entrar(d); }
-  catch (e) { ls.del('cisper-senha'); if (eu) esquecer(eu); pedirSenha('A senha mudou. Digite a sua senha.'); }
+  catch (e) { ls.del('cisper-senha'); pedirSenha('A senha mudou. Digite a sua senha.'); }
 }
 async function carregar(manual) {
   try { await usarEnv(await baixar()); }
@@ -441,17 +441,11 @@ function cartaoFeito(i) {
 }
 
 // ---- entrada e troca de pessoa
-// Senhas da Débora e da Duda ficam lembradas neste celular, para trocar com um toque. A do Paulo nunca fica.
-const salvas = () => { try { return JSON.parse(ls.get('cisper-salvas', '{}')) || {}; } catch (e) { return {}; } };
-const guardar = (quem, s) => { const o = salvas(); if (quem === 'debora' || quem === 'duda') { o[quem] = s; ls.set('cisper-salvas', JSON.stringify(o)); } };
-const esquecer = (quem) => { const o = salvas(); delete o[quem]; ls.set('cisper-salvas', JSON.stringify(o)); };
+// Cada pessoa sempre digita a própria senha ao trocar. Nenhuma senha fica lembrada para a troca.
+ls.del('cisper-salvas');
 let escolhido = '';
 function marcarPessoas() {
-  const o = salvas();
-  document.querySelectorAll('#quem3 .pessoa').forEach((b) => {
-    b.setAttribute('aria-pressed', b.dataset.p === escolhido ? 'true' : 'false');
-    b.querySelector('.ok').textContent = o[b.dataset.p] ? '✓ entra direto' : '';
-  });
+  document.querySelectorAll('#quem3 .pessoa').forEach((b) => b.setAttribute('aria-pressed', b.dataset.p === escolhido ? 'true' : 'false'));
   const nomes = { debora: 'da Débora', duda: 'da Duda', adm: 'do Paulo' };
   $('txtSenha').innerHTML = escolhido ? 'Digite a senha <b>' + nomes[escolhido] + '</b>.' : 'Digite a <b>sua</b> senha para entrar.';
 }
@@ -459,20 +453,13 @@ async function entrarCom(s) {
   if (!ENV) ENV = await baixar();
   let d, env = ENV;
   try { d = await abrir(env, s); } catch (e) { env = await baixar(); d = await abrir(env, s); }
-  ENV = env; ls.set('cisper-senha', s); ls.set('cisper-lista', JSON.stringify(ENV)); guardar(d.quem, s);
+  ENV = env; ls.set('cisper-senha', s); ls.set('cisper-lista', JSON.stringify(ENV));
   $('trava').hidden = true; $('senha').value = ''; $('senha').type = 'password'; $('btOlho').setAttribute('aria-pressed', 'false');
   if (d.quem === 'adm') quem = 'todos';
   entrar(d); window.scrollTo(0, 0);
 }
-document.querySelectorAll('#quem3 .pessoa').forEach((b) => b.addEventListener('click', async () => {
-  escolhido = b.dataset.p; marcarPessoas(); $('erroSenha').textContent = '';
-  const s = salvas()[escolhido];
-  if (s) {
-    $('erroSenha').textContent = 'Abrindo…';
-    try { await entrarCom(s); $('erroSenha').textContent = ''; return; }
-    catch (e) { esquecer(escolhido); marcarPessoas(); $('erroSenha').textContent = 'A senha mudou. Digite a senha nova.'; }
-  }
-  $('senha').focus();
+document.querySelectorAll('#quem3 .pessoa').forEach((b) => b.addEventListener('click', () => {
+  escolhido = b.dataset.p; marcarPessoas(); $('erroSenha').textContent = ''; $('senha').value = ''; $('senha').focus();
 }));
 function pedirSenha(erro) { escolhido = ''; marcarPessoas(); $('trava').hidden = false; $('erroSenha').textContent = erro || ''; }
 $('fTrava').addEventListener('submit', async (ev) => {

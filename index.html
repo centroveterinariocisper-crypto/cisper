@@ -6,95 +6,126 @@
 <title>Cisper</title>
 <meta name="description" content="Mensagens do dia da recepção do Centro Veterinário Cisper">
 <meta name="robots" content="noindex,nofollow">
-<meta name="theme-color" content="#1B2A6B">
+<meta name="theme-color" content="#ffffff">
+<meta name="color-scheme" content="light">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Cisper">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <style>
-/* Uma coluna de trabalho: faixa azul da marca no topo, escolha do dia e da pessoa, cartões de contato */
+/* Tela única de trabalho: cabeçalho branco com quem está usando, painel "sua lista de hoje", cartões a fazer, depois os feitos */
 :root {
-  --navy: #1B2A6B; --teal: #3DBFB8; --teal-ink: #1f7f7a;
-  --bg: #f2f5f7; --card: #ffffff; --ink: #18213f; --muted: #5d6680; --line: #dfe4ec;
-  --soft: #e6f5f4; --wa: #1f8a4c; --warn: #9a5b00; --warnsoft: #fbefd9; --done: #edf0f3; --bad: #b3362f;
+  --navy: #1B2A6B; --teal: #2fa9a3; --teal-soft: #e5f6f5;
+  --bg: #ffffff; --surface: #f5f7fa; --ink: #18213f; --muted: #66708a; --line: #e4e8ef;
+  --wa: #1f9d55; --ok: #1f9d55; --ok-soft: #e7f6ee; --warn: #b26a00; --warn-soft: #fff3df; --bad: #c0392b;
+  --debora: #2fa9a3; --duda: #6b5bd2; --adm: #1B2A6B;
+  color-scheme: light;
 }
-@media (prefers-color-scheme: dark) { :root {
-  --bg: #0f1424; --card: #182037; --ink: #e8ecf6; --muted: #9aa4bf; --line: #2a3452;
-  --soft: #16302f; --wa: #2fa463; --warn: #e6ad55; --warnsoft: #33281a; --done: #141a2d; --bad: #f08a80; --teal-ink: #6fd6cf;
-  color-scheme: dark; } }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 [hidden] { display: none !important; }
-html, body { margin: 0; }
-body { background: var(--bg); color: var(--ink); font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; min-height: 100vh; }
-.topo { background: var(--navy); color: #fff; padding: calc(env(safe-area-inset-top, 0px) + 14px) max(16px, env(safe-area-inset-right, 0px)) 14px max(16px, env(safe-area-inset-left, 0px)); position: sticky; top: 0; z-index: 5; box-shadow: 0 2px 10px rgba(0,0,0,.15); }
-.topo-in { max-width: 640px; margin: 0 auto; display: flex; align-items: center; gap: 12px; }
-.topo img { width: 44px; height: 44px; border-radius: 12px; background: #fff; flex: 0 0 auto; }
-.topo h1 { margin: 0; font-size: 19px; line-height: 1.2; }
-.topo .sub { font-size: 13px; opacity: .8; }
+html, body { margin: 0; background: var(--bg); }
+body { color: var(--ink); font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; min-height: 100vh; }
+button { font: inherit; cursor: pointer; }
+button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+
+.topo { position: sticky; top: 0; z-index: 5; background: rgba(255,255,255,.96); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); padding: calc(env(safe-area-inset-top, 0px) + 10px) max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px)); }
+.topo-in { max-width: 620px; margin: 0 auto; display: flex; align-items: center; gap: 10px; }
+.topo img { width: 40px; height: 40px; border-radius: 10px; flex: 0 0 auto; }
 .topo .tit { flex: 1; min-width: 0; }
-.topo button { font: inherit; font-size: 14px; color: #fff; background: rgba(255,255,255,.14); border: 0; border-radius: 99px; padding: 8px 12px; cursor: pointer; }
-.wrap { max-width: 640px; margin: 0 auto; padding: 14px max(16px, env(safe-area-inset-right, 0px)) calc(env(safe-area-inset-bottom, 0px) + 40px) max(16px, env(safe-area-inset-left, 0px)); display: flex; flex-direction: column; gap: 14px; }
+.topo h1 { margin: 0; font-size: 17px; color: var(--navy); line-height: 1.15; }
+.topo .sub { font-size: 12px; color: var(--muted); }
+.perfil { display: inline-flex; align-items: center; gap: 6px; border-radius: 99px; padding: 6px 12px 6px 6px; font-size: 14px; font-weight: 700; color: #fff; background: var(--cor, var(--navy)); border: 0; white-space: nowrap; }
+.perfil .ini { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,.25); display: grid; place-items: center; font-size: 13px; }
+
+.wrap { max-width: 620px; margin: 0 auto; padding: 14px max(16px, env(safe-area-inset-right, 0px)) calc(env(safe-area-inset-bottom, 0px) + 48px) max(16px, env(safe-area-inset-left, 0px)); display: flex; flex-direction: column; gap: 14px; }
+
+.painel { border-radius: 18px; padding: 16px; color: #fff; background: var(--cor, var(--navy)); display: flex; flex-direction: column; gap: 10px; box-shadow: 0 6px 18px rgba(27,42,107,.12); }
+.painel .ola { font-size: 20px; font-weight: 800; margin: 0; }
+.painel .info { font-size: 14px; opacity: .92; margin: 0; }
+.painel .conta { display: flex; align-items: baseline; gap: 8px; }
+.painel .conta b { font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; }
+.painel .conta span { font-size: 15px; opacity: .92; }
+.painel .bar { height: 10px; background: rgba(255,255,255,.28); border-radius: 99px; overflow: hidden; }
+.painel .bar i { display: block; height: 100%; width: 0; background: #fff; border-radius: 99px; transition: width .4s; }
+.painel.fim { background: var(--ok); }
+
+.linha-chips { display: flex; flex-direction: column; gap: 6px; }
+.rotulo { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
 .chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
 .chips::-webkit-scrollbar { display: none; }
-.chips button { flex: 0 0 auto; border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 99px; padding: 8px 13px; font: inherit; font-size: 14px; cursor: pointer; }
-.chips button.on { background: var(--navy); color: #fff; border-color: var(--navy); font-weight: 600; }
-@media (prefers-color-scheme: dark) { .chips button.on { background: var(--teal); color: #0f1424; border-color: var(--teal); } }
-.prog { font-size: 15px; }
-.bar { height: 8px; background: var(--line); border-radius: 99px; overflow: hidden; margin-top: 6px; }
-.bar i { display: block; height: 100%; width: 0; background: var(--teal); transition: width .3s; }
-.dica { background: var(--soft); border-radius: 12px; padding: 12px 14px; font-size: 14px; }
-.dica summary { cursor: pointer; font-weight: 700; }
-.dica ol, .dica ul { margin: 8px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 5px; }
-h2 { font-size: 16px; margin: 8px 0 0; color: var(--navy); }
-@media (prefers-color-scheme: dark) { h2 { color: var(--teal-ink); } }
-.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
-.card.feito { background: var(--done); }
-.card.feito .nome, .card.feito .det { opacity: .55; }
-.nome { font-weight: 700; font-size: 17px; overflow-wrap: anywhere; }
-.det { color: var(--muted); font-size: 14px; overflow-wrap: anywhere; }
-.tag { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; background: var(--warnsoft); color: var(--warn); border-radius: 99px; padding: 2px 8px; margin-right: 6px; vertical-align: 2px; }
-a.wa { display: block; text-align: center; background: var(--wa); color: #fff; text-decoration: none; font-weight: 700; padding: 13px; border-radius: 12px; font-size: 16px; }
-.linha { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
-.linha button { border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 8px; padding: 7px 11px; font: inherit; font-size: 14px; cursor: pointer; }
-.ok { color: var(--teal-ink); font-weight: 700; font-size: 14px; }
-.semtel { color: var(--bad); font-size: 14px; }
-details.msg summary { color: var(--muted); font-size: 13px; cursor: pointer; }
-details.msg p { margin: 6px 0 0; background: var(--bg); padding: 10px; border-radius: 8px; font-size: 14px; white-space: pre-wrap; }
-.vazio { color: var(--muted); background: var(--card); border: 1px dashed var(--line); border-radius: 14px; padding: 18px; }
-.aviso { color: var(--bad); font-size: 14px; }
+.chips button { flex: 0 0 auto; border: 1px solid var(--line); background: var(--bg); color: var(--ink); border-radius: 99px; padding: 8px 14px; font-size: 14px; }
+.chips button.on { background: var(--navy); color: #fff; border-color: var(--navy); font-weight: 700; }
+
+.secao { font-size: 15px; font-weight: 800; color: var(--navy); margin: 6px 0 -4px; display: flex; align-items: center; gap: 8px; }
+.secao .n { background: var(--surface); color: var(--muted); border-radius: 99px; padding: 1px 9px; font-size: 13px; }
+
+.card { background: var(--bg); border: 1px solid var(--line); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 1px 3px rgba(24,33,63,.06); border-left: 5px solid var(--tipo, var(--line)); }
+.card .tipo { align-self: flex-start; font-size: 12px; font-weight: 800; letter-spacing: .02em; border-radius: 99px; padding: 3px 10px; background: var(--tipo-soft, var(--surface)); color: var(--tipo-ink, var(--muted)); }
+.card .nome { font-weight: 800; font-size: 18px; line-height: 1.25; overflow-wrap: anywhere; }
+.card .det { color: var(--muted); font-size: 14px; overflow-wrap: anywhere; margin-top: -6px; }
+.card .alerta { display: inline-block; font-size: 12px; font-weight: 800; background: var(--warn-soft); color: var(--warn); border-radius: 6px; padding: 1px 7px; margin-left: 6px; vertical-align: 2px; }
+.passos { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+a.wa, button.feito { display: flex; align-items: center; justify-content: center; gap: 6px; text-align: center; text-decoration: none; font-weight: 800; padding: 13px 8px; border-radius: 12px; font-size: 15px; line-height: 1.2; }
+a.wa { background: var(--wa); color: #fff; }
+button.feito { background: var(--bg); color: var(--ok); border: 2px solid var(--ok); }
+.passos .num { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; font-size: 12px; background: rgba(255,255,255,.25); }
+button.feito .num { background: var(--ok-soft); }
+.semtel { grid-column: 1 / -1; color: var(--bad); font-size: 14px; background: #fdeceb; border-radius: 10px; padding: 10px; }
+details.msg summary { color: var(--muted); font-size: 13px; cursor: pointer; list-style: none; }
+details.msg summary::before { content: "▸ "; }
+details.msg[open] summary::before { content: "▾ "; }
+details.msg p { margin: 6px 0 0; background: var(--surface); padding: 10px 12px; border-radius: 10px; font-size: 14px; white-space: pre-wrap; }
+
+.card.ok { background: var(--ok-soft); border-color: #cfe9da; border-left-color: var(--ok); box-shadow: none; padding: 10px 14px; flex-direction: row; align-items: center; gap: 10px; }
+.card.ok .check { width: 30px; height: 30px; flex: 0 0 auto; border-radius: 50%; background: var(--ok); color: #fff; display: grid; place-items: center; font-weight: 900; }
+.card.ok .txt { flex: 1; min-width: 0; }
+.card.ok .nome { font-size: 15px; }
+.card.ok .det { margin: 0; font-size: 13px; }
+.card.ok button { background: none; border: 0; color: var(--muted); text-decoration: underline; font-size: 13px; padding: 6px; }
+
+.vazio { color: var(--muted); background: var(--surface); border-radius: 16px; padding: 20px; text-align: center; }
 .vazio p { margin: 0 0 10px; }
-.adm { background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--navy); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; font-size: 14px; }
+.aviso { color: var(--bad); font-size: 14px; margin: 0; }
+.okmsg { color: var(--ok); font-weight: 800; font-size: 14px; margin: 0; }
+button.grande { width: 100%; font-weight: 800; font-size: 17px; padding: 14px; border: 0; border-radius: 12px; background: var(--navy); color: #fff; }
+button.link { background: none; border: 0; color: var(--muted); text-decoration: underline; font-size: 14px; padding: 6px 0; align-self: center; }
+
+.ajuda { background: var(--surface); border-radius: 14px; padding: 12px 14px; font-size: 14px; }
+.ajuda summary { cursor: pointer; font-weight: 800; color: var(--navy); }
+.ajuda ol, .ajuda ul { margin: 8px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+
+.adm { background: var(--surface); border: 1px dashed #c9d1e0; border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; font-size: 14px; }
+.adm b { color: var(--navy); }
 .adm #admToken { display: flex; flex-direction: column; gap: 8px; }
-.adm #admToken[hidden] { display: none; }
-.adm input { font: inherit; padding: 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
-button.link { background: none; border: 0; color: var(--muted); text-decoration: underline; font: inherit; font-size: 13px; align-self: flex-start; padding: 0; cursor: pointer; }
-.okmsg { color: var(--teal-ink); font-weight: 700; font-size: 14px; }
-button.grande { width: 100%; font: inherit; font-weight: 700; font-size: 17px; padding: 14px; border: 0; border-radius: 12px; background: var(--navy); color: #fff; cursor: pointer; margin-top: 4px; }
-/* tela da senha */
-#trava { position: fixed; inset: 0; background: var(--navy); color: #fff; display: flex; align-items: center; justify-content: center; padding: 24px; z-index: 20; }
-#trava form { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 14px; align-items: center; text-align: center; }
-#trava img { width: 96px; height: 96px; border-radius: 24px; background: #fff; }
-#trava h1 { margin: 0; font-size: 22px; }
-#trava p { margin: 0; opacity: .85; font-size: 15px; }
+.adm input { font: inherit; padding: 10px; border-radius: 10px; border: 1px solid var(--line); background: #fff; color: var(--ink); }
+
+/* tela de entrada */
+#trava { position: fixed; inset: 0; background: #fff; display: flex; align-items: center; justify-content: center; padding: 24px; z-index: 20; overflow-y: auto; }
+#trava form { width: 100%; max-width: 340px; display: flex; flex-direction: column; gap: 14px; align-items: center; text-align: center; }
+#trava img { width: 104px; height: 104px; border-radius: 26px; box-shadow: 0 6px 20px rgba(27,42,107,.15); }
+#trava h1 { margin: 4px 0 0; font-size: 22px; color: var(--navy); }
+#trava p { margin: 0; color: var(--muted); font-size: 15px; }
 #trava .campo { position: relative; width: 100%; }
-#trava input { width: 100%; font: inherit; font-size: 20px; letter-spacing: .08em; text-align: center; padding: 12px 52px; border-radius: 12px; border: 0; background: #ffffff; color: #18213f; -webkit-text-fill-color: #18213f; color-scheme: light; }
-#trava button.olho { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; padding: 0; background: transparent; color: #5d6680; font-size: 20px; }
-#trava button.olho[aria-pressed="true"] { color: #1B2A6B; }
-#trava button.admlink { background: transparent; color: #fff; text-decoration: underline; font-weight: 400; font-size: 14px; }
-#trava button { width: 100%; font: inherit; font-weight: 700; padding: 13px; border-radius: 12px; border: 0; background: var(--teal); color: #0f1424; cursor: pointer; }
-#trava .erro { color: #ffc2bd; min-height: 1.4em; }
-button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+#trava input { width: 100%; font: inherit; font-size: 20px; letter-spacing: .06em; text-align: center; padding: 13px 52px; border-radius: 14px; border: 2px solid var(--line); background: #fff; color: var(--ink); -webkit-text-fill-color: var(--ink); }
+#trava input:focus { border-color: var(--teal); outline: none; }
+#trava button.olho { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; padding: 0; background: transparent; border: 0; color: var(--muted); font-size: 20px; }
+#trava button.olho[aria-pressed="true"] { color: var(--navy); }
+#trava button[type="submit"] { width: 100%; font-weight: 800; font-size: 17px; padding: 14px; border-radius: 14px; border: 0; background: var(--navy); color: #fff; }
+#trava .erro { color: var(--bad); min-height: 1.4em; font-size: 14px; }
+#trava .admlink { background: transparent; border: 0; color: var(--muted); text-decoration: underline; font-size: 13px; }
+@media (prefers-reduced-motion: reduce) { .painel .bar i { transition: none; } }
 </style>
 </head>
 <body>
 <div id="trava" hidden>
   <form id="fTrava" autocomplete="off">
     <img src="apple-touch-icon.png" alt="">
-    <h1>Centro Veterinário Cisper</h1>
-    <p>Digite a sua senha para abrir a lista.</p>
+    <h1>Lista do dia</h1>
+    <p>Centro Veterinário Cisper</p>
+    <p>Digite a <b>sua</b> senha para entrar.</p>
     <div class="campo">
       <input id="senha" type="password" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="off" aria-label="Senha">
       <button type="button" class="olho" id="btOlho" aria-label="Mostrar senha" aria-pressed="false">👁</button>
@@ -111,15 +142,22 @@ button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visibl
     <img src="apple-touch-icon.png" alt="Centro Veterinário Cisper">
     <div class="tit">
       <h1>Lista do dia</h1>
-      <div class="sub" id="sub">Carregando…</div>
+      <div class="sub" id="sub">Centro Veterinário Cisper</div>
     </div>
-    <button type="button" id="btAtualizar" aria-label="Buscar lista nova">↻ Atualizar</button>
+    <button type="button" class="perfil" id="perfil" hidden aria-label="Trocar de pessoa"><span class="ini" id="perfilIni"></span><span id="perfilNome"></span></button>
   </div>
 </header>
 
 <main class="wrap">
+  <section class="painel" id="painel" hidden aria-live="polite">
+    <p class="ola" id="ola"></p>
+    <p class="info" id="info"></p>
+    <div class="conta"><b id="nFeitos">0</b><span id="nTotal">de 0 mensagens enviadas</span></div>
+    <div class="bar"><i id="barra"></i></div>
+  </section>
+
   <section class="adm" id="adm" hidden>
-    <b>Administrador</b>
+    <b>Área do administrador</b>
     <button type="button" class="grande" id="btPublicar" hidden>📤 Publicar lista nova</button>
     <input type="file" id="arquivo" accept=".cisper,.json,.txt,application/json,text/plain,*/*" hidden>
     <form id="fToken" autocomplete="off"><div id="admToken" hidden>
@@ -127,24 +165,25 @@ button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visibl
       <input id="token" type="password" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="github_pat_…" aria-label="Chave do GitHub">
       <button type="submit" class="grande">Salvar chave</button>
     </div></form>
-    <button type="button" class="link" id="btTrocarToken">Trocar chave</button>
+    <div class="linha-chips"><span class="rotulo">Ver a lista de</span><div class="chips" id="quem"></div></div>
+    <button type="button" class="link" id="btTrocarToken">Trocar chave do GitHub</button>
   </section>
-  <div class="chips" id="dias" aria-label="Dia"></div>
-  <div class="chips" id="quem" aria-label="Quem está usando"></div>
-  <div class="prog" id="prog"></div>
+
+  <div class="linha-chips" id="linhaDias" hidden><span class="rotulo">Dia</span><div class="chips" id="dias"></div></div>
+
   <div id="lista"><div class="vazio">Carregando a lista…</div></div>
-  <details class="dica">
+
+  <details class="ajuda">
     <summary>Como usar</summary>
     <ol>
-      <li>Toque no seu nome. <b>Débora (manhã)</b>: pós-atendimento, vacinas, depois do orçamento e os 10 primeiros clientes parados, das 9h às 11h30. <b>Duda (tarde)</b>: os outros clientes parados, das 14h às 17h, e as respostas da tarde.</li>
-      <li>Toque em <b>Abrir WhatsApp</b>. A mensagem já vem escrita. Confira o nome, envie e volte para o app.</li>
-      <li>O cartão fica marcado como enviado. Passe para o próximo.</li>
-      <li>Se souber que o animal faleceu, <b>não envie</b> e avise o Paulo.</li>
+      <li>Toque em <b>1 · Abrir WhatsApp</b>. A mensagem já vem escrita. Confira o nome e envie.</li>
+      <li>Volte para o app e toque em <b>2 · Já enviei</b>. O cliente vai para "Feitas hoje".</li>
+      <li>Se souber que o animal faleceu, <b>não envie</b>: toque em Já enviei e avise o Paulo.</li>
       <li>Não envie no almoço, depois das 19h nem no domingo.</li>
-      <li>O Paulo publica a lista nova no domingo e na quarta. Ela aparece sozinha quando você abre o app. Se não aparecer, toque em <b>↻ Atualizar</b>.</li>
+      <li>A lista nova aparece sozinha quando o Paulo publica. Para buscar na hora, puxe a tela para baixo ou feche e abra o app.</li>
     </ol>
   </details>
-  <details class="dica">
+  <details class="ajuda">
     <summary>Quando o cliente responder</summary>
     <ul>
       <li><b>"Vou levar"</b>: "Que bom! Estamos esperando 🐾 Atendemos das 8h às 20h, almoço das 12h às 13h."</li>
@@ -156,11 +195,24 @@ button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visibl
       <li>Se o cliente não responder, não mande outra mensagem.</li>
     </ul>
   </details>
+  <button type="button" class="link" id="btSair" hidden>Trocar de pessoa</button>
 </main>
 
 <script>
-const GRUPOS = [['pos', 'Como o animal está'], ['vac', 'Vacinas para avisar'], ['orc2', 'Depois do orçamento'], ['par', 'Clientes para chamar de volta']];
-const QUEM = [['todos', 'Tudo'], ['debora', 'Débora · manhã'], ['duda', 'Duda · tarde']];
+const TIPOS = {
+  pos:  { rot: '🩺 Pós-atendimento', cor: '#2fa9a3', soft: '#e5f6f5', ink: '#1d7c77' },
+  vac:  { rot: '💉 Vacina', cor: '#e08a00', soft: '#fff3df', ink: '#9a5b00' },
+  orc2: { rot: '💬 Depois do orçamento', cor: '#3b6fd8', soft: '#e8effc', ink: '#2a55ad' },
+  orc7: { rot: '💬 Depois do orçamento', cor: '#3b6fd8', soft: '#e8effc', ink: '#2a55ad' },
+  par:  { rot: '👋 Cliente sumido', cor: '#8a94a8', soft: '#eef1f5', ink: '#55607a' }
+};
+const ORDEM = ['pos', 'vac', 'orc2', 'orc7', 'par'];
+const PESSOAS = {
+  debora: { nome: 'Débora', turno: 'Manhã', horario: 'Envie das 9h às 11h30.', cor: 'var(--debora)' },
+  duda:   { nome: 'Duda', turno: 'Tarde', horario: 'Envie das 14h às 17h e responda quem escrever à tarde.', cor: 'var(--duda)' },
+  todos:  { nome: 'Paulo', turno: 'Adm', horario: 'Você está vendo a lista das duas.', cor: 'var(--adm)' }
+};
+const QUEM = [['todos', 'As duas'], ['debora', 'Débora'], ['duda', 'Duda']];
 const $ = (id) => document.getElementById(id);
 const el = (t, c, x) => { const e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; };
 const ls = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : v; } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }, del(k) { try { localStorage.removeItem(k); } catch (e) {} } };
@@ -168,6 +220,7 @@ const cap = (s) => { const w = String(s || '').trim().split(/\s+/)[0] || ''; ret
 const capNome = (s) => String(s || '').trim().toLowerCase().replace(/(^|\s)(\p{L})/gu, (m, a, b) => a + b.toUpperCase()).replace(/\b(De|Da|Do|Dos|Das|E)\b/g, (m) => m.toLowerCase());
 const rs = (v) => 'R$ ' + Math.round(v || 0).toLocaleString('pt-BR');
 const hojeISO = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+const hora = (ms) => new Date(ms).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
 function msg(i) {
   const n = cap(i.c), a = i.a ? capNome(i.a) : 'seu pet';
@@ -188,14 +241,14 @@ function msg(i) {
   return `Oi, ${n}! Aqui é do Centro Veterinário Cisper 🐾 Faz tempo que não vemos ${G ? G.o + ' ' : ''}${a} por aqui. Como ${G ? G.ele + ' ' : ''}está? Vacina e check-up em dia ajudam a pegar problemas cedo. ${vir} Se não quiser receber lembretes, é só avisar. ❤️`;
 }
 function det(i) {
-  if (i.t === 'vac') return `${i.a} · vacina ${i.x} · vence ${i.d}`;
-  if (i.t === 'par') return `${i.a} · última visita ${i.d}`;
-  if (i.t === 'pos') return `${i.a} · ${i.x} em ${i.d}`;
-  return `${i.a} · orçamento de ${rs(i.v)} feito em ${i.d}`;
+  if (i.t === 'vac') return `${i.a} · vacina ${String(i.x || '').replace(/RAIVA/gi, 'antirrábica')} · vence ${String(i.d).slice(0, 5)}`;
+  if (i.t === 'par') return `${i.a} · última visita em ${i.d}`;
+  if (i.t === 'pos') return `${i.a} · ${i.x} em ${String(i.d).slice(0, 5)}`;
+  return `${i.a} · orçamento de ${rs(i.v)} em ${String(i.d).slice(0, 5)}`;
 }
 const dona = (i, lista) => { if (i.t !== 'par') return 'debora'; const p = lista.filter((x) => x.t === 'par').indexOf(i); return p < 10 ? 'debora' : 'duda'; };
 
-// ---- dados criptografados (dados.enc): só abrem com a senha da clínica
+// ---- dados criptografados: cada pessoa abre com a própria senha
 const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
 async function abrir(env, senha) {
   const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(senha), 'PBKDF2', false, ['deriveKey']);
@@ -209,17 +262,15 @@ async function abrir(env, senha) {
   }
   throw new Error('senha errada');
 }
-
 let DADOS = null, META = null, ENV = null;
-let quem = ls.get('cisper-quem', 'todos');
+let eu = ls.get('cisper-eu', '');            // quem entrou: debora, duda ou adm
+let quem = ls.get('cisper-quem', 'todos');   // lista que está sendo vista
 let feitos = {}; try { feitos = JSON.parse(ls.get('cisper-enviados', '{}')) || {}; } catch (e) { feitos = {}; }
 const salvar = () => ls.set('cisper-enviados', JSON.stringify(feitos));
 let atual = null;
-
-// A lista fica no site, criptografada (dados.enc). Cada pessoa abre com a própria senha.
-// Só o administrador (Paulo) publica uma lista nova, direto do celular dele.
+const ehAdm = () => eu === 'adm';
 const REPO = 'centroveterinariocisper-crypto/cisper';
-const ehAdm = () => ls.get('cisper-adm', '') === '1';
+
 async function baixar() {
   const r = await fetch('dados.enc?t=' + Date.now(), { cache: 'no-store' });
   if (r.status === 404) throw new Error('nao publicada');
@@ -230,35 +281,155 @@ async function usarEnv(env) {
   ENV = env;
   const senha = ls.get('cisper-senha', '');
   if (!senha) { pedirSenha(); return; }
-  try { const d = await abrir(ENV, senha); ls.set('cisper-lista', JSON.stringify(ENV)); aplicar(d); }
+  try { const d = await abrir(ENV, senha); ls.set('cisper-lista', JSON.stringify(ENV)); entrar(d); }
   catch (e) { ls.del('cisper-senha'); pedirSenha('A senha mudou. Digite a sua senha.'); }
 }
 async function carregar(manual) {
-  const btn = $('btAtualizar'); btn.disabled = true; btn.textContent = '↻ …';
   try { await usarEnv(await baixar()); }
   catch (e) {
     let env = null; try { env = JSON.parse(ls.get('cisper-lista', 'null')); } catch (x) {}
     if (env && env.vagas) { await usarEnv(env); if (manual) $('sub').textContent = e.message === 'nao publicada' ? 'Nenhuma lista nova publicada' : 'Sem internet · mostrando a última lista'; }
     else {
-      $('sub').textContent = 'Centro Veterinário Cisper';
-      $('lista').replaceChildren(el('div', 'vazio', e.message === 'nao publicada' ? 'A lista ainda não foi publicada. O Paulo avisa quando estiver pronta.' : 'Não consegui buscar a lista. Confira a internet e toque em Atualizar.'));
-      if (e.message === 'nao publicada' && !ls.get('cisper-senha', '')) { ENV = null; pedirSenha(); $('btAdmArquivo').hidden = false; }
+      $('lista').replaceChildren(el('div', 'vazio', e.message === 'nao publicada' ? 'A lista ainda não foi publicada. O Paulo avisa quando estiver pronta.' : 'Não consegui buscar a lista. Confira a internet e abra o app de novo.'));
+      if (!ls.get('cisper-senha', '')) { ENV = null; pedirSenha(); if (e.message === 'nao publicada') $('btAdmArquivo').hidden = false; }
     }
-  } finally { btn.disabled = false; btn.textContent = '↻ Atualizar'; mostrarAdm(); }
+  }
+}
+function entrar(d) {
+  eu = d.quem === 'adm' ? 'adm' : d.quem; ls.set('cisper-eu', eu);
+  if (!ehAdm()) quem = eu; else if (!['todos', 'debora', 'duda'].includes(quem)) quem = 'todos';
+  ls.set('cisper-quem', quem);
+  aplicar(d);
+}
+function aplicar(d) {
+  DADOS = d.dias || {}; META = d;
+  const dias = Object.keys(DADOS).sort(), h = hojeISO();
+  if (!atual || !dias.includes(atual)) atual = dias.includes(h) ? h : (dias.find((x) => x > h) || dias[dias.length - 1]);
+  const vivos = new Set(Object.values(DADOS).flat().map((i) => i.k));
+  for (const k of Object.keys(feitos)) if (!vivos.has(k) && Date.now() - feitos[k] > 30 * 864e5) delete feitos[k];
+  salvar(); render();
 }
 function alertaTopo(txt, ok) { const L = $('lista'); const p = el('p', ok ? 'okmsg' : 'aviso', txt); L.prepend(p); setTimeout(() => p.remove(), 10000); window.scrollTo(0, 0); }
 
-// ---- área do administrador
-function mostrarAdm() {
-  const box = $('adm'); box.hidden = !ehAdm(); if (!ehAdm()) return;
-  const tem = !!ls.get('cisper-token', '');
-  $('admToken').hidden = tem; $('btPublicar').hidden = !tem;
+function render() {
+  if (!DADOS) return;
+  const P = PESSOAS[ehAdm() ? 'todos' : eu] || PESSOAS.todos;
+  const vendo = PESSOAS[quem] || P;
+  // cabeçalho: quem está usando
+  $('perfil').hidden = false; $('perfil').style.setProperty('--cor', P.cor);
+  $('perfilIni').textContent = P.nome[0]; $('perfilNome').textContent = P.nome + ' · ' + P.turno;
+  $('btSair').hidden = false;
+  const g = META && META.gerado_em ? new Date(META.gerado_em) : null;
+  $('sub').textContent = g && !isNaN(g) ? 'Lista atualizada em ' + g.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) : 'Centro Veterinário Cisper';
+  // administrador
+  $('adm').hidden = !ehAdm();
+  if (ehAdm()) {
+    const tem = !!ls.get('cisper-token', '');
+    $('admToken').hidden = tem; $('btPublicar').hidden = !tem; $('btTrocarToken').hidden = !tem;
+    const qx = $('quem'); qx.replaceChildren();
+    for (const [id, nome] of QUEM) { const b = el('button', id === quem ? 'on' : '', nome); b.type = 'button'; b.onclick = () => { quem = id; ls.set('cisper-quem', id); render(); }; qx.appendChild(b); }
+  }
+  // dias
+  const dias = Object.keys(DADOS).sort();
+  $('linhaDias').hidden = dias.length < 2;
+  const bx = $('dias'); bx.replaceChildren();
+  for (const d of dias) {
+    const rot = d === hojeISO() ? 'Hoje' : new Date(d + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'numeric' });
+    const b = el('button', d === atual ? 'on' : '', rot); b.type = 'button';
+    b.onclick = () => { atual = d; render(); window.scrollTo(0, 0); };
+    bx.appendChild(b);
+  }
+  // lista de quem está sendo visto
+  const doDia = DADOS[atual] || [];
+  const itens = doDia.filter((i) => quem === 'todos' || dona(i, doDia) === quem).sort((a, b) => ORDEM.indexOf(a.t) - ORDEM.indexOf(b.t));
+  const fazer = itens.filter((i) => !feitos[i.k]);
+  const prontos = itens.filter((i) => feitos[i.k]).sort((a, b) => feitos[b.k] - feitos[a.k]);
+  // painel
+  const ehHoje = atual === hojeISO();
+  const nomeDia = ehHoje ? 'hoje' : new Date(atual + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+  $('painel').hidden = false;
+  $('painel').style.setProperty('--cor', vendo.cor);
+  $('painel').classList.toggle('fim', itens.length > 0 && !fazer.length);
+  if (ehAdm() && quem !== 'todos') $('ola').textContent = 'Lista da ' + vendo.nome + ' · ' + vendo.turno;
+  else if (ehAdm()) $('ola').textContent = 'Olá, Paulo!';
+  else $('ola').textContent = itens.length && !fazer.length ? `Tudo feito, ${P.nome}! 🎉` : `Olá, ${P.nome}! 👋`;
+  $('info').textContent = !itens.length ? `Nada para ${nomeDia}.` : (fazer.length ? `${ehAdm() && quem === 'todos' ? 'Mensagens de ' + nomeDia + ' das duas' : 'Sua lista de ' + nomeDia}: faltam ${fazer.length}. ${vendo.horario}` : `Todas as mensagens de ${nomeDia} foram enviadas.`);
+  $('nFeitos').textContent = prontos.length; $('nTotal').textContent = `de ${itens.length} ${itens.length === 1 ? 'mensagem enviada' : 'mensagens enviadas'}`;
+  $('barra').style.width = itens.length ? Math.round(prontos.length / itens.length * 100) + '%' : '0';
+  // cartões
+  const L = $('lista'); L.replaceChildren();
+  const dl = dias[dias.length - 1];
+  if (dl < hojeISO()) L.appendChild(el('p', 'aviso', 'Esta é a última lista publicada. A nova aparece quando o Paulo publicar.'));
+  if (!itens.length) { L.appendChild(el('div', 'vazio', `Nada para ${nomeDia}.`)); return; }
+  if (fazer.length) {
+    const s = el('div', 'secao'); s.appendChild(document.createTextNode('Para enviar')); s.appendChild(el('span', 'n', String(fazer.length))); L.appendChild(s);
+    for (const i of fazer) L.appendChild(cartao(i));
+  }
+  if (prontos.length) {
+    const s = el('div', 'secao'); s.appendChild(document.createTextNode('✓ Feitas')); s.appendChild(el('span', 'n', String(prontos.length))); L.appendChild(s);
+    for (const i of prontos) L.appendChild(cartaoFeito(i));
+  }
 }
+function cartao(i) {
+  const T = TIPOS[i.t] || TIPOS.par;
+  const c = el('article', 'card'); c.style.setProperty('--tipo', T.cor); c.style.setProperty('--tipo-soft', T.soft); c.style.setProperty('--tipo-ink', T.ink);
+  c.appendChild(el('span', 'tipo', T.rot));
+  const nm = el('div', 'nome', capNome(i.c));
+  if (i.t === 'vac' && (i.atraso || 0) > 0) nm.appendChild(el('span', 'alerta', 'vencida'));
+  c.appendChild(nm); c.appendChild(el('div', 'det', det(i)));
+  const m = msg(i);
+  const ps = el('div', 'passos');
+  if (i.tel) {
+    const a = el('a', 'wa'); a.appendChild(el('span', 'num', '1')); a.appendChild(document.createTextNode('Abrir WhatsApp'));
+    a.href = 'https://api.whatsapp.com/send?phone=' + i.tel + '&text=' + encodeURIComponent(m); a.target = '_blank'; a.rel = 'noopener';
+    ps.appendChild(a);
+  } else ps.appendChild(el('div', 'semtel', 'Sem celular na ficha. Procure o telefone no NuvemVet.'));
+  const b = el('button', 'feito'); b.type = 'button'; b.appendChild(el('span', 'num', i.tel ? '2' : '✓')); b.appendChild(document.createTextNode('Já enviei'));
+  b.onclick = () => { feitos[i.k] = Date.now(); salvar(); render(); };
+  ps.appendChild(b);
+  c.appendChild(ps);
+  const dt = el('details', 'msg'); dt.appendChild(el('summary', null, 'Ver a mensagem')); dt.appendChild(el('p', null, m)); c.appendChild(dt);
+  return c;
+}
+function cartaoFeito(i) {
+  const c = el('article', 'card ok');
+  c.appendChild(el('span', 'check', '✓'));
+  const t = el('div', 'txt'); t.appendChild(el('div', 'nome', capNome(i.c))); t.appendChild(el('div', 'det', `Enviada às ${hora(feitos[i.k])} · ${i.a}`)); c.appendChild(t);
+  const u = el('button', null, 'Desfazer'); u.type = 'button'; u.onclick = () => { delete feitos[i.k]; salvar(); render(); }; c.appendChild(u);
+  return c;
+}
+
+// ---- entrada e troca de pessoa
+function pedirSenha(erro) { $('trava').hidden = false; $('erroSenha').textContent = erro || ''; setTimeout(() => $('senha').focus(), 50); }
+$('fTrava').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const s = $('senha').value.trim(); if (!s) return;
+  $('erroSenha').textContent = 'Abrindo…';
+  if (!ENV) { try { ENV = await baixar(); } catch (e) { $('erroSenha').textContent = 'A lista ainda não foi publicada. Se você é o administrador, toque no link abaixo.'; $('btAdmArquivo').hidden = false; return; } }
+  try {
+    const d = await abrir(ENV, s); ls.set('cisper-senha', s); ls.set('cisper-lista', JSON.stringify(ENV));
+    $('trava').hidden = true; $('senha').value = ''; $('senha').type = 'password'; $('btOlho').setAttribute('aria-pressed', 'false');
+    if (d.quem === 'adm') quem = 'todos';
+    entrar(d); window.scrollTo(0, 0);
+  } catch (e) { $('erroSenha').textContent = 'Senha errada. Confira no 👁 e tente de novo.'; }
+});
+$('btOlho').addEventListener('click', () => { const i = $('senha'); const ver = i.type === 'password'; i.type = ver ? 'text' : 'password'; $('btOlho').setAttribute('aria-pressed', ver ? 'true' : 'false'); $('btOlho').setAttribute('aria-label', ver ? 'Esconder senha' : 'Mostrar senha'); i.focus(); });
+const sair = () => { ls.del('cisper-senha'); ls.del('cisper-eu'); eu = ''; $('perfil').hidden = true; $('painel').hidden = true; $('adm').hidden = true; $('btSair').hidden = true; pedirSenha(); };
+$('btSair').addEventListener('click', sair);
+$('perfil').addEventListener('click', sair);
+$('btAdmArquivo').addEventListener('click', () => { if (!$('senha').value.trim()) { $('erroSenha').textContent = 'Digite a senha de administrador primeiro.'; return; } $('arquivoLogin').click(); });
+$('arquivoLogin').addEventListener('change', async (ev) => {
+  const f = ev.target.files && ev.target.files[0]; $('arquivoLogin').value = ''; if (!f) return;
+  try { const env = JSON.parse(await f.text()); if (!env.vagas || !env.ct) throw 0; ENV = env; } catch (e) { $('erroSenha').textContent = 'Esse arquivo não é uma lista da Cisper.'; return; }
+  $('fTrava').requestSubmit();
+});
+
+// ---- administrador: publicar lista nova
 $('fToken').addEventListener('submit', (ev) => {
   ev.preventDefault(); const v = $('token').value.trim(); if (!v) return;
-  ls.set('cisper-token', v); $('token').value = ''; mostrarAdm(); alertaTopo('Chave salva neste celular. Agora você já pode publicar.', true);
+  ls.set('cisper-token', v); $('token').value = ''; render(); alertaTopo('Chave salva neste celular. Agora você já pode publicar.', true);
 });
-$('btTrocarToken').addEventListener('click', () => { ls.del('cisper-token'); mostrarAdm(); });
+$('btTrocarToken').addEventListener('click', () => { ls.del('cisper-token'); render(); });
 $('btPublicar').addEventListener('click', () => $('arquivo').click());
 $('arquivo').addEventListener('change', async (ev) => {
   const f = ev.target.files && ev.target.files[0]; $('arquivo').value = ''; if (!f) return;
@@ -268,107 +439,23 @@ $('arquivo').addEventListener('change', async (ev) => {
   try { d = await abrir(env, ls.get('cisper-senha', '')); if (d.quem !== 'adm') throw 0; } catch (e) { alertaTopo('Essa lista não abre com a sua senha de administrador. Confira se é o arquivo certo.'); return; }
   const btn = $('btPublicar'); btn.disabled = true; btn.textContent = 'Publicando…';
   try {
-    const tk = ls.get('cisper-token', '');
-    const h = { Authorization: 'Bearer ' + tk, Accept: 'application/vnd.github+json' };
+    const h = { Authorization: 'Bearer ' + ls.get('cisper-token', ''), Accept: 'application/vnd.github+json' };
     let sha;
     const g = await fetch(`https://api.github.com/repos/${REPO}/contents/dados.enc`, { headers: h, cache: 'no-store' });
     if (g.status === 401 || g.status === 403) throw new Error('chave');
     if (g.ok) sha = (await g.json()).sha;
     const corpo = JSON.stringify(env);
-    const conteudo = btoa(unescape(encodeURIComponent(corpo)));
-    const r = await fetch(`https://api.github.com/repos/${REPO}/contents/dados.enc`, { method: 'PUT', headers: { ...h, 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'Lista nova (' + new Date().toLocaleDateString('pt-BR') + ')', content: conteudo, sha }) });
+    const r = await fetch(`https://api.github.com/repos/${REPO}/contents/dados.enc`, { method: 'PUT', headers: { ...h, 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'Lista nova (' + new Date().toLocaleDateString('pt-BR') + ')', content: btoa(unescape(encodeURIComponent(corpo))), sha }) });
     if (r.status === 401 || r.status === 403 || r.status === 404) throw new Error('chave');
     if (!r.ok) throw new Error('falhou');
     ls.set('cisper-lista', corpo); ENV = env; aplicar(d);
-    alertaTopo('Lista publicada! Em 1 ou 2 minutos ela aparece no celular das meninas quando abrirem o app.', true);
+    alertaTopo('Lista publicada! Em alguns minutos ela aparece no celular das meninas.', true);
   } catch (e) {
-    alertaTopo(e.message === 'chave' ? 'O GitHub recusou a chave. Toque em "Trocar chave" e cole uma chave nova.' : 'Não consegui publicar. Confira a internet e tente de novo.');
+    alertaTopo(e.message === 'chave' ? 'O GitHub recusou a chave. Toque em "Trocar chave do GitHub" e cole uma chave nova.' : 'Não consegui publicar. Confira a internet e tente de novo.');
   } finally { btn.disabled = false; btn.textContent = '📤 Publicar lista nova'; }
 });
 
-function aplicar(d) {
-  DADOS = d.dias || {}; META = d;
-  const dias = Object.keys(DADOS).sort(), h = hojeISO();
-  if (!atual || !dias.includes(atual)) atual = dias.includes(h) ? h : (dias.find((x) => x > h) || dias[dias.length - 1]);
-  const vivos = new Set(Object.values(DADOS).flat().map((i) => i.k));
-  for (const k of Object.keys(feitos)) if (!vivos.has(k) && Date.now() - feitos[k] > 30 * 864e5) delete feitos[k];
-  salvar(); render();
-}
-function pedirSenha(erro) {
-  $('trava').hidden = false; $('erroSenha').textContent = erro || '';
-  setTimeout(() => $('senha').focus(), 50);
-}
-$('fTrava').addEventListener('submit', async (ev) => {
-  ev.preventDefault();
-  const s = $('senha').value.trim(); if (!s) return;
-  $('erroSenha').textContent = 'Abrindo…';
-  if (!ENV) { try { ENV = await baixar(); } catch (e) { $('erroSenha').textContent = 'A lista ainda não foi publicada. Se você é o administrador, toque no link abaixo.'; $('btAdmArquivo').hidden = false; return; } }
-  try {
-    const d = await abrir(ENV, s); ls.set('cisper-senha', s); ls.set('cisper-lista', JSON.stringify(ENV));
-    ls.set('cisper-adm', d.quem === 'adm' ? '1' : '');
-    quem = d.quem === 'adm' ? 'todos' : (QUEM.some(([id]) => id === d.quem) ? d.quem : quem); ls.set('cisper-quem', quem);
-    $('trava').hidden = true; $('senha').value = ''; aplicar(d); mostrarAdm();
-  } catch (e) { $('erroSenha').textContent = 'Senha errada. Tente de novo.'; }
-});
-$('btAtualizar').addEventListener('click', () => carregar(true));
-$('btOlho').addEventListener('click', () => { const i = $('senha'); const ver = i.type === 'password'; i.type = ver ? 'text' : 'password'; $('btOlho').setAttribute('aria-pressed', ver ? 'true' : 'false'); $('btOlho').setAttribute('aria-label', ver ? 'Esconder senha' : 'Mostrar senha'); i.focus(); });
-// Primeira publicação: ainda não há lista no site, então o adm entra usando o arquivo que recebeu
-$('btAdmArquivo').addEventListener('click', () => { if (!$('senha').value.trim()) { $('erroSenha').textContent = 'Digite a senha de administrador primeiro.'; return; } $('arquivoLogin').click(); });
-$('arquivoLogin').addEventListener('change', async (ev) => {
-  const f = ev.target.files && ev.target.files[0]; $('arquivoLogin').value = ''; if (!f) return;
-  try { const env = JSON.parse(await f.text()); if (!env.vagas || !env.ct) throw 0; ENV = env; } catch (e) { $('erroSenha').textContent = 'Esse arquivo não é uma lista da Cisper.'; return; }
-  $('fTrava').requestSubmit();
-});
-document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') carregar(false); });
-
-function render() {
-  if (!DADOS) return;
-  const dias = Object.keys(DADOS).sort();
-  const g = META && META.gerado_em ? new Date(META.gerado_em) : null;
-  $('sub').textContent = g && !isNaN(g) ? 'Atualizada em ' + g.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' }) + ' às ' + g.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : 'Centro Veterinário Cisper';
-  const bx = $('dias'); bx.replaceChildren();
-  for (const d of dias) {
-    const rot = d === hojeISO() ? 'Hoje' : new Date(d + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'numeric' });
-    const b = el('button', d === atual ? 'on' : '', rot); b.type = 'button';
-    b.onclick = () => { atual = d; render(); window.scrollTo(0, 0); };
-    bx.appendChild(b);
-  }
-  const qx = $('quem'); qx.replaceChildren();
-  for (const [id, nome] of QUEM) { const b = el('button', id === quem ? 'on' : '', nome); b.type = 'button'; b.onclick = () => { quem = id; ls.set('cisper-quem', id); render(); }; qx.appendChild(b); }
-  const doDia = DADOS[atual] || [];
-  const itens = doDia.filter((i) => quem === 'todos' || dona(i, doDia) === quem);
-  const ok = itens.filter((i) => feitos[i.k]).length;
-  const pr = $('prog'); pr.replaceChildren(el('div', null, `${ok} de ${itens.length} mensagens enviadas`));
-  const bar = el('div', 'bar'); const fill = el('i'); fill.style.width = itens.length ? (ok / itens.length * 100) + '%' : '0'; bar.appendChild(fill); pr.appendChild(bar);
-  const L = $('lista'); L.replaceChildren();
-  if (atual < hojeISO() && dias[dias.length - 1] < hojeISO()) L.appendChild(el('p', 'aviso', 'Esta é a última lista publicada. Toque em ↻ Atualizar para ver se já tem a nova.'));
-  if (!itens.length) { L.appendChild(el('div', 'vazio', 'Nada para este dia.')); return; }
-  for (const [t, titulo] of GRUPOS) {
-    const grupo = itens.filter((i) => i.t === t || (t === 'orc2' && i.t === 'orc7')); if (!grupo.length) continue;
-    L.appendChild(el('h2', null, `${titulo} (${grupo.length})`));
-    for (const i of grupo) {
-      const c = el('div', 'card' + (feitos[i.k] ? ' feito' : ''));
-      const nm = el('div', 'nome');
-      if (i.t === 'vac' && (i.atraso || 0) > 0) nm.appendChild(el('span', 'tag', 'vencida'));
-      nm.appendChild(document.createTextNode(capNome(i.c)));
-      c.appendChild(nm); c.appendChild(el('div', 'det', det(i)));
-      const m = msg(i);
-      if (i.tel) {
-        const a = el('a', 'wa', feitos[i.k] ? 'Abrir WhatsApp de novo' : 'Abrir WhatsApp');
-        a.href = 'https://api.whatsapp.com/send?phone=' + i.tel + '&text=' + encodeURIComponent(m); a.target = '_blank'; a.rel = 'noopener';
-        a.onclick = () => { feitos[i.k] = Date.now(); salvar(); setTimeout(render, 300); };
-        c.appendChild(a);
-      } else c.appendChild(el('div', 'semtel', 'Sem celular na ficha. Procure o telefone no NuvemVet.'));
-      const ln = el('div', 'linha');
-      if (feitos[i.k]) { ln.appendChild(el('span', 'ok', '✓ Enviado')); const u = el('button', null, 'Desmarcar'); u.type = 'button'; u.onclick = () => { delete feitos[i.k]; salvar(); render(); }; ln.appendChild(u); }
-      else { const u = el('button', null, 'Marcar como enviado'); u.type = 'button'; u.onclick = () => { feitos[i.k] = Date.now(); salvar(); render(); }; ln.appendChild(u); }
-      c.appendChild(ln);
-      const dt = el('details', 'msg'); dt.appendChild(el('summary', null, 'Ver mensagem')); dt.appendChild(el('p', null, m)); c.appendChild(dt);
-      L.appendChild(c);
-    }
-  }
-}
-
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && ls.get('cisper-senha', '')) carregar(false); });
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
   let recarregou = false;

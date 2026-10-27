@@ -458,7 +458,13 @@ $('arquivo').addEventListener('change', async (ev) => {
   let env;
   try { env = JSON.parse(await f.text()); if (!env.vagas || !env.ct) throw 0; } catch (e) { alertaTopo('Esse arquivo não é uma lista da Cisper. Escolha o arquivo "Lista Cisper" que o Claude mandou.'); return; }
   let d;
-  try { d = await abrir(env, ls.get('cisper-senha', '')); if (d.quem !== 'adm') throw 0; } catch (e) { alertaTopo('Essa lista não abre com a sua senha de administrador. Confira se é o arquivo certo.'); return; }
+  let novaSenha = '';
+  try { d = await abrir(env, ls.get('cisper-senha', '')); if (d.quem !== 'adm') throw 0; }
+  catch (e) {
+    novaSenha = (prompt('Essa lista usa senhas novas. Digite a sua NOVA senha de administrador:') || '').trim();
+    try { if (!novaSenha) throw 0; d = await abrir(env, novaSenha); if (d.quem !== 'adm') throw 0; }
+    catch (e2) { alertaTopo('Essa lista não abre com essa senha de administrador. Confira se é o arquivo certo.'); return; }
+  }
   const btn = $('btPublicar'); btn.disabled = true; btn.textContent = 'Publicando…';
   try {
     const h = { Authorization: 'Bearer ' + ls.get('cisper-token', ''), Accept: 'application/vnd.github+json' };
@@ -470,7 +476,7 @@ $('arquivo').addEventListener('change', async (ev) => {
     const r = await fetch(`https://api.github.com/repos/${REPO}/contents/dados.enc`, { method: 'PUT', headers: { ...h, 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'Lista nova (' + new Date().toLocaleDateString('pt-BR') + ')', content: btoa(unescape(encodeURIComponent(corpo))), sha }) });
     if (r.status === 401 || r.status === 403 || r.status === 404) throw new Error('chave');
     if (!r.ok) throw new Error('falhou');
-    ls.set('cisper-lista', corpo); ENV = env; aplicar(d);
+    if (novaSenha) ls.set('cisper-senha', novaSenha); ls.set('cisper-lista', corpo); ENV = env; aplicar(d);
     alertaTopo('Lista publicada! Em alguns minutos ela aparece no celular das meninas.', true);
   } catch (e) {
     alertaTopo(e.message === 'chave' ? 'O GitHub recusou a chave. Toque em "Trocar chave do GitHub" e cole uma chave nova.' : 'Não consegui publicar. Confira a internet e tente de novo.');

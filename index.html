@@ -171,9 +171,15 @@ const dona = (i, lista) => { if (i.t !== 'par') return 'debora'; const p = lista
 const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
 async function abrir(env, senha) {
   const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(senha), 'PBKDF2', false, ['deriveKey']);
-  const chave = await crypto.subtle.deriveKey({ name: 'PBKDF2', salt: b64(env.salt), iterations: env.iter, hash: 'SHA-256' }, base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
-  const txt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(env.iv) }, chave, b64(env.ct));
-  return JSON.parse(new TextDecoder().decode(txt));
+  for (const v of (env.vagas || [])) {
+    const kSenha = await crypto.subtle.deriveKey({ name: 'PBKDF2', salt: b64(v.salt), iterations: env.iter, hash: 'SHA-256' }, base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+    let vaga;
+    try { vaga = JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(v.iv) }, kSenha, b64(v.ct)))); } catch (e) { continue; }
+    const kDados = await crypto.subtle.importKey('raw', b64(vaga.k), 'AES-GCM', false, ['decrypt']);
+    const txt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(env.iv) }, kDados, b64(env.ct));
+    const d = JSON.parse(new TextDecoder().decode(txt)); d.quem = vaga.quem; return d;
+  }
+  throw new Error('senha errada');
 }
 
 let DADOS = null, META = null, ENV = null;
@@ -219,7 +225,7 @@ $('fTrava').addEventListener('submit', async (ev) => {
   ev.preventDefault();
   const s = $('senha').value.trim(); if (!s || !ENV) return;
   $('erroSenha').textContent = 'Abrindo…';
-  try { const d = await abrir(ENV, s); ls.set('cisper-senha', s); $('trava').hidden = true; $('senha').value = ''; aplicar(d); }
+  try { const d = await abrir(ENV, s); ls.set('cisper-senha', s); if (d.quem && QUEM.some(([id]) => id === d.quem)) { quem = d.quem; ls.set('cisper-quem', quem); } $('trava').hidden = true; $('senha').value = ''; aplicar(d); }
   catch (e) { $('erroSenha').textContent = 'Senha errada. Tente de novo.'; }
 });
 $('btAtualizar').addEventListener('click', () => carregar(true));

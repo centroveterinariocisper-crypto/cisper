@@ -122,6 +122,13 @@ button.link { background: none; border: 0; color: var(--muted); text-decoration:
 #trava h1 { margin: 4px 0 0; font-size: 22px; color: var(--navy); }
 #trava p { margin: 0; color: var(--muted); font-size: 15px; }
 #trava .campo { position: relative; width: 100%; }
+#trava .quem3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; }
+#trava .pessoa { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 4px 10px; border-radius: 16px; border: 2px solid var(--line); background: #fff; color: var(--ink); font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
+#trava .pessoa .bola { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 20px; background: linear-gradient(135deg, var(--c1), var(--c2)); }
+#trava .pessoa small { font-weight: 500; color: var(--muted); font-size: 12px; }
+#trava .pessoa[aria-pressed="true"] { border-color: var(--c1); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c1) 22%, transparent); }
+#trava .pessoa .ok { font-size: 11px; color: var(--teal); font-weight: 700; min-height: 14px; }
+.perfil .troca { margin-left: 2px; font-size: 15px; opacity: .9; }
 #trava input { width: 100%; font: inherit; font-size: 20px; letter-spacing: .06em; text-align: center; padding: 13px 52px; border-radius: 14px; border: 2px solid var(--line); background: #fff; color: var(--ink); -webkit-text-fill-color: var(--ink); }
 #trava input:focus { border-color: var(--teal); outline: none; }
 #trava button.olho { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; padding: 0; background: transparent; border: 0; color: var(--muted); font-size: 20px; }
@@ -138,7 +145,13 @@ button.link { background: none; border: 0; color: var(--muted); text-decoration:
     <img src="apple-touch-icon.png" alt="">
     <h1>Lista do dia</h1>
     <p>Centro Veterinário Cisper</p>
-    <p>Digite a <b>sua</b> senha para entrar.</p>
+    <p id="pergQuem">Quem vai usar agora? Toque no seu nome.</p>
+    <div class="quem3" id="quem3">
+      <button type="button" class="pessoa" data-p="debora" style="--c1:var(--debora);--c2:var(--debora-2)" aria-pressed="false"><span class="bola">D</span>Débora<small>Manhã</small><span class="ok"></span></button>
+      <button type="button" class="pessoa" data-p="duda" style="--c1:var(--duda);--c2:var(--duda-2)" aria-pressed="false"><span class="bola">D</span>Duda<small>Tarde</small><span class="ok"></span></button>
+      <button type="button" class="pessoa" data-p="adm" style="--c1:var(--adm);--c2:var(--adm-2)" aria-pressed="false"><span class="bola">P</span>Paulo<small>Adm</small><span class="ok"></span></button>
+    </div>
+    <p id="txtSenha">Digite a <b>sua</b> senha para entrar.</p>
     <div class="campo">
       <input id="senha" type="password" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="off" aria-label="Senha">
       <button type="button" class="olho" id="btOlho" aria-label="Mostrar senha" aria-pressed="false">👁</button>
@@ -157,7 +170,7 @@ button.link { background: none; border: 0; color: var(--muted); text-decoration:
       <h1>Lista do dia</h1>
       <div class="sub" id="sub">Centro Veterinário Cisper</div>
     </div>
-    <button type="button" class="perfil" id="perfil" hidden aria-label="Trocar de pessoa"><span class="ini" id="perfilIni"></span><span id="perfilNome"></span></button>
+    <button type="button" class="perfil" id="perfil" hidden aria-label="Trocar de pessoa"><span class="ini" id="perfilIni"></span><span id="perfilNome"></span><span class="troca" aria-hidden="true">⇄</span></button>
   </div>
 </header>
 
@@ -302,7 +315,7 @@ async function usarEnv(env) {
   const senha = ls.get('cisper-senha', '');
   if (!senha) { pedirSenha(); return; }
   try { const d = await abrir(ENV, senha); ls.set('cisper-lista', JSON.stringify(ENV)); entrar(d); }
-  catch (e) { ls.del('cisper-senha'); pedirSenha('A senha mudou. Digite a sua senha.'); }
+  catch (e) { ls.del('cisper-senha'); if (eu) esquecer(eu); pedirSenha('A senha mudou. Digite a sua senha.'); }
 }
 async function carregar(manual) {
   try { await usarEnv(await baixar()); }
@@ -428,24 +441,47 @@ function cartaoFeito(i) {
 }
 
 // ---- entrada e troca de pessoa
-function pedirSenha(erro) { $('trava').hidden = false; $('erroSenha').textContent = erro || ''; setTimeout(() => $('senha').focus(), 50); }
+// Senhas da Débora e da Duda ficam lembradas neste celular, para trocar com um toque. A do Paulo nunca fica.
+const salvas = () => { try { return JSON.parse(ls.get('cisper-salvas', '{}')) || {}; } catch (e) { return {}; } };
+const guardar = (quem, s) => { const o = salvas(); if (quem === 'debora' || quem === 'duda') { o[quem] = s; ls.set('cisper-salvas', JSON.stringify(o)); } };
+const esquecer = (quem) => { const o = salvas(); delete o[quem]; ls.set('cisper-salvas', JSON.stringify(o)); };
+let escolhido = '';
+function marcarPessoas() {
+  const o = salvas();
+  document.querySelectorAll('#quem3 .pessoa').forEach((b) => {
+    b.setAttribute('aria-pressed', b.dataset.p === escolhido ? 'true' : 'false');
+    b.querySelector('.ok').textContent = o[b.dataset.p] ? '✓ entra direto' : '';
+  });
+  const nomes = { debora: 'da Débora', duda: 'da Duda', adm: 'do Paulo' };
+  $('txtSenha').innerHTML = escolhido ? 'Digite a senha <b>' + nomes[escolhido] + '</b>.' : 'Digite a <b>sua</b> senha para entrar.';
+}
+async function entrarCom(s) {
+  if (!ENV) ENV = await baixar();
+  let d, env = ENV;
+  try { d = await abrir(env, s); } catch (e) { env = await baixar(); d = await abrir(env, s); }
+  ENV = env; ls.set('cisper-senha', s); ls.set('cisper-lista', JSON.stringify(ENV)); guardar(d.quem, s);
+  $('trava').hidden = true; $('senha').value = ''; $('senha').type = 'password'; $('btOlho').setAttribute('aria-pressed', 'false');
+  if (d.quem === 'adm') quem = 'todos';
+  entrar(d); window.scrollTo(0, 0);
+}
+document.querySelectorAll('#quem3 .pessoa').forEach((b) => b.addEventListener('click', async () => {
+  escolhido = b.dataset.p; marcarPessoas(); $('erroSenha').textContent = '';
+  const s = salvas()[escolhido];
+  if (s) {
+    $('erroSenha').textContent = 'Abrindo…';
+    try { await entrarCom(s); $('erroSenha').textContent = ''; return; }
+    catch (e) { esquecer(escolhido); marcarPessoas(); $('erroSenha').textContent = 'A senha mudou. Digite a senha nova.'; }
+  }
+  $('senha').focus();
+}));
+function pedirSenha(erro) { escolhido = ''; marcarPessoas(); $('trava').hidden = false; $('erroSenha').textContent = erro || ''; }
 $('fTrava').addEventListener('submit', async (ev) => {
   ev.preventDefault();
   const s = $('senha').value.trim(); if (!s) return;
   $('erroSenha').textContent = 'Abrindo…';
   if (!ENV) { try { ENV = await baixar(); } catch (e) { $('erroSenha').textContent = 'A lista ainda não foi publicada. Se você é o administrador, toque no link abaixo.'; $('btAdmArquivo').hidden = false; return; } }
-  try {
-    const d = await abrir(ENV, s); ls.set('cisper-senha', s); ls.set('cisper-lista', JSON.stringify(ENV));
-    $('trava').hidden = true; $('senha').value = ''; $('senha').type = 'password'; $('btOlho').setAttribute('aria-pressed', 'false');
-    if (d.quem === 'adm') quem = 'todos';
-    entrar(d); window.scrollTo(0, 0);
-  } catch (e) {
-    // Talvez a lista guardada seja antiga (senhas trocadas): busca a mais nova e tenta de novo.
-    try { const novo = await baixar(); const d = await abrir(novo, s); ENV = novo; ls.set('cisper-senha', s); ls.set('cisper-lista', JSON.stringify(ENV));
-      $('trava').hidden = true; $('senha').value = ''; $('senha').type = 'password'; $('btOlho').setAttribute('aria-pressed', 'false');
-      if (d.quem === 'adm') quem = 'todos'; entrar(d); window.scrollTo(0, 0); return; } catch (x) {}
-    $('erroSenha').textContent = 'Senha errada. Confira no 👁 e tente de novo.';
-  }
+  try { await entrarCom(s); $('erroSenha').textContent = ''; }
+  catch (e) { $('erroSenha').textContent = 'Senha errada. Confira no 👁 e tente de novo.'; }
 });
 $('btOlho').addEventListener('click', () => { const i = $('senha'); const ver = i.type === 'password'; i.type = ver ? 'text' : 'password'; $('btOlho').setAttribute('aria-pressed', ver ? 'true' : 'false'); $('btOlho').setAttribute('aria-label', ver ? 'Esconder senha' : 'Mostrar senha'); i.focus(); });
 const sair = () => { ls.del('cisper-senha'); ls.del('cisper-eu'); eu = ''; $('perfil').hidden = true; $('painel').hidden = true; $('adm').hidden = true; $('btSair').hidden = true; pedirSenha(); };

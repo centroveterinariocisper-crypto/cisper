@@ -79,7 +79,11 @@ button.grande { width: 100%; font: inherit; font-weight: 700; font-size: 17px; p
 #trava img { width: 96px; height: 96px; border-radius: 24px; background: #fff; }
 #trava h1 { margin: 0; font-size: 22px; }
 #trava p { margin: 0; opacity: .85; font-size: 15px; }
-#trava input { width: 100%; font: inherit; font-size: 22px; letter-spacing: .12em; text-align: center; padding: 12px; border-radius: 12px; border: 0; color: #18213f; }
+#trava .campo { position: relative; width: 100%; }
+#trava input { width: 100%; font: inherit; font-size: 20px; letter-spacing: .08em; text-align: center; padding: 12px 52px; border-radius: 12px; border: 0; background: #ffffff; color: #18213f; -webkit-text-fill-color: #18213f; color-scheme: light; }
+#trava button.olho { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; padding: 0; background: transparent; color: #5d6680; font-size: 20px; }
+#trava button.olho[aria-pressed="true"] { color: #1B2A6B; }
+#trava button.admlink { background: transparent; color: #fff; text-decoration: underline; font-weight: 400; font-size: 14px; }
 #trava button { width: 100%; font: inherit; font-weight: 700; padding: 13px; border-radius: 12px; border: 0; background: var(--teal); color: #0f1424; cursor: pointer; }
 #trava .erro { color: #ffc2bd; min-height: 1.4em; }
 button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
@@ -90,10 +94,15 @@ button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visibl
   <form id="fTrava" autocomplete="off">
     <img src="apple-touch-icon.png" alt="">
     <h1>Centro Veterinário Cisper</h1>
-    <p>Digite a senha da clínica para abrir a lista.</p>
-    <input id="senha" type="password" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="off" aria-label="Senha">
+    <p>Digite a sua senha para abrir a lista.</p>
+    <div class="campo">
+      <input id="senha" type="password" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="off" aria-label="Senha">
+      <button type="button" class="olho" id="btOlho" aria-label="Mostrar senha" aria-pressed="false">👁</button>
+    </div>
     <button type="submit">Entrar</button>
     <div class="erro" id="erroSenha" aria-live="polite"></div>
+    <button type="button" class="admlink" id="btAdmArquivo" hidden>Sou o administrador: abrir com o arquivo da lista</button>
+    <input type="file" id="arquivoLogin" accept=".cisper,.json,.txt,application/json,text/plain,*/*" hidden>
   </form>
 </div>
 
@@ -233,7 +242,7 @@ async function carregar(manual) {
     else {
       $('sub').textContent = 'Centro Veterinário Cisper';
       $('lista').replaceChildren(el('div', 'vazio', e.message === 'nao publicada' ? 'A lista ainda não foi publicada. O Paulo avisa quando estiver pronta.' : 'Não consegui buscar a lista. Confira a internet e toque em Atualizar.'));
-      if (e.message === 'nao publicada' && !ls.get('cisper-senha', '')) { ENV = null; pedirSenha(); }
+      if (e.message === 'nao publicada' && !ls.get('cisper-senha', '')) { ENV = null; pedirSenha(); $('btAdmArquivo').hidden = false; }
     }
   } finally { btn.disabled = false; btn.textContent = '↻ Atualizar'; mostrarAdm(); }
 }
@@ -293,7 +302,7 @@ $('fTrava').addEventListener('submit', async (ev) => {
   ev.preventDefault();
   const s = $('senha').value.trim(); if (!s) return;
   $('erroSenha').textContent = 'Abrindo…';
-  if (!ENV) { try { ENV = await baixar(); } catch (e) { $('erroSenha').textContent = 'A lista ainda não foi publicada. Tente mais tarde.'; return; } }
+  if (!ENV) { try { ENV = await baixar(); } catch (e) { $('erroSenha').textContent = 'A lista ainda não foi publicada. Se você é o administrador, toque no link abaixo.'; $('btAdmArquivo').hidden = false; return; } }
   try {
     const d = await abrir(ENV, s); ls.set('cisper-senha', s); ls.set('cisper-lista', JSON.stringify(ENV));
     ls.set('cisper-adm', d.quem === 'adm' ? '1' : '');
@@ -302,6 +311,14 @@ $('fTrava').addEventListener('submit', async (ev) => {
   } catch (e) { $('erroSenha').textContent = 'Senha errada. Tente de novo.'; }
 });
 $('btAtualizar').addEventListener('click', () => carregar(true));
+$('btOlho').addEventListener('click', () => { const i = $('senha'); const ver = i.type === 'password'; i.type = ver ? 'text' : 'password'; $('btOlho').setAttribute('aria-pressed', ver ? 'true' : 'false'); $('btOlho').setAttribute('aria-label', ver ? 'Esconder senha' : 'Mostrar senha'); i.focus(); });
+// Primeira publicação: ainda não há lista no site, então o adm entra usando o arquivo que recebeu
+$('btAdmArquivo').addEventListener('click', () => { if (!$('senha').value.trim()) { $('erroSenha').textContent = 'Digite a senha de administrador primeiro.'; return; } $('arquivoLogin').click(); });
+$('arquivoLogin').addEventListener('change', async (ev) => {
+  const f = ev.target.files && ev.target.files[0]; $('arquivoLogin').value = ''; if (!f) return;
+  try { const env = JSON.parse(await f.text()); if (!env.vagas || !env.ct) throw 0; ENV = env; } catch (e) { $('erroSenha').textContent = 'Esse arquivo não é uma lista da Cisper.'; return; }
+  $('fTrava').requestSubmit();
+});
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') carregar(false); });
 
 function render() {

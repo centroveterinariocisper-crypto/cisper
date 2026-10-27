@@ -184,6 +184,7 @@ let atual = null;
 
 async function baixar() {
   const r = await fetch('dados.enc?t=' + Date.now(), { cache: 'no-store' });
+  if (r.status === 404) throw new Error('nao publicada');
   if (!r.ok) throw new Error('sem lista');
   return r.json();
 }
@@ -196,7 +197,8 @@ async function carregar(manual) {
     try { const d = await abrir(ENV, senha); aplicar(d); }
     catch (e) { ls.del('cisper-senha'); pedirSenha('A senha mudou. Digite a nova senha.'); }
   } catch (e) {
-    if (!DADOS) $('lista').replaceChildren(el('div', 'vazio', 'Não consegui buscar a lista. Confira a internet e toque em Atualizar.'));
+    if (!DADOS) $('lista').replaceChildren(el('div', 'vazio', e && e.message === 'nao publicada' ? 'A lista ainda não foi publicada. O Paulo avisa quando estiver pronta.' : 'Não consegui buscar a lista. Confira a internet e toque em Atualizar.'));
+    if (!DADOS) $('sub').textContent = 'Centro Veterinário Cisper';
     else if (manual) $('sub').textContent = 'Sem internet · mostrando a última lista';
   } finally { btn.disabled = false; btn.textContent = '↻ Atualizar'; }
 }

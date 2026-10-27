@@ -21,7 +21,7 @@
   --navy: #1B2A6B; --teal: #2fa9a3; --teal-soft: #e5f6f5;
   --bg: #ffffff; --surface: #f5f7fa; --ink: #18213f; --muted: #66708a; --line: #e4e8ef;
   --wa: #1f9d55; --ok: #1f9d55; --ok-soft: #e7f6ee; --warn: #b26a00; --warn-soft: #fff3df; --bad: #c0392b;
-  --debora: #2fa9a3; --duda: #6b5bd2; --adm: #1B2A6B;
+  --debora: #F07C1E; --debora-2: #E9573F; --duda: #E5488A; --duda-2: #B8337A; --adm: #1B2A6B; --adm-2: #2fa9a3;
   color-scheme: light;
 }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -37,27 +37,31 @@ button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visibl
 .topo .tit { flex: 1; min-width: 0; }
 .topo h1 { margin: 0; font-size: 17px; color: var(--navy); line-height: 1.15; }
 .topo .sub { font-size: 12px; color: var(--muted); }
-.perfil { display: inline-flex; align-items: center; gap: 6px; border-radius: 99px; padding: 6px 12px 6px 6px; font-size: 14px; font-weight: 700; color: #fff; background: var(--cor, var(--navy)); border: 0; white-space: nowrap; }
+.perfil { display: inline-flex; align-items: center; gap: 6px; border-radius: 99px; padding: 6px 12px 6px 6px; font-size: 14px; font-weight: 700; color: #fff; background: linear-gradient(135deg, var(--cor, var(--navy)), var(--cor2, var(--navy))); border: 0; white-space: nowrap; }
 .perfil .ini { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,.25); display: grid; place-items: center; font-size: 13px; }
 
 .wrap { max-width: 620px; margin: 0 auto; padding: 14px max(16px, env(safe-area-inset-right, 0px)) calc(env(safe-area-inset-bottom, 0px) + 48px) max(16px, env(safe-area-inset-left, 0px)); display: flex; flex-direction: column; gap: 14px; }
 
-.painel { border-radius: 18px; padding: 16px; color: #fff; background: var(--cor, var(--navy)); display: flex; flex-direction: column; gap: 10px; box-shadow: 0 6px 18px rgba(27,42,107,.12); }
+.painel { position: relative; overflow: hidden; border-radius: 18px; padding: 16px; color: #fff; background: linear-gradient(135deg, var(--cor, var(--navy)) 0%, var(--cor2, var(--navy)) 100%); display: flex; flex-direction: column; gap: 10px; box-shadow: 0 6px 18px rgba(27,42,107,.12); }
 .painel .ola { font-size: 20px; font-weight: 800; margin: 0; }
 .painel .info { font-size: 14px; opacity: .92; margin: 0; }
 .painel .conta { display: flex; align-items: baseline; gap: 8px; }
-.painel .conta b { font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; }
+.painel .conta b { font-size: 38px; line-height: 1; font-variant-numeric: tabular-nums; }
 .painel .conta span { font-size: 15px; opacity: .92; }
 .painel .bar { height: 10px; background: rgba(255,255,255,.28); border-radius: 99px; overflow: hidden; }
 .painel .bar i { display: block; height: 100%; width: 0; background: #fff; border-radius: 99px; transition: width .4s; }
-.painel.fim { background: var(--ok); }
+.painel > * { position: relative; z-index: 1; }
+.painel { padding-bottom: 22px; }
+.painel::after { content: ""; position: absolute; left: -10%; right: -10%; bottom: -38px; height: 70px; background: var(--navy); opacity: .22; border-radius: 50% 50% 0 0 / 100% 100% 0 0; }
+.painel::before { content: ""; position: absolute; left: -10%; right: -10%; bottom: -52px; height: 70px; background: var(--teal); opacity: .35; border-radius: 50% 50% 0 0 / 100% 100% 0 0; }
+.painel.fim { background: linear-gradient(135deg, #1f9d55, #2fa9a3); }
 
 .linha-chips { display: flex; flex-direction: column; gap: 6px; }
 .rotulo { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
 .chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
 .chips::-webkit-scrollbar { display: none; }
 .chips button { flex: 0 0 auto; border: 1px solid var(--line); background: var(--bg); color: var(--ink); border-radius: 99px; padding: 8px 14px; font-size: 14px; }
-.chips button.on { background: var(--navy); color: #fff; border-color: var(--navy); font-weight: 700; }
+.chips button.on { background: var(--minha, var(--navy)); color: #fff; border-color: var(--minha, var(--navy)); font-weight: 700; }
 
 .secao { font-size: 15px; font-weight: 800; color: var(--navy); margin: 6px 0 -4px; display: flex; align-items: center; gap: 8px; }
 .secao .n { background: var(--surface); color: var(--muted); border-radius: 99px; padding: 1px 9px; font-size: 13px; }
@@ -67,7 +71,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visibl
 .card .nome { font-weight: 800; font-size: 18px; line-height: 1.25; overflow-wrap: anywhere; }
 .card .det { color: var(--muted); font-size: 14px; overflow-wrap: anywhere; margin-top: -6px; }
 .card .alerta { display: inline-block; font-size: 12px; font-weight: 800; background: var(--warn-soft); color: var(--warn); border-radius: 6px; padding: 1px 7px; margin-left: 6px; vertical-align: 2px; }
-.passos { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.passos { display: grid; grid-template-columns: 1fr; gap: 8px; }
 a.wa, button.feito { display: flex; align-items: center; justify-content: center; gap: 6px; text-align: center; text-decoration: none; font-weight: 800; padding: 13px 8px; border-radius: 12px; font-size: 15px; line-height: 1.2; }
 a.wa { background: var(--wa); color: #fff; }
 button.feito { background: var(--bg); color: var(--ok); border: 2px solid var(--ok); }
@@ -79,6 +83,15 @@ details.msg summary::before { content: "▸ "; }
 details.msg[open] summary::before { content: "▾ "; }
 details.msg p { margin: 6px 0 0; background: var(--surface); padding: 10px 12px; border-radius: 10px; font-size: 14px; white-space: pre-wrap; }
 
+label.marcar { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border: 2px dashed #c9d1e0; border-radius: 12px; cursor: pointer; font-weight: 700; color: var(--ink); user-select: none; }
+label.marcar input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+label.marcar .caixa { width: 28px; height: 28px; flex: 0 0 auto; border-radius: 8px; border: 2.5px solid var(--minha, var(--navy)); background: #fff; display: grid; place-items: center; transition: background .15s; }
+label.marcar input:checked + .caixa { background: var(--ok); border-color: var(--ok); }
+label.marcar input:checked + .caixa::after { content: "✓"; color: #fff; font-weight: 900; font-size: 18px; line-height: 1; }
+label.marcar input:focus-visible + .caixa { outline: 3px solid var(--teal); outline-offset: 2px; }
+label.marcar.on { border-style: solid; border-color: #cfe9da; background: var(--ok-soft); color: var(--ok); }
+.card.ok label.marcar { border: 0; background: none; padding: 0; width: 100%; color: var(--ink); }
+.card.ok label.marcar .txt { flex: 1; min-width: 0; }
 .card.ok { background: var(--ok-soft); border-color: #cfe9da; border-left-color: var(--ok); box-shadow: none; padding: 10px 14px; flex-direction: row; align-items: center; gap: 10px; }
 .card.ok .check { width: 30px; height: 30px; flex: 0 0 auto; border-radius: 50%; background: var(--ok); color: #fff; display: grid; place-items: center; font-weight: 900; }
 .card.ok .txt { flex: 1; min-width: 0; }
@@ -177,8 +190,9 @@ button.link { background: none; border: 0; color: var(--muted); text-decoration:
     <summary>Como usar</summary>
     <ol>
       <li>Toque em <b>1 · Abrir WhatsApp</b>. A mensagem já vem escrita. Confira o nome e envie.</li>
-      <li>Volte para o app e toque em <b>2 · Já enviei</b>. O cliente vai para "Feitas hoje".</li>
-      <li>Se souber que o animal faleceu, <b>não envie</b>: toque em Já enviei e avise o Paulo.</li>
+      <li>Volte para o app e marque a caixinha <b>☐ Marque aqui quando enviar</b>. O cliente desce para "Feitas".</li>
+      <li>Marcou sem querer? Toque na caixinha de novo, em "Feitas", para desmarcar.</li>
+      <li>Se souber que o animal faleceu, <b>não envie</b>: marque a caixinha e avise o Paulo.</li>
       <li>Não envie no almoço, depois das 19h nem no domingo.</li>
       <li>A lista nova aparece sozinha quando o Paulo publica. Para buscar na hora, puxe a tela para baixo ou feche e abra o app.</li>
     </ol>
@@ -201,16 +215,16 @@ button.link { background: none; border: 0; color: var(--muted); text-decoration:
 <script>
 const TIPOS = {
   pos:  { rot: '🩺 Pós-atendimento', cor: '#2fa9a3', soft: '#e5f6f5', ink: '#1d7c77' },
-  vac:  { rot: '💉 Vacina', cor: '#e08a00', soft: '#fff3df', ink: '#9a5b00' },
-  orc2: { rot: '💬 Depois do orçamento', cor: '#3b6fd8', soft: '#e8effc', ink: '#2a55ad' },
-  orc7: { rot: '💬 Depois do orçamento', cor: '#3b6fd8', soft: '#e8effc', ink: '#2a55ad' },
+  vac:  { rot: '💉 Vacina', cor: '#1B2A6B', soft: '#e8ebf6', ink: '#1B2A6B' },
+  orc2: { rot: '💬 Depois do orçamento', cor: '#3b8fd8', soft: '#e6f1fb', ink: '#23649f' },
+  orc7: { rot: '💬 Depois do orçamento', cor: '#3b8fd8', soft: '#e6f1fb', ink: '#23649f' },
   par:  { rot: '👋 Cliente sumido', cor: '#8a94a8', soft: '#eef1f5', ink: '#55607a' }
 };
 const ORDEM = ['pos', 'vac', 'orc2', 'orc7', 'par'];
 const PESSOAS = {
-  debora: { nome: 'Débora', turno: 'Manhã', horario: 'Envie das 9h às 11h30.', cor: 'var(--debora)' },
-  duda:   { nome: 'Duda', turno: 'Tarde', horario: 'Envie das 14h às 17h e responda quem escrever à tarde.', cor: 'var(--duda)' },
-  todos:  { nome: 'Paulo', turno: 'Adm', horario: 'Você está vendo a lista das duas.', cor: 'var(--adm)' }
+  debora: { nome: 'Débora', turno: 'Manhã', horario: 'Envie das 9h às 11h30.', cor: 'var(--debora)', cor2: 'var(--debora-2)' },
+  duda:   { nome: 'Duda', turno: 'Tarde', horario: 'Envie das 14h às 17h e responda quem escrever à tarde.', cor: 'var(--duda)', cor2: 'var(--duda-2)' },
+  todos:  { nome: 'Paulo', turno: 'Adm', horario: 'Você está vendo a lista das duas.', cor: 'var(--adm)', cor2: 'var(--adm-2)' }
 };
 const QUEM = [['todos', 'As duas'], ['debora', 'Débora'], ['duda', 'Duda']];
 const $ = (id) => document.getElementById(id);
@@ -316,7 +330,7 @@ function render() {
   const P = PESSOAS[ehAdm() ? 'todos' : eu] || PESSOAS.todos;
   const vendo = PESSOAS[quem] || P;
   // cabeçalho: quem está usando
-  $('perfil').hidden = false; $('perfil').style.setProperty('--cor', P.cor);
+  $('perfil').hidden = false; $('perfil').style.setProperty('--cor', P.cor); $('perfil').style.setProperty('--cor2', P.cor2);
   $('perfilIni').textContent = P.nome[0]; $('perfilNome').textContent = P.nome + ' · ' + P.turno;
   $('btSair').hidden = false;
   const g = META && META.gerado_em ? new Date(META.gerado_em) : null;
@@ -348,7 +362,9 @@ function render() {
   const ehHoje = atual === hojeISO();
   const nomeDia = ehHoje ? 'hoje' : new Date(atual + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
   $('painel').hidden = false;
-  $('painel').style.setProperty('--cor', vendo.cor);
+  $('painel').style.setProperty('--cor', vendo.cor); $('painel').style.setProperty('--cor2', vendo.cor2);
+  document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff');
+  document.documentElement.style.setProperty('--minha', vendo.cor);
   $('painel').classList.toggle('fim', itens.length > 0 && !fazer.length);
   if (ehAdm() && quem !== 'todos') $('ola').textContent = 'Lista da ' + vendo.nome + ' · ' + vendo.turno;
   else if (ehAdm()) $('ola').textContent = 'Olá, Paulo!';
@@ -380,22 +396,28 @@ function cartao(i) {
   const m = msg(i);
   const ps = el('div', 'passos');
   if (i.tel) {
-    const a = el('a', 'wa'); a.appendChild(el('span', 'num', '1')); a.appendChild(document.createTextNode('Abrir WhatsApp'));
+    const a = el('a', 'wa'); a.appendChild(document.createTextNode('Abrir WhatsApp'));
     a.href = 'https://api.whatsapp.com/send?phone=' + i.tel + '&text=' + encodeURIComponent(m); a.target = '_blank'; a.rel = 'noopener';
     ps.appendChild(a);
   } else ps.appendChild(el('div', 'semtel', 'Sem celular na ficha. Procure o telefone no NuvemVet.'));
-  const b = el('button', 'feito'); b.type = 'button'; b.appendChild(el('span', 'num', i.tel ? '2' : '✓')); b.appendChild(document.createTextNode('Já enviei'));
-  b.onclick = () => { feitos[i.k] = Date.now(); salvar(); render(); };
-  ps.appendChild(b);
   c.appendChild(ps);
+  c.appendChild(caixa(i, false));
   const dt = el('details', 'msg'); dt.appendChild(el('summary', null, 'Ver a mensagem')); dt.appendChild(el('p', null, m)); c.appendChild(dt);
   return c;
 }
+function caixa(i, marcada) {
+  const lb = el('label', 'marcar' + (marcada ? ' on' : ''));
+  const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = marcada;
+  cb.setAttribute('aria-label', 'Mensagem enviada para ' + capNome(i.c));
+  cb.addEventListener('change', () => { if (cb.checked) feitos[i.k] = Date.now(); else delete feitos[i.k]; salvar(); setTimeout(render, marcada ? 0 : 350); lb.classList.toggle('on', cb.checked); });
+  lb.appendChild(cb); lb.appendChild(el('span', 'caixa')); lb.appendChild(el('span', 'txt', marcada ? 'Enviada' : 'Marque aqui quando enviar'));
+  return lb;
+}
 function cartaoFeito(i) {
   const c = el('article', 'card ok');
-  c.appendChild(el('span', 'check', '✓'));
-  const t = el('div', 'txt'); t.appendChild(el('div', 'nome', capNome(i.c))); t.appendChild(el('div', 'det', `Enviada às ${hora(feitos[i.k])} · ${i.a}`)); c.appendChild(t);
-  const u = el('button', null, 'Desfazer'); u.type = 'button'; u.onclick = () => { delete feitos[i.k]; salvar(); render(); }; c.appendChild(u);
+  const t = el('div', 'txt'); t.appendChild(el('div', 'nome', capNome(i.c))); t.appendChild(el('div', 'det', `Enviada às ${hora(feitos[i.k])} · ${i.a}`));
+  const cx = caixa(i, true); cx.prepend(t); cx.querySelector('.txt:last-child').remove();
+  c.appendChild(cx);
   return c;
 }
 

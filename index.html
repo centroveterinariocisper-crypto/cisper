@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Cisper</title>
+<meta name="description" content="Mensagens do dia da recepção do Centro Veterinário Cisper">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#1B2A6B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Cisper">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+/* Uma coluna de trabalho: faixa azul da marca no topo, escolha do dia e da pessoa, cartões de contato */
+:root {
+  --navy: #1B2A6B; --teal: #3DBFB8; --teal-ink: #1f7f7a;
+  --bg: #f2f5f7; --card: #ffffff; --ink: #18213f; --muted: #5d6680; --line: #dfe4ec;
+  --soft: #e6f5f4; --wa: #1f8a4c; --warn: #9a5b00; --warnsoft: #fbefd9; --done: #edf0f3; --bad: #b3362f;
+}
+@media (prefers-color-scheme: dark) { :root {
+  --bg: #0f1424; --card: #182037; --ink: #e8ecf6; --muted: #9aa4bf; --line: #2a3452;
+  --soft: #16302f; --wa: #2fa463; --warn: #e6ad55; --warnsoft: #33281a; --done: #141a2d; --bad: #f08a80; --teal-ink: #6fd6cf;
+  color-scheme: dark; } }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+[hidden] { display: none !important; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; min-height: 100vh; }
+.topo { background: var(--navy); color: #fff; padding: calc(env(safe-area-inset-top, 0px) + 14px) max(16px, env(safe-area-inset-right, 0px)) 14px max(16px, env(safe-area-inset-left, 0px)); position: sticky; top: 0; z-index: 5; box-shadow: 0 2px 10px rgba(0,0,0,.15); }
+.topo-in { max-width: 640px; margin: 0 auto; display: flex; align-items: center; gap: 12px; }
+.topo img { width: 44px; height: 44px; border-radius: 12px; background: #fff; flex: 0 0 auto; }
+.topo h1 { margin: 0; font-size: 19px; line-height: 1.2; }
+.topo .sub { font-size: 13px; opacity: .8; }
+.topo .tit { flex: 1; min-width: 0; }
+.topo button { font: inherit; font-size: 14px; color: #fff; background: rgba(255,255,255,.14); border: 0; border-radius: 99px; padding: 8px 12px; cursor: pointer; }
+.wrap { max-width: 640px; margin: 0 auto; padding: 14px max(16px, env(safe-area-inset-right, 0px)) calc(env(safe-area-inset-bottom, 0px) + 40px) max(16px, env(safe-area-inset-left, 0px)); display: flex; flex-direction: column; gap: 14px; }
+.chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chips button { flex: 0 0 auto; border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 99px; padding: 8px 13px; font: inherit; font-size: 14px; cursor: pointer; }
+.chips button.on { background: var(--navy); color: #fff; border-color: var(--navy); font-weight: 600; }
+@media (prefers-color-scheme: dark) { .chips button.on { background: var(--teal); color: #0f1424; border-color: var(--teal); } }
+.prog { font-size: 15px; }
+.bar { height: 8px; background: var(--line); border-radius: 99px; overflow: hidden; margin-top: 6px; }
+.bar i { display: block; height: 100%; width: 0; background: var(--teal); transition: width .3s; }
+.dica { background: var(--soft); border-radius: 12px; padding: 12px 14px; font-size: 14px; }
+.dica summary { cursor: pointer; font-weight: 700; }
+.dica ol, .dica ul { margin: 8px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 5px; }
+h2 { font-size: 16px; margin: 8px 0 0; color: var(--navy); }
+@media (prefers-color-scheme: dark) { h2 { color: var(--teal-ink); } }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+.card.feito { background: var(--done); }
+.card.feito .nome, .card.feito .det { opacity: .55; }
+.nome { font-weight: 700; font-size: 17px; overflow-wrap: anywhere; }
+.det { color: var(--muted); font-size: 14px; overflow-wrap: anywhere; }
+.tag { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; background: var(--warnsoft); color: var(--warn); border-radius: 99px; padding: 2px 8px; margin-right: 6px; vertical-align: 2px; }
+a.wa { display: block; text-align: center; background: var(--wa); color: #fff; text-decoration: none; font-weight: 700; padding: 13px; border-radius: 12px; font-size: 16px; }
+.linha { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.linha button { border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 8px; padding: 7px 11px; font: inherit; font-size: 14px; cursor: pointer; }
+.ok { color: var(--teal-ink); font-weight: 700; font-size: 14px; }
+.semtel { color: var(--bad); font-size: 14px; }
+details.msg summary { color: var(--muted); font-size: 13px; cursor: pointer; }
+details.msg p { margin: 6px 0 0; background: var(--bg); padding: 10px; border-radius: 8px; font-size: 14px; white-space: pre-wrap; }
+.vazio { color: var(--muted); background: var(--card); border: 1px dashed var(--line); border-radius: 14px; padding: 18px; }
+.aviso { color: var(--bad); font-size: 14px; }
+/* tela da senha */
+#trava { position: fixed; inset: 0; background: var(--navy); color: #fff; display: flex; align-items: center; justify-content: center; padding: 24px; z-index: 20; }
+#trava form { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 14px; align-items: center; text-align: center; }
+#trava img { width: 96px; height: 96px; border-radius: 24px; background: #fff; }
+#trava h1 { margin: 0; font-size: 22px; }
+#trava p { margin: 0; opacity: .85; font-size: 15px; }
+#trava input { width: 100%; font: inherit; font-size: 22px; letter-spacing: .3em; text-align: center; padding: 12px; border-radius: 12px; border: 0; color: #18213f; }
+#trava button { width: 100%; font: inherit; font-weight: 700; padding: 13px; border-radius: 12px; border: 0; background: var(--teal); color: #0f1424; cursor: pointer; }
+#trava .erro { color: #ffc2bd; min-height: 1.4em; }
+button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div id="trava" hidden>
+  <form id="fTrava" autocomplete="off">
+    <img src="apple-touch-icon.png" alt="">
+    <h1>Centro Veterinário Cisper</h1>
+    <p>Digite a senha da clínica para abrir a lista.</p>
+    <input id="senha" type="password" inputmode="numeric" autocomplete="off" aria-label="Senha">
+    <button type="submit">Entrar</button>
+    <div class="erro" id="erroSenha" aria-live="polite"></div>
+  </form>
+</div>
+
+<header class="topo">
+  <div class="topo-in">
+    <img src="apple-touch-icon.png" alt="Centro Veterinário Cisper">
+    <div class="tit">
+      <h1>Lista do dia</h1>
+      <div class="sub" id="sub">Carregando…</div>
+    </div>
+    <button type="button" id="btAtualizar" aria-label="Buscar lista nova">↻ Atualizar</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="chips" id="dias" aria-label="Dia"></div>
+  <div class="chips" id="quem" aria-label="Quem está usando"></div>
+  <div class="prog" id="prog"></div>
+  <div id="lista"><div class="vazio">Carregando a lista…</div></div>
+  <details class="dica">
+    <summary>Como usar</summary>
+    <ol>
+      <li>Toque no seu nome. <b>Débora (manhã)</b>: pós-atendimento, vacinas, depois do orçamento e os 10 primeiros clientes parados, das 9h às 11h30. <b>Duda (tarde)</b>: os outros clientes parados, das 14h às 17h, e as respostas da tarde.</li>
+      <li>Toque em <b>Abrir WhatsApp</b>. A mensagem já vem escrita. Confira o nome, envie e volte para o app.</li>
+      <li>O cartão fica marcado como enviado. Passe para o próximo.</li>
+      <li>Se souber que o animal faleceu, <b>não envie</b> e avise o Paulo.</li>
+      <li>Não envie no almoço, depois das 19h nem no domingo.</li>
+      <li>A lista é atualizada pelo Paulo. Para ver a nova, toque em <b>↻ Atualizar</b>.</li>
+    </ol>
+  </details>
+  <details class="dica">
+    <summary>Quando o cliente responder</summary>
+    <ul>
+      <li><b>"Vou levar"</b>: "Que bom! Estamos esperando 🐾 Atendemos das 8h às 20h, almoço das 12h às 13h."</li>
+      <li><b>"Já vacinei"</b>: "Que ótimo! Pode mandar uma foto da carteirinha? Assim atualizamos o cadastro." Depois avise o Paulo.</li>
+      <li><b>"Quanto custa?"</b>: informe o valor da tabela do NuvemVet e diga que dá para pagar no Pix, débito ou crédito.</li>
+      <li><b>"Ele melhorou"</b>: "Que notícia boa! Qualquer coisa, estamos aqui ❤️"</li>
+      <li><b>"Não melhorou"</b>: chame o veterinário na hora e peça para o tutor trazer o animal hoje.</li>
+      <li><b>"Não quero receber"</b>: "Tudo bem, desculpe o incômodo. Não enviaremos mais." Escreva <b>NÃO ENVIAR WHATSAPP</b> nas anotações da ficha no NuvemVet.</li>
+      <li>Se o cliente não responder, não mande outra mensagem.</li>
+    </ul>
+  </details>
+</main>
+
+<script>
+const GRUPOS = [['pos', 'Como o animal está'], ['vac', 'Vacinas para avisar'], ['orc2', 'Depois do orçamento'], ['par', 'Clientes para chamar de volta']];
+const QUEM = [['todos', 'Tudo'], ['debora', 'Débora · manhã'], ['duda', 'Duda · tarde']];
+const $ = (id) => document.getElementById(id);
+const el = (t, c, x) => { const e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; };
+const ls = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : v; } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }, del(k) { try { localStorage.removeItem(k); } catch (e) {} } };
+const cap = (s) => { const w = String(s || '').trim().split(/\s+/)[0] || ''; return w ? w[0].toUpperCase() + w.slice(1).toLowerCase() : ''; };
+const capNome = (s) => String(s || '').trim().toLowerCase().replace(/(^|\s)(\p{L})/gu, (m, a, b) => a + b.toUpperCase()).replace(/\b(De|Da|Do|Dos|Das|E)\b/g, (m) => m.toLowerCase());
+const rs = (v) => 'R$ ' + Math.round(v || 0).toLocaleString('pt-BR');
+const hojeISO = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+
+function msg(i) {
+  const n = cap(i.c), a = i.a ? capNome(i.a) : 'seu pet';
+  const dm = (x) => String(x || '').slice(0, 5);
+  const G = { f: { o: 'a', de: 'da', ele: 'ela' }, m: { o: 'o', de: 'do', ele: 'ele' } }[i.g];
+  const vir = 'É só vir: atendemos por ordem de chegada, de segunda a sábado, das 8h às 20h (almoço das 12h às 13h).';
+  if (i.t === 'vac') {
+    const ap = (i.n || 1) > 1, vx = String(i.x || '').replace(/RAIVA/gi, 'antirrábica'), vp = /( e |,)/.test(vx);
+    const oque = (vp ? `as vacinas (${vx})` : `a vacina ${vx}`) + (ap || !G ? ' de ' : ' ' + G.de + ' ') + a;
+    const quando = (i.atraso || 0) > 0 ? `${vp ? 'podem estar vencidas' : 'pode estar vencida'} desde ${dm(i.d)}` : `${vp ? 'vencem' : 'vence'} por volta de ${dm(i.d)}`;
+    return `Oi, ${n}! Aqui é do Centro Veterinário Cisper 🐾 Pelo nosso registro, ${oque} ${quando}. Pode conferir na carteirinha? Vacina em dia protege contra doenças graves. Se já tomou, nos avise. Atendemos por ordem de chegada, de segunda a sábado, das 8h às 20h (almoço das 12h às 13h). Se não quiser receber lembretes, é só avisar. ❤️`;
+  }
+  if (i.t === 'pos') {
+    const ap = (i.n || 1) > 1; const quem = ap ? `estão ${a}` : `${G ? G.o + ' ' : ''}${a} está`;
+    return `Oi, ${n}! Aqui é do Centro Veterinário Cisper 🐾 Passando para saber como ${quem} depois ${i.x === 'cirurgia' ? 'da cirurgia' : 'do atendimento'}. ${i.x === 'cirurgia' ? 'Está se recuperando bem?' : 'Melhorou?'} Se tiver qualquer dúvida sobre o tratamento, é só responder aqui. ❤️`;
+  }
+  if (i.t === 'orc2' || i.t === 'orc7') return `Oi, ${n}! Aqui é do Centro Veterinário Cisper 🐾 Passando para saber como ${G ? G.o + ' ' : ''}${a} está. Se precisar de qualquer coisa, é só responder aqui. ❤️`;
+  return `Oi, ${n}! Aqui é do Centro Veterinário Cisper 🐾 Faz tempo que não vemos ${G ? G.o + ' ' : ''}${a} por aqui. Como ${G ? G.ele + ' ' : ''}está? Vacina e check-up em dia ajudam a pegar problemas cedo. ${vir} Se não quiser receber lembretes, é só avisar. ❤️`;
+}
+function det(i) {
+  if (i.t === 'vac') return `${i.a} · vacina ${i.x} · vence ${i.d}`;
+  if (i.t === 'par') return `${i.a} · última visita ${i.d}`;
+  if (i.t === 'pos') return `${i.a} · ${i.x} em ${i.d}`;
+  return `${i.a} · orçamento de ${rs(i.v)} feito em ${i.d}`;
+}
+const dona = (i, lista) => { if (i.t !== 'par') return 'debora'; const p = lista.filter((x) => x.t === 'par').indexOf(i); return p < 10 ? 'debora' : 'duda'; };
+
+// ---- dados criptografados (dados.enc): só abrem com a senha da clínica
+const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+async function abrir(env, senha) {
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(senha), 'PBKDF2', false, ['deriveKey']);
+  const chave = await crypto.subtle.deriveKey({ name: 'PBKDF2', salt: b64(env.salt), iterations: env.iter, hash: 'SHA-256' }, base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+  const txt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(env.iv) }, chave, b64(env.ct));
+  return JSON.parse(new TextDecoder().decode(txt));
+}
+
+let DADOS = null, META = null, ENV = null;
+let quem = ls.get('cisper-quem', 'todos');
+let feitos = {}; try { feitos = JSON.parse(ls.get('cisper-enviados', '{}')) || {}; } catch (e) { feitos = {}; }
+const salvar = () => ls.set('cisper-enviados', JSON.stringify(feitos));
+let atual = null;
+
+async function baixar() {
+  const r = await fetch('dados.enc?t=' + Date.now(), { cache: 'no-store' });
+  if (!r.ok) throw new Error('sem lista');
+  return r.json();
+}
+async function carregar(manual) {
+  const btn = $('btAtualizar'); btn.disabled = true; btn.textContent = '↻ …';
+  try {
+    ENV = await baixar();
+    const senha = ls.get('cisper-senha', '');
+    if (!senha) { pedirSenha(); return; }
+    try { const d = await abrir(ENV, senha); aplicar(d); }
+    catch (e) { ls.del('cisper-senha'); pedirSenha('A senha mudou. Digite a nova senha.'); }
+  } catch (e) {
+    if (!DADOS) $('lista').replaceChildren(el('div', 'vazio', 'Não consegui buscar a lista. Confira a internet e toque em Atualizar.'));
+    else if (manual) $('sub').textContent = 'Sem internet · mostrando a última lista';
+  } finally { btn.disabled = false; btn.textContent = '↻ Atualizar'; }
+}
+function aplicar(d) {
+  DADOS = d.dias || {}; META = d;
+  const dias = Object.keys(DADOS).sort(), h = hojeISO();
+  if (!atual || !dias.includes(atual)) atual = dias.includes(h) ? h : (dias.find((x) => x > h) || dias[dias.length - 1]);
+  // limpa marcações de itens que não existem mais
+  const vivos = new Set(Object.values(DADOS).flat().map((i) => i.k));
+  for (const k of Object.keys(feitos)) if (!vivos.has(k) && Date.now() - feitos[k] > 30 * 864e5) delete feitos[k];
+  salvar(); render();
+}
+function pedirSenha(erro) {
+  $('trava').hidden = false; $('erroSenha').textContent = erro || '';
+  setTimeout(() => $('senha').focus(), 50);
+}
+$('fTrava').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const s = $('senha').value.trim(); if (!s || !ENV) return;
+  $('erroSenha').textContent = 'Abrindo…';
+  try { const d = await abrir(ENV, s); ls.set('cisper-senha', s); $('trava').hidden = true; $('senha').value = ''; aplicar(d); }
+  catch (e) { $('erroSenha').textContent = 'Senha errada. Tente de novo.'; }
+});
+$('btAtualizar').addEventListener('click', () => carregar(true));
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && ENV) carregar(false); });
+
+function render() {
+  if (!DADOS) return;
+  const dias = Object.keys(DADOS).sort();
+  const g = META && META.gerado_em ? new Date(META.gerado_em) : null;
+  $('sub').textContent = g && !isNaN(g) ? 'Atualizada em ' + g.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric' }) + ' às ' + g.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : 'Centro Veterinário Cisper';
+  const bx = $('dias'); bx.replaceChildren();
+  for (const d of dias) {
+    const rot = d === hojeISO() ? 'Hoje' : new Date(d + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'numeric' });
+    const b = el('button', d === atual ? 'on' : '', rot); b.type = 'button';
+    b.onclick = () => { atual = d; render(); window.scrollTo(0, 0); };
+    bx.appendChild(b);
+  }
+  const qx = $('quem'); qx.replaceChildren();
+  for (const [id, nome] of QUEM) { const b = el('button', id === quem ? 'on' : '', nome); b.type = 'button'; b.onclick = () => { quem = id; ls.set('cisper-quem', id); render(); }; qx.appendChild(b); }
+  const doDia = DADOS[atual] || [];
+  const itens = doDia.filter((i) => quem === 'todos' || dona(i, doDia) === quem);
+  const ok = itens.filter((i) => feitos[i.k]).length;
+  const pr = $('prog'); pr.replaceChildren(el('div', null, `${ok} de ${itens.length} mensagens enviadas`));
+  const bar = el('div', 'bar'); const fill = el('i'); fill.style.width = itens.length ? (ok / itens.length * 100) + '%' : '0'; bar.appendChild(fill); pr.appendChild(bar);
+  const L = $('lista'); L.replaceChildren();
+  if (atual < hojeISO() && dias[dias.length - 1] < hojeISO()) L.appendChild(el('p', 'aviso', 'Esta é a última lista que o Paulo montou. Toque em Atualizar para ver se já tem a nova.'));
+  if (!itens.length) { L.appendChild(el('div', 'vazio', 'Nada para este dia.')); return; }
+  for (const [t, titulo] of GRUPOS) {
+    const grupo = itens.filter((i) => i.t === t || (t === 'orc2' && i.t === 'orc7')); if (!grupo.length) continue;
+    L.appendChild(el('h2', null, `${titulo} (${grupo.length})`));
+    for (const i of grupo) {
+      const c = el('div', 'card' + (feitos[i.k] ? ' feito' : ''));
+      const nm = el('div', 'nome');
+      if (i.t === 'vac' && (i.atraso || 0) > 0) nm.appendChild(el('span', 'tag', 'vencida'));
+      nm.appendChild(document.createTextNode(capNome(i.c)));
+      c.appendChild(nm); c.appendChild(el('div', 'det', det(i)));
+      const m = msg(i);
+      if (i.tel) {
+        const a = el('a', 'wa', feitos[i.k] ? 'Abrir WhatsApp de novo' : 'Abrir WhatsApp');
+        a.href = 'https://api.whatsapp.com/send?phone=' + i.tel + '&text=' + encodeURIComponent(m); a.target = '_blank'; a.rel = 'noopener';
+        a.onclick = () => { feitos[i.k] = Date.now(); salvar(); setTimeout(render, 300); };
+        c.appendChild(a);
+      } else c.appendChild(el('div', 'semtel', 'Sem celular na ficha. Procure o telefone no NuvemVet.'));
+      const ln = el('div', 'linha');
+      if (feitos[i.k]) { ln.appendChild(el('span', 'ok', '✓ Enviado')); const u = el('button', null, 'Desmarcar'); u.type = 'button'; u.onclick = () => { delete feitos[i.k]; salvar(); render(); }; ln.appendChild(u); }
+      else { const u = el('button', null, 'Marcar como enviado'); u.type = 'button'; u.onclick = () => { feitos[i.k] = Date.now(); salvar(); render(); }; ln.appendChild(u); }
+      c.appendChild(ln);
+      const dt = el('details', 'msg'); dt.appendChild(el('summary', null, 'Ver mensagem')); dt.appendChild(el('p', null, m)); c.appendChild(dt);
+      L.appendChild(c);
+    }
+  }
+}
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+  let recarregou = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => { if (!recarregou) { recarregou = true; location.reload(); } });
+}
+carregar(false);
+</script>
+</body>
+</html>

@@ -243,16 +243,16 @@ function msg(i) {
   const vir = 'É só vir: atendemos por ordem de chegada, de segunda a sábado, das 8h às 20h (almoço das 12h às 13h).';
   if (i.t === 'vac') {
     const ap = (i.n || 1) > 1, vx = String(i.x || '').replace(/RAIVA/gi, 'antirrábica'), vp = /( e |,)/.test(vx);
-    const oque = (vp ? `as vacinas (${vx})` : `a vacina ${vx}`) + (ap || !G ? ' de ' : ' ' + G.de + ' ') + a;
+    const oque = (vp ? `As vacinas (${vx})` : `A vacina ${vx}`) + (ap || !G ? ' de ' : ' ' + G.de + ' ') + a;
     const quando = (i.atraso || 0) > 0 ? `${vp ? 'podem estar vencidas' : 'pode estar vencida'} desde ${dm(i.d)}` : `${vp ? 'vencem' : 'vence'} por volta de ${dm(i.d)}`;
-    return `Oi, ${n}! Aqui é do Centro Veterinário Cisper 🐾 Pelo nosso registro, ${oque} ${quando}. Pode conferir na carteirinha? Vacina em dia protege contra doenças graves. Se já tomou, nos avise. Atendemos por ordem de chegada, de segunda a sábado, das 8h às 20h (almoço das 12h às 13h). Se não quiser receber lembretes, é só avisar. ❤️`;
+    return `Oi, ${n}! Aqui é do Centro Veterinário Cisper 🐾 ${oque} ${quando} 💉 Dá uma olhadinha na carteirinha? Se já tomou, é só nos avisar. Atendemos por ordem de chegada, de segunda a sábado, das 8h às 20h. ❤️`;
   }
   if (i.t === 'pos') {
     const ap = (i.n || 1) > 1; const quem = ap ? `estão ${a}` : `${G ? G.o + ' ' : ''}${a} está`;
     return `Oi, ${n}! Aqui é do Centro Veterinário Cisper 🐾 Passando para saber como ${quem} depois ${i.x === 'cirurgia' ? 'da cirurgia' : 'do atendimento'}. ${i.x === 'cirurgia' ? 'Está se recuperando bem?' : 'Melhorou?'} Se tiver qualquer dúvida sobre o tratamento, é só responder aqui. ❤️`;
   }
   if (i.t === 'orc2' || i.t === 'orc7') return `Oi, ${n}! Aqui é do Centro Veterinário Cisper 🐾 Passando para saber como ${G ? G.o + ' ' : ''}${a} está. Se precisar de qualquer coisa, é só responder aqui. ❤️`;
-  return `Oi, ${n}! Aqui é do Centro Veterinário Cisper 🐾 Faz tempo que não vemos ${G ? G.o + ' ' : ''}${a} por aqui. Como ${G ? G.ele + ' ' : ''}está? Vacina e check-up em dia ajudam a pegar problemas cedo. ${vir} Se não quiser receber lembretes, é só avisar. ❤️`;
+  return `Oi, ${n}! Aqui é do Centro Veterinário Cisper 🐾 Faz tempo que não vemos ${G ? G.o + ' ' : ''}${a} por aqui. Como ${G ? G.ele + ' ' : ''}está? Vacina e check-up em dia ajudam a pegar problemas cedo. ${vir} ❤️`;
 }
 function det(i) {
   if (i.t === 'vac') return `${i.a} · vacina ${String(i.x || '').replace(/RAIVA/gi, 'antirrábica')} · vence ${String(i.d).slice(0, 5)}`;

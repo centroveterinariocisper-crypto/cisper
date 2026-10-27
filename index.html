@@ -141,20 +141,20 @@ button.link { background: none; border: 0; color: var(--muted); text-decoration:
 /* ===== Maré Mansa: visual novo ===== */
 @font-face { font-family: Outfit; src: url(fonts/Outfit-Regular.ttf) format("truetype"); font-weight: 400 600; font-display: swap; }
 @font-face { font-family: Outfit; src: url(fonts/Outfit-Bold.ttf) format("truetype"); font-weight: 700 900; font-display: swap; }
-@font-face { font-family: Serifa; src: url(fonts/InstrumentSerif-Italic.ttf) format("truetype"); font-style: italic; font-display: swap; }
+@font-face { font-family: Serifa; src: url(fonts/Fraunces-Italic.woff2) format("woff2"); font-style: italic; font-weight: 100 900; font-display: swap; }
 :root { --bg: #FBFAF7; --card: #ffffff; --surface: #F3F1EC; --line: #E8E5DE; --ink: #16204A; --muted: #6B7290; }
 html, body { background: var(--bg); }
 body { font-family: Outfit, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; letter-spacing: .005em; }
-.serifa { font-family: Serifa, Georgia, serif; font-style: italic; font-weight: 400; letter-spacing: 0; }
+.serifa { font-family: Serifa, Georgia, serif; font-style: italic; font-weight: 600; font-variation-settings: 'SOFT' 100, 'WONK' 1; letter-spacing: -.01em; letter-spacing: 0; }
 .topo { background: rgba(251,250,247,.92); border-bottom: 1px solid var(--line); }
-.topo h1 { font-family: Serifa, Georgia, serif; font-style: italic; font-weight: 400; font-size: 23px; letter-spacing: 0; }
+.topo h1 { font-family: Serifa, Georgia, serif; font-style: italic; font-weight: 600; font-variation-settings: 'SOFT' 100, 'WONK' 1; letter-spacing: -.01em; font-size: 21px; }
 .topo .sub { letter-spacing: .04em; }
 .topo img { border-radius: 12px; box-shadow: 0 2px 8px rgba(27,42,107,.10); }
 .perfil { box-shadow: 0 4px 12px color-mix(in srgb, var(--cor, var(--navy)) 30%, transparent); padding: 6px 12px 6px 6px; }
 .painel { border-radius: 24px; padding: 20px 20px 34px; gap: 8px; box-shadow: 0 14px 30px -12px color-mix(in srgb, var(--cor, var(--navy)) 55%, transparent); }
 .painel::before, .painel::after { content: none; }
 .painel .ondas { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 64px; z-index: 0; pointer-events: none; }
-.painel .ola { font-family: Serifa, Georgia, serif; font-style: italic; font-weight: 400; font-size: 30px; line-height: 1.05; }
+.painel .ola { font-family: Serifa, Georgia, serif; font-style: italic; font-weight: 600; font-variation-settings: 'SOFT' 100, 'WONK' 1; letter-spacing: -.01em; font-size: 28px; line-height: 1.05; }
 .painel .info { font-size: 14.5px; line-height: 1.4; }
 .painel .conta { margin-top: 6px; }
 .painel .conta b { font-size: 52px; font-weight: 700; letter-spacing: -.02em; }
@@ -177,7 +177,7 @@ details.msg p { background: var(--surface); border-radius: 14px; }
 .ajuda { background: var(--card); border: 1px solid var(--line); border-radius: 18px; }
 .ajuda summary { font-weight: 700; }
 .adm { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 14px 16px; }
-.adm b.t { font-family: Serifa, Georgia, serif; font-style: italic; font-weight: 400; font-size: 20px; color: var(--navy); }
+.adm b.t { font-family: Serifa, Georgia, serif; font-style: italic; font-weight: 600; font-variation-settings: 'SOFT' 100, 'WONK' 1; letter-spacing: -.01em; font-size: 20px; color: var(--navy); }
 button.grande { border-radius: 14px; font-weight: 700; }
 .vazio { background: var(--card); border: 1px solid var(--line); border-radius: 20px; }
 /* abas do administrador */
@@ -209,7 +209,7 @@ button.grande { border-radius: 14px; font-weight: 700; }
 .faltas li.nao span:first-child::before { content: "○ "; color: var(--bad); font-weight: 700; }
 .cobrar { display: flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none; border: 1.5px solid var(--line); color: var(--ink); background: var(--bg); border-radius: 14px; padding: 11px; font-weight: 600; font-size: 14.5px; }
 .semana { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
-.semana h2 { margin: 0; font-family: Serifa, Georgia, serif; font-style: italic; font-weight: 400; font-size: 24px; color: var(--navy); }
+.semana h2 { margin: 0; font-family: Serifa, Georgia, serif; font-style: italic; font-weight: 600; font-variation-settings: 'SOFT' 100, 'WONK' 1; letter-spacing: -.01em; font-size: 24px; color: var(--navy); }
 .semana table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
 .semana th { text-align: left; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 700; padding: 0 4px 8px; }
 .semana td { padding: 9px 4px; border-top: 1px solid var(--line); }
@@ -218,22 +218,36 @@ button.grande { border-radius: 14px; font-weight: 700; }
 .semana td.bom { color: var(--ok); font-weight: 700; }
 .semana tfoot td { font-weight: 700; border-top: 2px solid var(--ink); }
 .semana .nota { font-size: 12.5px; color: var(--muted); margin: 0; }
+/* confirmar saída */
+.fundo { position: fixed; inset: 0; z-index: 30; background: rgba(22,32,74,.38); display: flex; align-items: flex-end; justify-content: center; padding: 16px; padding-bottom: max(16px, env(safe-area-inset-bottom)); animation: aparece .18s ease-out; }
+.folha { width: 100%; max-width: 420px; background: var(--card); border-radius: 26px; padding: 22px 18px 16px; display: flex; flex-direction: column; gap: 10px; text-align: center; box-shadow: 0 20px 40px -12px rgba(22,32,74,.4); animation: sobe .22s ease-out; }
+.folha .ct { margin: 0; font-family: Serifa, Georgia, serif; font-style: italic; font-weight: 600; font-variation-settings: 'SOFT' 100, 'WONK' 1; font-size: 24px; color: var(--navy); }
+.folha .cs { margin: 0 0 6px; color: var(--muted); font-size: 15px; }
+.folha button { border: 0; border-radius: 16px; padding: 14px; font-weight: 700; font-size: 16px; }
+.folha .sim { background: var(--bad); color: #fff; }
+.folha .nao { background: var(--surface); color: var(--ink); }
+@keyframes aparece { from { opacity: 0; } }
+@keyframes sobe { from { transform: translateY(24px); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .fundo, .folha { animation: none; } }
 /* entrada */
-#trava { background: var(--bg); align-items: flex-start; padding-top: max(40px, env(safe-area-inset-top)); }
-#trava h1 { font-family: Serifa, Georgia, serif; font-style: italic; font-weight: 400; font-size: 38px; line-height: 1; }
+#trava { background: var(--bg); display: block; padding: max(36px, env(safe-area-inset-top)) 24px 0; overscroll-behavior: contain; }
+#trava h1 { font-family: Serifa, Georgia, serif; font-style: italic; font-weight: 600; font-variation-settings: 'SOFT' 100, 'WONK' 1; letter-spacing: -.015em; font-size: 40px; line-height: 1.05; }
+#trava h1 em, .topo h1 em { font-style: italic; color: var(--teal); }
 #trava img { width: 92px; height: 92px; border-radius: 24px; }
 #trava .pessoa { border-radius: 20px; border: 1.5px solid var(--line); font-weight: 600; box-shadow: 0 8px 18px -14px rgba(22,32,74,.35); }
 #trava input { border-radius: 16px; border: 1.5px solid var(--line); }
 #trava button[type="submit"] { border-radius: 16px; font-weight: 700; background: linear-gradient(135deg, var(--navy), #24418a); box-shadow: 0 10px 20px -12px var(--navy); }
-#trava .ondasBase { position: fixed; left: 0; right: 0; bottom: 0; width: 100%; height: 120px; pointer-events: none; z-index: -1; }
-#trava form { position: relative; z-index: 1; padding-bottom: 130px; }
+#trava .ondasBase { display: block; width: calc(100% + 48px); margin: 8px -24px 0; height: 110px; pointer-events: none; }
+#trava form { margin: 0 auto; min-height: calc(100% - 118px); justify-content: center; padding-bottom: 8px; }
+#trava .erro:empty { min-height: 0; }
+#trava button.olho svg { width: 24px; height: 24px; display: block; margin: auto; }
 </style>
 </head>
 <body>
 <div id="trava" hidden>
   <form id="fTrava" autocomplete="off">
     <img src="apple-touch-icon.png" alt="">
-    <h1>Lista do dia</h1>
+    <h1>Lista do <em>dia</em></h1>
     <p>Centro Veterinário Cisper</p>
     <p id="pergQuem">Quem vai usar agora? Toque no seu nome.</p>
     <div class="quem3" id="quem3">
@@ -244,7 +258,7 @@ button.grande { border-radius: 14px; font-weight: 700; }
     <p id="txtSenha">Digite a <b>sua</b> senha para entrar.</p>
     <div class="campo">
       <input id="senha" type="password" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="off" aria-label="Senha">
-      <button type="button" class="olho" id="btOlho" aria-label="Mostrar senha" aria-pressed="false">👁</button>
+      <button type="button" class="olho" id="btOlho" aria-label="Mostrar senha" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
     </div>
     <button type="submit">Entrar</button>
     <div class="erro" id="erroSenha" aria-live="polite"></div>
@@ -254,11 +268,20 @@ button.grande { border-radius: 14px; font-weight: 700; }
   <svg class="ondasBase" id="ondasBase" viewBox="0 0 400 120" preserveAspectRatio="none" aria-hidden="true"></svg>
 </div>
 
+<div id="confSair" class="fundo" hidden role="dialog" aria-modal="true" aria-labelledby="confTit">
+  <div class="folha">
+    <p class="ct" id="confTit">Deseja realmente sair?</p>
+    <p class="cs" id="confTxt">Para entrar de novo, vai precisar digitar a senha.</p>
+    <button type="button" class="sim" id="btSairSim">Sim, sair</button>
+    <button type="button" class="nao" id="btSairNao">Cancelar</button>
+  </div>
+</div>
+
 <header class="topo">
   <div class="topo-in">
     <img src="apple-touch-icon.png" alt="Centro Veterinário Cisper">
     <div class="tit">
-      <h1>Lista do dia</h1>
+      <h1>Lista do <em>dia</em></h1>
       <div class="sub" id="sub">Centro Veterinário Cisper</div>
     </div>
     <button type="button" class="perfil" id="perfil" hidden aria-label="Trocar de pessoa"><span class="ini" id="perfilIni"></span><span id="perfilNome"></span><span class="troca" aria-hidden="true">⇄</span></button>
@@ -517,7 +540,7 @@ function render() {
   $('perfilIni').textContent = P.nome[0]; $('perfilNome').textContent = P.nome + ' · ' + P.turno;
   $('btSair').hidden = false;
   const g = META && META.gerado_em ? new Date(META.gerado_em) : null;
-  $('sub').textContent = g && !isNaN(g) ? 'Lista atualizada em ' + g.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) : 'Centro Veterinário Cisper';
+  $('sub').textContent = g && !isNaN(g) ? 'Atualizada em ' + g.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) : 'Centro Veterinário Cisper';
   // administrador
   $('adm').hidden = !ehAdm();
   if (ehAdm()) {
@@ -702,19 +725,29 @@ async function entrarCom(s) {
 document.querySelectorAll('#quem3 .pessoa').forEach((b) => b.addEventListener('click', () => {
   escolhido = b.dataset.p; marcarPessoas(); $('erroSenha').textContent = ''; $('senha').value = ''; $('senha').focus();
 }));
-function pedirSenha(erro) { escolhido = ''; marcarPessoas(); $('trava').hidden = false; $('erroSenha').textContent = erro || ''; }
+function pedirSenha(erro) { escolhido = ''; marcarPessoas(); $('senha').value = ''; $('senha').type = 'password'; $('btOlho').setAttribute('aria-pressed', 'false'); $('trava').hidden = false; $('trava').scrollTop = 0; $('erroSenha').textContent = erro || ''; }
 $('fTrava').addEventListener('submit', async (ev) => {
   ev.preventDefault();
   const s = $('senha').value.trim(); if (!s) return;
   $('erroSenha').textContent = 'Abrindo…';
   if (!ENV) { try { ENV = await baixar(); } catch (e) { $('erroSenha').textContent = 'A lista ainda não foi publicada. Se você é o administrador, toque no link abaixo.'; $('btAdmArquivo').hidden = false; return; } }
   try { await entrarCom(s); $('erroSenha').textContent = ''; }
-  catch (e) { $('erroSenha').textContent = 'Senha errada. Confira no 👁 e tente de novo.'; }
+  catch (e) { $('erroSenha').textContent = 'Senha errada. Toque no olhinho para conferir e tente de novo.'; }
 });
 $('btOlho').addEventListener('click', () => { const i = $('senha'); const ver = i.type === 'password'; i.type = ver ? 'text' : 'password'; $('btOlho').setAttribute('aria-pressed', ver ? 'true' : 'false'); $('btOlho').setAttribute('aria-label', ver ? 'Esconder senha' : 'Mostrar senha'); i.focus(); });
 const sair = () => { TOKM = ''; KDADOS = ''; REM = {}; aba = 'lista'; $('acomp').hidden = true; $('lista').hidden = false; ls.del('cisper-senha'); ls.del('cisper-eu'); eu = ''; $('perfil').hidden = true; $('painel').hidden = true; $('adm').hidden = true; $('btSair').hidden = true; pedirSenha(); };
-$('btSair').addEventListener('click', sair);
-$('perfil').addEventListener('click', sair);
+function perguntarSair() {
+  const P = PESSOAS[ehAdm() ? 'todos' : eu];
+  $('confTit').textContent = P ? `Deseja realmente sair, ${P.nome}?` : 'Deseja realmente sair?';
+  $('confSair').hidden = false; setTimeout(() => $('btSairNao').focus(), 30);
+}
+const fecharSair = () => { $('confSair').hidden = true; };
+$('btSair').addEventListener('click', perguntarSair);
+$('perfil').addEventListener('click', perguntarSair);
+$('btSairSim').addEventListener('click', () => { fecharSair(); sair(); window.scrollTo(0, 0); });
+$('btSairNao').addEventListener('click', fecharSair);
+$('confSair').addEventListener('click', (e) => { if (e.target === $('confSair')) fecharSair(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('confSair').hidden) fecharSair(); });
 $('btAdmArquivo').addEventListener('click', () => { if (!$('senha').value.trim()) { $('erroSenha').textContent = 'Digite a senha de administrador primeiro.'; return; } $('arquivoLogin').click(); });
 $('arquivoLogin').addEventListener('change', async (ev) => {
   const f = ev.target.files && ev.target.files[0]; $('arquivoLogin').value = ''; if (!f) return;

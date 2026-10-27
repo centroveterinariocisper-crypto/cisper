@@ -286,6 +286,12 @@ const ehAdm = () => eu === 'adm';
 const REPO = 'centroveterinariocisper-crypto/cisper';
 
 async function baixar() {
+  // Primeiro pega direto do GitHub (sempre a versão mais nova); se não der, usa a cópia do site.
+  try {
+    const g = await fetch(`https://api.github.com/repos/${REPO}/contents/dados.enc?t=` + Date.now(), { cache: 'no-store', headers: { Accept: 'application/vnd.github.raw' } });
+    if (g.status === 404) throw new Error('nao publicada');
+    if (g.ok) return await g.json();
+  } catch (e) { if (e.message === 'nao publicada') throw e; }
   const r = await fetch('dados.enc?t=' + Date.now(), { cache: 'no-store' });
   if (r.status === 404) throw new Error('nao publicada');
   if (!r.ok) throw new Error('sem internet');
@@ -433,7 +439,13 @@ $('fTrava').addEventListener('submit', async (ev) => {
     $('trava').hidden = true; $('senha').value = ''; $('senha').type = 'password'; $('btOlho').setAttribute('aria-pressed', 'false');
     if (d.quem === 'adm') quem = 'todos';
     entrar(d); window.scrollTo(0, 0);
-  } catch (e) { $('erroSenha').textContent = 'Senha errada. Confira no 👁 e tente de novo.'; }
+  } catch (e) {
+    // Talvez a lista guardada seja antiga (senhas trocadas): busca a mais nova e tenta de novo.
+    try { const novo = await baixar(); const d = await abrir(novo, s); ENV = novo; ls.set('cisper-senha', s); ls.set('cisper-lista', JSON.stringify(ENV));
+      $('trava').hidden = true; $('senha').value = ''; $('senha').type = 'password'; $('btOlho').setAttribute('aria-pressed', 'false');
+      if (d.quem === 'adm') quem = 'todos'; entrar(d); window.scrollTo(0, 0); return; } catch (x) {}
+    $('erroSenha').textContent = 'Senha errada. Confira no 👁 e tente de novo.';
+  }
 });
 $('btOlho').addEventListener('click', () => { const i = $('senha'); const ver = i.type === 'password'; i.type = ver ? 'text' : 'password'; $('btOlho').setAttribute('aria-pressed', ver ? 'true' : 'false'); $('btOlho').setAttribute('aria-label', ver ? 'Esconder senha' : 'Mostrar senha'); i.focus(); });
 const sair = () => { ls.del('cisper-senha'); ls.del('cisper-eu'); eu = ''; $('perfil').hidden = true; $('painel').hidden = true; $('adm').hidden = true; $('btSair').hidden = true; pedirSenha(); };

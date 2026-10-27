@@ -13,6 +13,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Cisper">
 <link rel="manifest" href="manifest.webmanifest">
+<link rel="preload" href="fonts/Outfit-Regular.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="fonts/Outfit-Bold.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="fonts/Fraunces-Italic.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <style>
@@ -139,9 +142,9 @@ button.link { background: none; border: 0; color: var(--muted); text-decoration:
 @media (prefers-reduced-motion: reduce) { .painel .bar i { transition: none; } }
 
 /* ===== Maré Mansa: visual novo ===== */
-@font-face { font-family: Outfit; src: url(fonts/Outfit-Regular.ttf) format("truetype"); font-weight: 400 600; font-display: swap; }
-@font-face { font-family: Outfit; src: url(fonts/Outfit-Bold.ttf) format("truetype"); font-weight: 700 900; font-display: swap; }
-@font-face { font-family: Serifa; src: url(fonts/Fraunces-Italic.woff2) format("woff2"); font-style: italic; font-weight: 100 900; font-display: swap; }
+@font-face { font-family: Outfit; src: url(fonts/Outfit-Regular.ttf) format("truetype"); font-weight: 400 600; font-display: block; }
+@font-face { font-family: Outfit; src: url(fonts/Outfit-Bold.ttf) format("truetype"); font-weight: 700 900; font-display: block; }
+@font-face { font-family: Serifa; src: url(fonts/Fraunces-Italic.woff2) format("woff2"); font-style: italic; font-weight: 100 900; font-display: block; }
 :root { --bg: #FBFAF7; --card: #ffffff; --surface: #F3F1EC; --line: #E8E5DE; --ink: #16204A; --muted: #6B7290; }
 html, body { background: var(--bg); }
 body { font-family: Outfit, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; letter-spacing: .005em; }
@@ -218,6 +221,11 @@ button.grande { border-radius: 14px; font-weight: 700; }
 .semana td.bom { color: var(--ok); font-weight: 700; }
 .semana tfoot td { font-weight: 700; border-top: 2px solid var(--ink); }
 .semana .nota { font-size: 12.5px; color: var(--muted); margin: 0; }
+/* abertura: nada aparece pela metade */
+#splash { position: fixed; inset: 0; z-index: 50; background: var(--bg, #FBFAF7); display: grid; place-items: center; transition: opacity .25s ease; }
+#splash img { width: 88px; height: 88px; border-radius: 22px; box-shadow: 0 6px 20px rgba(27,42,107,.15); }
+#splash.sai { opacity: 0; pointer-events: none; }
+body.iniciando > :not(#splash) { visibility: hidden; }
 /* confirmar saída */
 .fundo { position: fixed; inset: 0; z-index: 30; background: rgba(22,32,74,.38); display: flex; align-items: flex-end; justify-content: center; padding: 16px; padding-bottom: max(16px, env(safe-area-inset-bottom)); animation: aparece .18s ease-out; }
 .folha { width: 100%; max-width: 420px; background: var(--card); border-radius: 26px; padding: 22px 18px 16px; display: flex; flex-direction: column; gap: 10px; text-align: center; box-shadow: 0 20px 40px -12px rgba(22,32,74,.4); animation: sobe .22s ease-out; }
@@ -243,7 +251,8 @@ button.grande { border-radius: 14px; font-weight: 700; }
 #trava button.olho svg { width: 24px; height: 24px; display: block; margin: auto; }
 </style>
 </head>
-<body>
+<body class="iniciando">
+<div id="splash" aria-hidden="true"><img src="apple-touch-icon.png" alt=""></div>
 <div id="trava" hidden>
   <form id="fTrava" autocomplete="off">
     <img src="apple-touch-icon.png" alt="">
@@ -464,7 +473,7 @@ async function puxar() {
       let m = {}; try { m = (await decifrar(KDADOS, await r.json())).m || {}; } catch (e) { continue; }
       for (const [k, ts] of Object.entries(m)) if (!novo[k] || ts < novo[k].ts) novo[k] = { ts, por: p };
     }
-    REM = novo; ultimaSinc = Date.now(); sincErro = '';
+    const igual = JSON.stringify(novo) === JSON.stringify(REM); REM = novo; ultimaSinc = Date.now(); sincErro = ''; if (igual && !ehAdm()) return;
   } catch (e) { sincErro = e.message === 'chave' ? 'A chave das marcações não funcionou.' : 'Sem internet para buscar as marcações.'; }
   render();
 }
@@ -503,22 +512,34 @@ async function usarEnv(env) {
   try { const d = await abrir(ENV, senha); ls.set('cisper-lista', JSON.stringify(ENV)); entrar(d); }
   catch (e) { ls.del('cisper-senha'); pedirSenha('A senha mudou. Digite a sua senha.'); }
 }
+let carregando = false;
 async function carregar(manual) {
-  try { await usarEnv(await baixar()); }
-  catch (e) {
-    let env = null; try { env = JSON.parse(ls.get('cisper-lista', 'null')); } catch (x) {}
-    if (env && env.vagas) { await usarEnv(env); if (manual) $('sub').textContent = e.message === 'nao publicada' ? 'Nenhuma lista nova publicada' : 'Sem internet · mostrando a última lista'; }
-    else {
+  if (carregando) return; carregando = true;
+  try {
+    let salvo = null; try { salvo = JSON.parse(ls.get('cisper-lista', 'null')); } catch (x) {}
+    const temSenha = !!ls.get('cisper-senha', '');
+    // 1) abre na hora com a lista guardada no celular
+    if (!DADOS && salvo && salvo.vagas && temSenha) await usarEnv(salvo);
+    // 2) busca a versão nova em silêncio e só redesenha se mudou
+    let novo;
+    try { novo = await baixar(); }
+    catch (e) {
+      if (DADOS || !$('trava').hidden) { if (manual) $('sub').textContent = e.message === 'nao publicada' ? 'Nenhuma lista nova publicada' : 'Sem internet · mostrando a última lista'; return; }
+      if (salvo && salvo.vagas) { await usarEnv(salvo); return; }
       $('lista').replaceChildren(el('div', 'vazio', e.message === 'nao publicada' ? 'A lista ainda não foi publicada. O Paulo avisa quando estiver pronta.' : 'Não consegui buscar a lista. Confira a internet e abra o app de novo.'));
-      if (!ls.get('cisper-senha', '')) { ENV = null; pedirSenha(); if (e.message === 'nao publicada') $('btAdmArquivo').hidden = false; }
+      if (!temSenha) { ENV = null; pedirSenha(); if (e.message === 'nao publicada') $('btAdmArquivo').hidden = false; } else pronto();
+      return;
     }
-  }
+    const mudou = !ENV || novo.ct !== ENV.ct || JSON.stringify(novo.mk || null) !== JSON.stringify(ENV.mk || null);
+    if (mudou) await usarEnv(novo); else if (!ls.get('cisper-senha', '')) pedirSenha();
+  } finally { carregando = false; }
 }
 function entrar(d) {
   eu = d.quem === 'adm' ? 'adm' : d.quem; ls.set('cisper-eu', eu);
   if (!ehAdm()) quem = eu; else if (!['todos', 'debora', 'duda'].includes(quem)) quem = 'todos';
   ls.set('cisper-quem', quem);
   aplicar(d);
+  pronto();
   prepararSinc(d);
 }
 function aplicar(d) {
@@ -529,6 +550,13 @@ function aplicar(d) {
   for (const k of Object.keys(feitos)) if (!vivos.has(k) && Date.now() - feitos[k] > 30 * 864e5) delete feitos[k];
   salvar(); render();
 }
+let mostrou = false;
+async function pronto() {
+  if (mostrou) return; mostrou = true;
+  try { await Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 1500))]); } catch (e) {}
+  requestAnimationFrame(() => { document.body.classList.remove('iniciando'); const sp = $('splash'); sp.classList.add('sai'); setTimeout(() => sp.remove(), 300); });
+}
+setTimeout(pronto, 5000); // nunca fica preso na abertura
 function alertaTopo(txt, ok) { const L = $('lista'); const p = el('p', ok ? 'okmsg' : 'aviso', txt); L.prepend(p); setTimeout(() => p.remove(), 10000); window.scrollTo(0, 0); }
 
 function render() {
@@ -725,7 +753,7 @@ async function entrarCom(s) {
 document.querySelectorAll('#quem3 .pessoa').forEach((b) => b.addEventListener('click', () => {
   escolhido = b.dataset.p; marcarPessoas(); $('erroSenha').textContent = ''; $('senha').value = ''; $('senha').focus();
 }));
-function pedirSenha(erro) { escolhido = ''; marcarPessoas(); $('senha').value = ''; $('senha').type = 'password'; $('btOlho').setAttribute('aria-pressed', 'false'); $('trava').hidden = false; $('trava').scrollTop = 0; $('erroSenha').textContent = erro || ''; }
+function pedirSenha(erro) { if (!$('trava').hidden) { if (erro) $('erroSenha').textContent = erro; pronto(); return; } escolhido = ''; marcarPessoas(); $('senha').value = ''; $('senha').type = 'password'; $('btOlho').setAttribute('aria-pressed', 'false'); $('trava').hidden = false; $('trava').scrollTop = 0; $('erroSenha').textContent = erro || ''; pronto(); }
 $('fTrava').addEventListener('submit', async (ev) => {
   ev.preventDefault();
   const s = $('senha').value.trim(); if (!s) return;
@@ -806,8 +834,7 @@ setInterval(() => { if (document.visibilityState === 'visible' && ehAdm() && TOK
 ondas($('ondasBase'), 14, 120, '#1B2A6B', 0.5);
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
-  let recarregou = false;
-  navigator.serviceWorker.addEventListener('controllerchange', () => { if (!recarregou) { recarregou = true; location.reload(); } });
+  // sem recarregar a tela sozinho: a versão nova entra na próxima vez que o app abrir
 }
 carregar(false);
 </script>

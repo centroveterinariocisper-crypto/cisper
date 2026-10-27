@@ -71,7 +71,7 @@ details.msg p { margin: 6px 0 0; background: var(--bg); padding: 10px; border-ra
 #trava img { width: 96px; height: 96px; border-radius: 24px; background: #fff; }
 #trava h1 { margin: 0; font-size: 22px; }
 #trava p { margin: 0; opacity: .85; font-size: 15px; }
-#trava input { width: 100%; font: inherit; font-size: 22px; letter-spacing: .3em; text-align: center; padding: 12px; border-radius: 12px; border: 0; color: #18213f; }
+#trava input { width: 100%; font: inherit; font-size: 22px; letter-spacing: .12em; text-align: center; padding: 12px; border-radius: 12px; border: 0; color: #18213f; }
 #trava button { width: 100%; font: inherit; font-weight: 700; padding: 13px; border-radius: 12px; border: 0; background: var(--teal); color: #0f1424; cursor: pointer; }
 #trava .erro { color: #ffc2bd; min-height: 1.4em; }
 button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
@@ -83,7 +83,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visibl
     <img src="apple-touch-icon.png" alt="">
     <h1>Centro Veterinário Cisper</h1>
     <p>Digite a senha da clínica para abrir a lista.</p>
-    <input id="senha" type="password" inputmode="numeric" autocomplete="off" aria-label="Senha">
+    <input id="senha" type="password" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="off" aria-label="Senha">
     <button type="submit">Entrar</button>
     <div class="erro" id="erroSenha" aria-live="polite"></div>
   </form>

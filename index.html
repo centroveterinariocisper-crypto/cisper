@@ -65,6 +65,8 @@ details.msg summary { color: var(--muted); font-size: 13px; cursor: pointer; }
 details.msg p { margin: 6px 0 0; background: var(--bg); padding: 10px; border-radius: 8px; font-size: 14px; white-space: pre-wrap; }
 .vazio { color: var(--muted); background: var(--card); border: 1px dashed var(--line); border-radius: 14px; padding: 18px; }
 .aviso { color: var(--bad); font-size: 14px; }
+.vazio p { margin: 0 0 10px; }
+button.grande { width: 100%; font: inherit; font-weight: 700; font-size: 17px; padding: 14px; border: 0; border-radius: 12px; background: var(--navy); color: #fff; cursor: pointer; margin-top: 4px; }
 /* tela da senha */
 #trava { position: fixed; inset: 0; background: var(--navy); color: #fff; display: flex; align-items: center; justify-content: center; padding: 24px; z-index: 20; }
 #trava form { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 14px; align-items: center; text-align: center; }
@@ -96,7 +98,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visibl
       <h1>Lista do dia</h1>
       <div class="sub" id="sub">Carregando…</div>
     </div>
-    <button type="button" id="btAtualizar" aria-label="Buscar lista nova">↻ Atualizar</button>
+    <button type="button" id="btAtualizar" aria-label="Carregar lista nova">📥 Carregar lista</button>
+    <input type="file" id="arquivo" accept=".cisper,.json,.txt,application/json,text/plain,*/*" hidden>
   </div>
 </header>
 
@@ -113,7 +116,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visibl
       <li>O cartão fica marcado como enviado. Passe para o próximo.</li>
       <li>Se souber que o animal faleceu, <b>não envie</b> e avise o Paulo.</li>
       <li>Não envie no almoço, depois das 19h nem no domingo.</li>
-      <li>A lista é atualizada pelo Paulo. Para ver a nova, toque em <b>↻ Atualizar</b>.</li>
+      <li>No domingo e na quarta o Paulo manda no WhatsApp o arquivo <b>Lista Cisper</b>. Toque em <b>📥 Carregar lista</b> e escolha esse arquivo. No iPhone, antes toque no arquivo no WhatsApp → compartilhar → <b>Salvar em Arquivos</b>.</li>
     </ol>
   </details>
   <details class="dica">
@@ -188,26 +191,40 @@ let feitos = {}; try { feitos = JSON.parse(ls.get('cisper-enviados', '{}')) || {
 const salvar = () => ls.set('cisper-enviados', JSON.stringify(feitos));
 let atual = null;
 
-async function baixar() {
-  const r = await fetch('dados.enc?t=' + Date.now(), { cache: 'no-store' });
-  if (r.status === 404) throw new Error('nao publicada');
-  if (!r.ok) throw new Error('sem lista');
-  return r.json();
-}
-async function carregar(manual) {
-  const btn = $('btAtualizar'); btn.disabled = true; btn.textContent = '↻ …';
+// A lista chega como arquivo pelo WhatsApp (nenhum dado de cliente fica na internet).
+// O arquivo criptografado fica guardado neste celular; a senha abre.
+async function usarEnv(env, nova) {
+  ENV = env;
+  const senha = ls.get('cisper-senha', '');
+  if (!senha) { pedirSenha(); return; }
   try {
-    ENV = await baixar();
-    const senha = ls.get('cisper-senha', '');
-    if (!senha) { pedirSenha(); return; }
-    try { const d = await abrir(ENV, senha); aplicar(d); }
-    catch (e) { ls.del('cisper-senha'); pedirSenha('A senha mudou. Digite a nova senha.'); }
-  } catch (e) {
-    if (!DADOS) $('lista').replaceChildren(el('div', 'vazio', e && e.message === 'nao publicada' ? 'A lista ainda não foi publicada. O Paulo avisa quando estiver pronta.' : 'Não consegui buscar a lista. Confira a internet e toque em Atualizar.'));
-    if (!DADOS) $('sub').textContent = 'Centro Veterinário Cisper';
-    else if (manual) $('sub').textContent = 'Sem internet · mostrando a última lista';
-  } finally { btn.disabled = false; btn.textContent = '↻ Atualizar'; }
+    const d = await abrir(ENV, senha);
+    if (nova) ls.set('cisper-lista', JSON.stringify(ENV));
+    aplicar(d);
+  } catch (e) { ls.del('cisper-senha'); pedirSenha('Digite a sua senha para abrir esta lista.'); }
 }
+function carregar() {
+  let env = null; try { env = JSON.parse(ls.get('cisper-lista', 'null')); } catch (e) { env = null; }
+  if (env && env.vagas) { usarEnv(env, false); return; }
+  $('sub').textContent = 'Centro Veterinário Cisper';
+  const L = $('lista'); L.replaceChildren();
+  const v = el('div', 'vazio');
+  v.appendChild(el('p', null, 'Ainda não tem lista neste celular.'));
+  v.appendChild(el('p', null, 'Toque no botão abaixo e escolha o arquivo "Lista Cisper" que o Paulo mandou no WhatsApp.'));
+  const bt = el('button', 'grande', '📥 Carregar lista'); bt.type = 'button'; bt.onclick = () => $('arquivo').click(); v.appendChild(bt);
+  L.appendChild(v);
+}
+async function lerArquivo(f) {
+  if (!f) return;
+  try {
+    const env = JSON.parse(await f.text());
+    if (!env || !env.vagas || !env.ct) throw new Error('arquivo');
+    ENV_NOVO = env; await usarEnv(env, true);
+  } catch (e) { alertaTopo('Esse arquivo não é uma lista da Cisper. Escolha o arquivo "Lista Cisper" que o Paulo mandou.'); }
+  $('arquivo').value = '';
+}
+function alertaTopo(txt) { const L = $('lista'); const p = el('p', 'aviso', txt); L.prepend(p); setTimeout(() => p.remove(), 8000); window.scrollTo(0, 0); }
+let ENV_NOVO = null;
 function aplicar(d) {
   DADOS = d.dias || {}; META = d;
   const dias = Object.keys(DADOS).sort(), h = hojeISO();
@@ -225,11 +242,11 @@ $('fTrava').addEventListener('submit', async (ev) => {
   ev.preventDefault();
   const s = $('senha').value.trim(); if (!s || !ENV) return;
   $('erroSenha').textContent = 'Abrindo…';
-  try { const d = await abrir(ENV, s); ls.set('cisper-senha', s); if (d.quem && QUEM.some(([id]) => id === d.quem)) { quem = d.quem; ls.set('cisper-quem', quem); } $('trava').hidden = true; $('senha').value = ''; aplicar(d); }
+  try { const d = await abrir(ENV, s); ls.set('cisper-senha', s); ls.set('cisper-lista', JSON.stringify(ENV)); if (d.quem && QUEM.some(([id]) => id === d.quem)) { quem = d.quem; ls.set('cisper-quem', quem); } $('trava').hidden = true; $('senha').value = ''; aplicar(d); }
   catch (e) { $('erroSenha').textContent = 'Senha errada. Tente de novo.'; }
 });
-$('btAtualizar').addEventListener('click', () => carregar(true));
-document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && ENV) carregar(false); });
+$('btAtualizar').addEventListener('click', () => $('arquivo').click());
+$('arquivo').addEventListener('change', (ev) => lerArquivo(ev.target.files && ev.target.files[0]));
 
 function render() {
   if (!DADOS) return;
@@ -251,7 +268,7 @@ function render() {
   const pr = $('prog'); pr.replaceChildren(el('div', null, `${ok} de ${itens.length} mensagens enviadas`));
   const bar = el('div', 'bar'); const fill = el('i'); fill.style.width = itens.length ? (ok / itens.length * 100) + '%' : '0'; bar.appendChild(fill); pr.appendChild(bar);
   const L = $('lista'); L.replaceChildren();
-  if (atual < hojeISO() && dias[dias.length - 1] < hojeISO()) L.appendChild(el('p', 'aviso', 'Esta é a última lista que o Paulo montou. Toque em Atualizar para ver se já tem a nova.'));
+  if (atual < hojeISO() && dias[dias.length - 1] < hojeISO()) L.appendChild(el('p', 'aviso', 'Esta é a última lista carregada. Se o Paulo já mandou a nova no WhatsApp, toque em 📥 Carregar lista.'));
   if (!itens.length) { L.appendChild(el('div', 'vazio', 'Nada para este dia.')); return; }
   for (const [t, titulo] of GRUPOS) {
     const grupo = itens.filter((i) => i.t === t || (t === 'orc2' && i.t === 'orc7')); if (!grupo.length) continue;
@@ -284,7 +301,7 @@ if ('serviceWorker' in navigator) {
   let recarregou = false;
   navigator.serviceWorker.addEventListener('controllerchange', () => { if (!recarregou) { recarregou = true; location.reload(); } });
 }
-carregar(false);
+carregar();
 </script>
 </body>
 </html>

@@ -137,6 +137,96 @@ button.link { background: none; border: 0; color: var(--muted); text-decoration:
 #trava .erro { color: var(--bad); min-height: 1.4em; font-size: 14px; }
 #trava .admlink { background: transparent; border: 0; color: var(--muted); text-decoration: underline; font-size: 13px; }
 @media (prefers-reduced-motion: reduce) { .painel .bar i { transition: none; } }
+
+/* ===== Maré Mansa: visual novo ===== */
+@font-face { font-family: Outfit; src: url(fonts/Outfit-Regular.ttf) format("truetype"); font-weight: 400 600; font-display: swap; }
+@font-face { font-family: Outfit; src: url(fonts/Outfit-Bold.ttf) format("truetype"); font-weight: 700 900; font-display: swap; }
+@font-face { font-family: Serifa; src: url(fonts/InstrumentSerif-Italic.ttf) format("truetype"); font-style: italic; font-display: swap; }
+:root { --bg: #FBFAF7; --card: #ffffff; --surface: #F3F1EC; --line: #E8E5DE; --ink: #16204A; --muted: #6B7290; }
+html, body { background: var(--bg); }
+body { font-family: Outfit, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; letter-spacing: .005em; }
+.serifa { font-family: Serifa, Georgia, serif; font-style: italic; font-weight: 400; letter-spacing: 0; }
+.topo { background: rgba(251,250,247,.92); border-bottom: 1px solid var(--line); }
+.topo h1 { font-family: Serifa, Georgia, serif; font-style: italic; font-weight: 400; font-size: 23px; letter-spacing: 0; }
+.topo .sub { letter-spacing: .04em; }
+.topo img { border-radius: 12px; box-shadow: 0 2px 8px rgba(27,42,107,.10); }
+.perfil { box-shadow: 0 4px 12px color-mix(in srgb, var(--cor, var(--navy)) 30%, transparent); padding: 6px 12px 6px 6px; }
+.painel { border-radius: 24px; padding: 20px 20px 34px; gap: 8px; box-shadow: 0 14px 30px -12px color-mix(in srgb, var(--cor, var(--navy)) 55%, transparent); }
+.painel::before, .painel::after { content: none; }
+.painel .ondas { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 64px; z-index: 0; pointer-events: none; }
+.painel .ola { font-family: Serifa, Georgia, serif; font-style: italic; font-weight: 400; font-size: 30px; line-height: 1.05; }
+.painel .info { font-size: 14.5px; line-height: 1.4; }
+.painel .conta { margin-top: 6px; }
+.painel .conta b { font-size: 52px; font-weight: 700; letter-spacing: -.02em; }
+.painel .bar { height: 8px; background: rgba(255,255,255,.25); }
+.rotulo, .secao { letter-spacing: .12em; text-transform: uppercase; font-size: 11.5px; font-weight: 700; color: var(--muted); }
+.secao { margin: 10px 0 -2px; }
+.secao .n { background: var(--card); border: 1px solid var(--line); letter-spacing: 0; color: var(--ink); }
+.chips button { background: var(--card); border-color: var(--line); padding: 9px 16px; font-weight: 500; }
+.chips button.on { box-shadow: 0 6px 14px -6px var(--minha, var(--navy)); }
+.card { background: var(--card); border: 1px solid var(--line); border-left: 1px solid var(--line); border-radius: 22px; padding: 16px 16px 14px; box-shadow: 0 1px 0 rgba(22,32,74,.03), 0 10px 24px -18px rgba(22,32,74,.28); position: relative; overflow: hidden; }
+.card::before { content: ""; position: absolute; left: 0; top: 18px; bottom: 18px; width: 4px; border-radius: 0 4px 4px 0; background: var(--tipo, var(--line)); }
+.card .tipo { font-weight: 700; letter-spacing: .02em; padding: 4px 11px; }
+.card .nome { font-weight: 700; font-size: 19px; letter-spacing: -.005em; }
+a.wa { border-radius: 14px; padding: 14px 8px; font-weight: 700; background: linear-gradient(180deg, #23ad60, #1c934f); box-shadow: 0 8px 16px -10px #1c934f; }
+label.marcar { border-radius: 14px; border: 1.5px dashed #D5D2CA; font-weight: 600; }
+label.marcar .caixa { border-radius: 9px; }
+.card.ok { background: #F1F8F3; border-color: #D7EBDD; border-radius: 18px; box-shadow: none; }
+.card.ok::before { background: var(--ok); }
+details.msg p { background: var(--surface); border-radius: 14px; }
+.ajuda { background: var(--card); border: 1px solid var(--line); border-radius: 18px; }
+.ajuda summary { font-weight: 700; }
+.adm { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 14px 16px; }
+.adm b.t { font-family: Serifa, Georgia, serif; font-style: italic; font-weight: 400; font-size: 20px; color: var(--navy); }
+button.grande { border-radius: 14px; font-weight: 700; }
+.vazio { background: var(--card); border: 1px solid var(--line); border-radius: 20px; }
+/* abas do administrador */
+.abas { display: grid; grid-template-columns: 1fr 1fr; background: var(--surface); border-radius: 14px; padding: 4px; gap: 4px; }
+.abas button { border: 0; background: transparent; border-radius: 11px; padding: 10px 6px; font-weight: 600; color: var(--muted); }
+.abas button.on { background: var(--card); color: var(--navy); box-shadow: 0 2px 8px rgba(22,32,74,.10); }
+.sinc { font-size: 12.5px; color: var(--muted); }
+.sinc.ok { color: var(--ok); }
+/* acompanhamento */
+.acomp { display: flex; flex-direction: column; gap: 14px; }
+.pessoaCard { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 16px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 10px 24px -18px rgba(22,32,74,.28); }
+.pessoaCard .cab { display: flex; align-items: center; gap: 10px; }
+.pessoaCard .bola { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 700; background: linear-gradient(135deg, var(--c1), var(--c2)); flex: 0 0 auto; }
+.pessoaCard .quem { flex: 1; min-width: 0; }
+.pessoaCard .quem b { display: block; font-size: 17px; }
+.pessoaCard .quem small { color: var(--muted); }
+.pessoaCard .num { font-size: 30px; font-weight: 700; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.pessoaCard .num span { font-size: 15px; color: var(--muted); font-weight: 500; }
+.trilho { height: 8px; border-radius: 99px; background: var(--surface); overflow: hidden; }
+.trilho i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--c1), var(--c2)); }
+.selo { align-self: flex-start; font-size: 12.5px; font-weight: 700; border-radius: 99px; padding: 3px 10px; }
+.selo.ok { background: var(--ok-soft); color: var(--ok); }
+.selo.falta { background: #FDECEB; color: var(--bad); }
+.selo.hoje { background: var(--warn-soft); color: var(--warn); }
+.faltas { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+.faltas li { display: flex; justify-content: space-between; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 14.5px; }
+.faltas li span:last-child { color: var(--muted); font-size: 13px; white-space: nowrap; }
+.faltas li.feita span:first-child::before { content: "✓ "; color: var(--ok); font-weight: 700; }
+.faltas li.nao span:first-child::before { content: "○ "; color: var(--bad); font-weight: 700; }
+.cobrar { display: flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none; border: 1.5px solid var(--line); color: var(--ink); background: var(--bg); border-radius: 14px; padding: 11px; font-weight: 600; font-size: 14.5px; }
+.semana { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.semana h2 { margin: 0; font-family: Serifa, Georgia, serif; font-style: italic; font-weight: 400; font-size: 24px; color: var(--navy); }
+.semana table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+.semana th { text-align: left; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 700; padding: 0 4px 8px; }
+.semana td { padding: 9px 4px; border-top: 1px solid var(--line); }
+.semana td.n, .semana th.n { text-align: right; }
+.semana td.ruim { color: var(--bad); font-weight: 700; }
+.semana td.bom { color: var(--ok); font-weight: 700; }
+.semana tfoot td { font-weight: 700; border-top: 2px solid var(--ink); }
+.semana .nota { font-size: 12.5px; color: var(--muted); margin: 0; }
+/* entrada */
+#trava { background: var(--bg); align-items: flex-start; padding-top: max(40px, env(safe-area-inset-top)); }
+#trava h1 { font-family: Serifa, Georgia, serif; font-style: italic; font-weight: 400; font-size: 38px; line-height: 1; }
+#trava img { width: 92px; height: 92px; border-radius: 24px; }
+#trava .pessoa { border-radius: 20px; border: 1.5px solid var(--line); font-weight: 600; box-shadow: 0 8px 18px -14px rgba(22,32,74,.35); }
+#trava input { border-radius: 16px; border: 1.5px solid var(--line); }
+#trava button[type="submit"] { border-radius: 16px; font-weight: 700; background: linear-gradient(135deg, var(--navy), #24418a); box-shadow: 0 10px 20px -12px var(--navy); }
+#trava .ondasBase { position: fixed; left: 0; right: 0; bottom: 0; width: 100%; height: 120px; pointer-events: none; z-index: -1; }
+#trava form { position: relative; z-index: 1; padding-bottom: 130px; }
 </style>
 </head>
 <body>
@@ -161,6 +251,7 @@ button.link { background: none; border: 0; color: var(--muted); text-decoration:
     <button type="button" class="admlink" id="btAdmArquivo" hidden>Sou o administrador: abrir com o arquivo da lista</button>
     <input type="file" id="arquivoLogin" accept=".cisper,.json,.txt,application/json,text/plain,*/*" hidden>
   </form>
+  <svg class="ondasBase" id="ondasBase" viewBox="0 0 400 120" preserveAspectRatio="none" aria-hidden="true"></svg>
 </div>
 
 <header class="topo">
@@ -180,10 +271,13 @@ button.link { background: none; border: 0; color: var(--muted); text-decoration:
     <p class="info" id="info"></p>
     <div class="conta"><b id="nFeitos">0</b><span id="nTotal">de 0 mensagens enviadas</span></div>
     <div class="bar"><i id="barra"></i></div>
+    <svg class="ondas" id="ondasPainel" viewBox="0 0 400 64" preserveAspectRatio="none" aria-hidden="true"></svg>
   </section>
 
   <section class="adm" id="adm" hidden>
-    <b>Área do administrador</b>
+    <b class="t">Área do administrador</b>
+    <div class="abas" role="tablist"><button type="button" id="abaLista" class="on">📋 Lista</button><button type="button" id="abaAcomp">📊 Acompanhamento</button></div>
+    <div class="sinc" id="sinc"></div>
     <button type="button" class="grande" id="btPublicar" hidden>📤 Publicar lista nova</button>
     <input type="file" id="arquivo" accept=".cisper,.json,.txt,application/json,text/plain,*/*" hidden>
     <form id="fToken" autocomplete="off"><div id="admToken" hidden>
@@ -192,12 +286,18 @@ button.link { background: none; border: 0; color: var(--muted); text-decoration:
       <button type="submit" class="grande">Salvar chave</button>
     </div></form>
     <div class="linha-chips"><span class="rotulo">Ver a lista de</span><div class="chips" id="quem"></div></div>
+    <form id="fMarcas" autocomplete="off"><div id="admMarcas" hidden style="display:flex;flex-direction:column;gap:8px">
+      <span>Para ver no seu celular o que elas marcaram, cole a <b>chave das marcações</b> (só uma vez):</span>
+      <input id="tokenMarcas" type="password" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="github_pat_…" aria-label="Chave das marcações">
+      <button type="submit" class="grande">Salvar chave das marcações</button>
+    </div></form>
     <button type="button" class="link" id="btTrocarToken">Trocar chave do GitHub</button>
   </section>
 
   <div class="linha-chips" id="linhaDias" hidden><span class="rotulo">Dia</span><div class="chips" id="dias"></div></div>
 
   <div id="lista"><div class="vazio">Carregando a lista…</div></div>
+  <div id="acomp" class="acomp" hidden></div>
 
   <details class="ajuda">
     <summary>Como usar</summary>
@@ -285,7 +385,7 @@ async function abrir(env, senha) {
     try { vaga = JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(v.iv) }, kSenha, b64(v.ct)))); } catch (e) { continue; }
     const kDados = await crypto.subtle.importKey('raw', b64(vaga.k), 'AES-GCM', false, ['decrypt']);
     const txt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(env.iv) }, kDados, b64(env.ct));
-    const d = JSON.parse(new TextDecoder().decode(txt)); d.quem = vaga.quem; return d;
+    const d = JSON.parse(new TextDecoder().decode(txt)); d.quem = vaga.quem; d._k = vaga.k; return d;
   }
   throw new Error('senha errada');
 }
@@ -297,6 +397,69 @@ const salvar = () => ls.set('cisper-enviados', JSON.stringify(feitos));
 let atual = null;
 const ehAdm = () => eu === 'adm';
 const REPO = 'centroveterinariocisper-crypto/cisper';
+const REPO_M = 'centroveterinariocisper-crypto/cisper-marcas';
+let aba = 'lista';
+
+// ---- ondas (Maré Mansa)
+function ondas(svg, linhas, alt, cor, op) {
+  if (!svg) return; let h = '';
+  for (let j = 0; j < linhas; j++) {
+    const t = j / Math.max(1, linhas - 1), y0 = alt * (0.25 + 0.7 * t), amp = 3 + 7 * t, ph = j * 0.35;
+    let d = '';
+    for (let x = 0; x <= 400; x += 10) { const y = y0 + amp * Math.sin(x / 95 + ph) + amp * 0.35 * Math.sin(x / 41 + ph * 1.7); d += (x ? 'L' : 'M') + x + ' ' + y.toFixed(1); }
+    h += `<path d="${d}" fill="none" stroke="${cor}" stroke-opacity="${(op * (0.35 + 0.65 * t)).toFixed(2)}" stroke-width="${(0.8 + 0.9 * t).toFixed(2)}" vector-effect="non-scaling-stroke"/>`;
+  }
+  svg.innerHTML = h;
+}
+
+// ---- marcações compartilhadas (cada celular grava as suas; o adm vê de todos)
+let REM = {};              // k -> { ts, por }
+let TOKM = '';             // chave das marcações (vem criptografada dentro da lista)
+let KDADOS = '';           // chave da lista, usada para criptografar as marcações
+let ultimaSinc = 0, sincErro = '';
+const feitoEm = (k) => feitos[k] || (REM[k] && REM[k].ts) || 0;
+async function chaveAES(kb64) { return crypto.subtle.importKey('raw', b64(kb64), 'AES-GCM', false, ['encrypt', 'decrypt']); }
+const paraB64 = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf)));
+async function cifrar(kb64, obj) { const iv = crypto.getRandomValues(new Uint8Array(12)); const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, await chaveAES(kb64), new TextEncoder().encode(JSON.stringify(obj))); return { iv: paraB64(iv), ct: paraB64(ct) }; }
+async function decifrar(kb64, o) { const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(o.iv) }, await chaveAES(kb64), b64(o.ct)); return JSON.parse(new TextDecoder().decode(pt)); }
+async function prepararSinc(d) {
+  KDADOS = d._k || ''; TOKM = '';
+  if (d.quem === 'adm' && ls.get('cisper-token-marcas', '')) TOKM = ls.get('cisper-token-marcas', '');
+  else if (ENV && ENV.mk && KDADOS) { try { TOKM = (await decifrar(KDADOS, ENV.mk)).t || ''; } catch (e) {} }
+  if (TOKM) puxar();
+}
+const hM = () => ({ Authorization: 'Bearer ' + TOKM, Accept: 'application/vnd.github+json' });
+async function puxar() {
+  if (!TOKM || !KDADOS) return;
+  const novo = {};
+  try {
+    for (const p of ['debora', 'duda', 'adm']) {
+      const r = await fetch(`https://api.github.com/repos/${REPO_M}/contents/${p}.json?t=` + Date.now(), { headers: { ...hM(), Accept: 'application/vnd.github.raw' }, cache: 'no-store' });
+      if (r.status === 404) continue;
+      if (r.status === 401 || r.status === 403) throw new Error('chave');
+      if (!r.ok) throw new Error('rede');
+      let m = {}; try { m = (await decifrar(KDADOS, await r.json())).m || {}; } catch (e) { continue; }
+      for (const [k, ts] of Object.entries(m)) if (!novo[k] || ts < novo[k].ts) novo[k] = { ts, por: p };
+    }
+    REM = novo; ultimaSinc = Date.now(); sincErro = '';
+  } catch (e) { sincErro = e.message === 'chave' ? 'A chave das marcações não funcionou.' : 'Sem internet para buscar as marcações.'; }
+  render();
+}
+let tEmp = null;
+function empurrarDepois() { if (!TOKM || !KDADOS || !eu) return; clearTimeout(tEmp); tEmp = setTimeout(empurrar, 1200); }
+async function empurrar(tent) {
+  try {
+    const caminho = `https://api.github.com/repos/${REPO_M}/contents/${eu}.json`;
+    let sha; const g = await fetch(caminho + '?t=' + Date.now(), { headers: hM(), cache: 'no-store' });
+    if (g.ok) sha = (await g.json()).sha;
+    const corpo = JSON.stringify(await cifrar(KDADOS, { m: feitos }));
+    const r = await fetch(caminho, { method: 'PUT', headers: { ...hM(), 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'marcações ' + eu, content: btoa(corpo), sha }) });
+    if (r.status === 409 && !tent) return empurrar(1);
+    if (!r.ok) throw 0;
+    ultimaSinc = Date.now(); sincErro = '';
+  } catch (e) { sincErro = 'Marcação salva neste celular. Envio pendente.'; }
+  if (ehAdm()) render();
+}
 
 async function baixar() {
   // Primeiro pega direto do GitHub (sempre a versão mais nova); se não der, usa a cópia do site.
@@ -333,6 +496,7 @@ function entrar(d) {
   if (!ehAdm()) quem = eu; else if (!['todos', 'debora', 'duda'].includes(quem)) quem = 'todos';
   ls.set('cisper-quem', quem);
   aplicar(d);
+  prepararSinc(d);
 }
 function aplicar(d) {
   DADOS = d.dias || {}; META = d;
@@ -361,7 +525,18 @@ function render() {
     $('admToken').hidden = tem; $('btPublicar').hidden = !tem; $('btTrocarToken').hidden = !tem;
     const qx = $('quem'); qx.replaceChildren();
     for (const [id, nome] of QUEM) { const b = el('button', id === quem ? 'on' : '', nome); b.type = 'button'; b.onclick = () => { quem = id; ls.set('cisper-quem', id); render(); }; qx.appendChild(b); }
+    $('abaLista').classList.toggle('on', aba === 'lista'); $('abaAcomp').classList.toggle('on', aba === 'acomp');
+    $('quem').parentElement.hidden = aba !== 'lista';
+    $('admMarcas').hidden = !!ls.get('cisper-token-marcas', '');
+    const sx = $('sinc');
+    if (sincErro) { sx.className = 'sinc'; sx.textContent = '⚠ ' + sincErro; }
+    else if (TOKM && ultimaSinc) { sx.className = 'sinc ok'; sx.textContent = '● Marcações das meninas atualizadas às ' + hora(ultimaSinc); }
+    else if (ls.get('cisper-token-marcas', '') && !(ENV && ENV.mk)) { sx.className = 'sinc'; sx.textContent = 'Publique a lista de novo para ligar as marcações nos celulares delas.'; }
+    else { sx.className = 'sinc'; sx.textContent = 'Por enquanto você vê só as marcações feitas neste celular.'; }
   }
+  const verAcomp = ehAdm() && aba === 'acomp';
+  $('acomp').hidden = !verAcomp; $('lista').hidden = verAcomp; $('painel').hidden = verAcomp;
+  ondas($('ondasPainel'), 7, 64, '#ffffff', 0.55);
   // dias
   const dias = Object.keys(DADOS).sort();
   $('linhaDias').hidden = dias.length < 2;
@@ -372,15 +547,16 @@ function render() {
     b.onclick = () => { atual = d; render(); window.scrollTo(0, 0); };
     bx.appendChild(b);
   }
+  if (verAcomp) { acompanhamento(); return; }
   // lista de quem está sendo visto
   const doDia = DADOS[atual] || [];
   const itens = doDia.filter((i) => quem === 'todos' || dona(i, doDia) === quem).sort((a, b) => ORDEM.indexOf(a.t) - ORDEM.indexOf(b.t));
-  const fazer = itens.filter((i) => !feitos[i.k]);
-  const prontos = itens.filter((i) => feitos[i.k]).sort((a, b) => feitos[b.k] - feitos[a.k]);
+  const fazer = itens.filter((i) => !feitoEm(i.k));
+  const prontos = itens.filter((i) => feitoEm(i.k)).sort((a, b) => feitoEm(b.k) - feitoEm(a.k));
   // painel
   const ehHoje = atual === hojeISO();
   const nomeDia = ehHoje ? 'hoje' : new Date(atual + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
-  $('painel').hidden = false;
+  $('painel').hidden = verAcomp;
   $('painel').style.setProperty('--cor', vendo.cor); $('painel').style.setProperty('--cor2', vendo.cor2);
   document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff');
   document.documentElement.style.setProperty('--minha', vendo.cor);
@@ -405,6 +581,71 @@ function render() {
     for (const i of prontos) L.appendChild(cartaoFeito(i));
   }
 }
+function acompanhamento() {
+  const A = $('acomp'); A.replaceChildren();
+  const h = hojeISO(), dias = Object.keys(DADOS).sort();
+  const rotDia = (d) => d === h ? 'hoje' : new Date(d + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'numeric' });
+  const doDia = DADOS[atual] || [];
+  const cores = { debora: ['var(--debora)', 'var(--debora-2)'], duda: ['var(--duda)', 'var(--duda-2)'] };
+  for (const p of ['debora', 'duda']) {
+    const P = PESSOAS[p];
+    const its = doDia.filter((i) => dona(i, doDia) === p).sort((a, b) => ORDEM.indexOf(a.t) - ORDEM.indexOf(b.t));
+    const ok = its.filter((i) => feitoEm(i.k)), nao = its.filter((i) => !feitoEm(i.k));
+    const c = el('section', 'pessoaCard'); c.style.setProperty('--c1', cores[p][0]); c.style.setProperty('--c2', cores[p][1]);
+    const cab = el('div', 'cab'); cab.appendChild(el('span', 'bola', P.nome[0]));
+    const q = el('div', 'quem'); q.appendChild(el('b', null, P.nome)); q.appendChild(el('small', null, P.turno + ' · ' + rotDia(atual))); cab.appendChild(q);
+    const n = el('div', 'num', String(ok.length)); n.appendChild(el('span', null, ' de ' + its.length)); cab.appendChild(n);
+    c.appendChild(cab);
+    const tr = el('div', 'trilho'); const ti = el('i'); ti.style.width = its.length ? Math.round(ok.length / its.length * 100) + '%' : '0'; tr.appendChild(ti); c.appendChild(tr);
+    if (!its.length) c.appendChild(el('span', 'selo ok', 'Nada para esse dia'));
+    else if (!nao.length) c.appendChild(el('span', 'selo ok', '✓ Fez tudo'));
+    else if (atual < h) c.appendChild(el('span', 'selo falta', `Não fez ${nao.length}`));
+    else if (atual === h) c.appendChild(el('span', 'selo hoje', `Faltam ${nao.length} hoje`));
+    else c.appendChild(el('span', 'selo hoje', 'Ainda não chegou o dia'));
+    if (its.length) {
+      const ul = el('ul', 'faltas');
+      for (const i of nao) { const li = el('li', 'nao'); li.appendChild(el('span', null, capNome(i.c) + ' · ' + i.a)); li.appendChild(el('span', null, (TIPOS[i.t] || TIPOS.par).rot.replace(/^\S+\s/, ''))); ul.appendChild(li); }
+      for (const i of ok.sort((a, b) => feitoEm(a.k) - feitoEm(b.k))) { const li = el('li', 'feita'); li.appendChild(el('span', null, capNome(i.c) + ' · ' + i.a)); li.appendChild(el('span', null, 'às ' + hora(feitoEm(i.k)))); ul.appendChild(li); }
+      const dt = el('details'); const sm = el('summary', 'sinc', nao.length ? `Ver quem ficou faltando (${nao.length}) e quem foi feito` : 'Ver quem foi feito'); dt.appendChild(sm); dt.appendChild(ul);
+      if (nao.length && atual <= h) dt.open = true;
+      c.appendChild(dt);
+      if (nao.length && atual <= h) {
+        const txt = `${P.nome}, ${atual === h ? 'hoje' : 'no dia ' + new Date(atual + 'T12:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })} ficaram ${nao.length} ${nao.length === 1 ? 'mensagem' : 'mensagens'} sem enviar na Lista do dia:\n` + nao.map((i) => '• ' + capNome(i.c) + ' (' + i.a + ')').join('\n') + '\nConsegue enviar agora? Obrigado!';
+        const a = el('a', 'cobrar', '💬 Mandar cobrança no WhatsApp'); a.href = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(txt); a.target = '_blank'; a.rel = 'noopener';
+        c.appendChild(a);
+      }
+    }
+    A.appendChild(c);
+  }
+  // total da semana
+  const S = el('section', 'semana'); S.appendChild(el('h2', null, 'Total da semana'));
+  const tb = document.createElement('table');
+  tb.innerHTML = '<thead><tr><th>Dia</th><th class="n">Débora</th><th class="n">Duda</th></tr></thead>';
+  const body = document.createElement('tbody');
+  const tot = { debora: [0, 0, 0], duda: [0, 0, 0] }; // feitas, total até hoje, não fez (dias passados)
+  for (const d of dias) {
+    const L = DADOS[d] || [], tr = document.createElement('tr');
+    const td0 = el('td', null, d === h ? 'Hoje' : new Date(d + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit' })); tr.appendChild(td0);
+    for (const p of ['debora', 'duda']) {
+      const its = L.filter((i) => dona(i, L) === p), ok = its.filter((i) => feitoEm(i.k)).length;
+      let cls = 'n', txt = its.length ? `${ok}/${its.length}` : '—';
+      if (d <= h) { tot[p][0] += ok; tot[p][1] += its.length; }
+      if (d < h && its.length) { tot[p][2] += its.length - ok; cls += ok < its.length ? ' ruim' : ' bom'; if (ok === its.length) txt += ' ✓'; }
+      else if (d > h && its.length) txt = `${its.length} a fazer`;
+      tr.appendChild(el('td', cls, txt));
+    }
+    tr.style.cursor = 'pointer'; tr.onclick = () => { atual = d; render(); window.scrollTo(0, 0); };
+    body.appendChild(tr);
+  }
+  tb.appendChild(body);
+  const tf = document.createElement('tfoot'); const trf = document.createElement('tr'); trf.appendChild(el('td', null, 'Até hoje'));
+  for (const p of ['debora', 'duda']) { const [ok, t] = tot[p]; trf.appendChild(el('td', 'n', t ? `${ok}/${t} · ${Math.round(ok / t * 100)}%` : '—')); }
+  tf.appendChild(trf); const trn = document.createElement('tr'); trn.appendChild(el('td', null, 'Não fez (dias passados)'));
+  for (const p of ['debora', 'duda']) trn.appendChild(el('td', 'n' + (tot[p][2] ? ' ruim' : ' bom'), String(tot[p][2])));
+  tf.appendChild(trn); tb.appendChild(tf); S.appendChild(tb);
+  S.appendChild(el('p', 'nota', 'Toque num dia para ver o detalhe. Os números contam o que elas marcaram como enviado no app.'));
+  A.appendChild(S);
+}
 function cartao(i) {
   const T = TIPOS[i.t] || TIPOS.par;
   const c = el('article', 'card'); c.style.setProperty('--tipo', T.cor); c.style.setProperty('--tipo-soft', T.soft); c.style.setProperty('--tipo-ink', T.ink);
@@ -428,13 +669,13 @@ function caixa(i, marcada) {
   const lb = el('label', 'marcar' + (marcada ? ' on' : ''));
   const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = marcada;
   cb.setAttribute('aria-label', 'Mensagem enviada para ' + capNome(i.c));
-  cb.addEventListener('change', () => { if (cb.checked) feitos[i.k] = Date.now(); else delete feitos[i.k]; salvar(); setTimeout(render, marcada ? 0 : 350); lb.classList.toggle('on', cb.checked); });
+  cb.addEventListener('change', () => { if (cb.checked) feitos[i.k] = Date.now(); else { delete feitos[i.k]; delete REM[i.k]; } salvar(); empurrarDepois(); setTimeout(render, marcada ? 0 : 350); lb.classList.toggle('on', cb.checked); });
   lb.appendChild(cb); lb.appendChild(el('span', 'caixa')); lb.appendChild(el('span', 'txt', marcada ? 'Enviada' : 'Marque aqui quando enviar'));
   return lb;
 }
 function cartaoFeito(i) {
   const c = el('article', 'card ok');
-  const t = el('div', 'txt'); t.appendChild(el('div', 'nome', capNome(i.c))); t.appendChild(el('div', 'det', `Enviada às ${hora(feitos[i.k])} · ${i.a}`));
+  const t = el('div', 'txt'); t.appendChild(el('div', 'nome', capNome(i.c))); t.appendChild(el('div', 'det', `Enviada às ${hora(feitoEm(i.k))} · ${i.a}`));
   const cx = caixa(i, true); cx.prepend(t); cx.querySelector('.txt:last-child').remove();
   c.appendChild(cx);
   return c;
@@ -471,7 +712,7 @@ $('fTrava').addEventListener('submit', async (ev) => {
   catch (e) { $('erroSenha').textContent = 'Senha errada. Confira no 👁 e tente de novo.'; }
 });
 $('btOlho').addEventListener('click', () => { const i = $('senha'); const ver = i.type === 'password'; i.type = ver ? 'text' : 'password'; $('btOlho').setAttribute('aria-pressed', ver ? 'true' : 'false'); $('btOlho').setAttribute('aria-label', ver ? 'Esconder senha' : 'Mostrar senha'); i.focus(); });
-const sair = () => { ls.del('cisper-senha'); ls.del('cisper-eu'); eu = ''; $('perfil').hidden = true; $('painel').hidden = true; $('adm').hidden = true; $('btSair').hidden = true; pedirSenha(); };
+const sair = () => { TOKM = ''; KDADOS = ''; REM = {}; aba = 'lista'; $('acomp').hidden = true; $('lista').hidden = false; ls.del('cisper-senha'); ls.del('cisper-eu'); eu = ''; $('perfil').hidden = true; $('painel').hidden = true; $('adm').hidden = true; $('btSair').hidden = true; pedirSenha(); };
 $('btSair').addEventListener('click', sair);
 $('perfil').addEventListener('click', sair);
 $('btAdmArquivo').addEventListener('click', () => { if (!$('senha').value.trim()) { $('erroSenha').textContent = 'Digite a senha de administrador primeiro.'; return; } $('arquivoLogin').click(); });
@@ -487,6 +728,13 @@ $('fToken').addEventListener('submit', (ev) => {
   ls.set('cisper-token', v); $('token').value = ''; render(); alertaTopo('Chave salva neste celular. Agora você já pode publicar.', true);
 });
 $('btTrocarToken').addEventListener('click', () => { ls.del('cisper-token'); render(); });
+$('abaLista').addEventListener('click', () => { aba = 'lista'; render(); });
+$('abaAcomp').addEventListener('click', () => { aba = 'acomp'; puxar(); render(); });
+$('fMarcas').addEventListener('submit', (ev) => {
+  ev.preventDefault(); const v = $('tokenMarcas').value.trim(); if (!v) return;
+  ls.set('cisper-token-marcas', v); $('tokenMarcas').value = ''; TOKM = v; puxar();
+  alertaTopo('Chave das marcações salva. Agora publique a lista de novo para ligar nos celulares delas.', true);
+});
 $('btPublicar').addEventListener('click', () => $('arquivo').click());
 $('arquivo').addEventListener('change', async (ev) => {
   const f = ev.target.files && ev.target.files[0]; $('arquivo').value = ''; if (!f) return;
@@ -500,6 +748,8 @@ $('arquivo').addEventListener('change', async (ev) => {
     try { if (!novaSenha) throw 0; d = await abrir(env, novaSenha); if (d.quem !== 'adm') throw 0; }
     catch (e2) { alertaTopo('Essa lista não abre com essa senha de administrador. Confira se é o arquivo certo.'); return; }
   }
+  const tm = ls.get('cisper-token-marcas', '');
+  if (tm && d._k) { try { env.mk = await cifrar(d._k, { t: tm }); } catch (e) {} }
   const btn = $('btPublicar'); btn.disabled = true; btn.textContent = 'Publicando…';
   try {
     const h = { Authorization: 'Bearer ' + ls.get('cisper-token', ''), Accept: 'application/vnd.github+json' };
@@ -511,7 +761,7 @@ $('arquivo').addEventListener('change', async (ev) => {
     const r = await fetch(`https://api.github.com/repos/${REPO}/contents/dados.enc`, { method: 'PUT', headers: { ...h, 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'Lista nova (' + new Date().toLocaleDateString('pt-BR') + ')', content: btoa(unescape(encodeURIComponent(corpo))), sha }) });
     if (r.status === 401 || r.status === 403 || r.status === 404) throw new Error('chave');
     if (!r.ok) throw new Error('falhou');
-    if (novaSenha) ls.set('cisper-senha', novaSenha); ls.set('cisper-lista', corpo); ENV = env; aplicar(d);
+    if (novaSenha) ls.set('cisper-senha', novaSenha); ls.set('cisper-lista', corpo); ENV = env; aplicar(d); prepararSinc(d);
     alertaTopo('Lista publicada! Em alguns minutos ela aparece no celular das meninas.', true);
   } catch (e) {
     alertaTopo(e.message === 'chave' ? 'O GitHub recusou a chave. Toque em "Trocar chave do GitHub" e cole uma chave nova.' : 'Não consegui publicar. Confira a internet e tente de novo.');
@@ -519,6 +769,8 @@ $('arquivo').addEventListener('change', async (ev) => {
 });
 
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && ls.get('cisper-senha', '')) carregar(false); });
+setInterval(() => { if (document.visibilityState === 'visible' && ehAdm() && TOKM) puxar(); }, 60000);
+ondas($('ondasBase'), 14, 120, '#1B2A6B', 0.5);
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
   let recarregou = false;

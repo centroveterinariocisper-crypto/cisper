@@ -35,4 +35,5 @@ App da recepção com as mensagens de WhatsApp do dia (pós-atendimento, vacinas
 ## Lembretes
 
 - A chave do GitHub usada para publicar vence em **01/01/2027**. Criar outra em github.com/settings/personal-access-tokens/new (repositório `cisper`, permissão Contents: Read and write) e trocar no app em "Trocar chave do GitHub".
-- A marcação de "enviada" fica guardada no celular onde foi feita.
+- **Acompanhamento (adm):** aba "📊 Acompanhamento" mostra o que cada uma fez e não fez no dia e o total da semana. As marcações são gravadas, criptografadas, no repositório privado `cisper-marcas`, com uma chave própria (Contents: Read and write só nesse repositório). Essa chave vai criptografada dentro da lista publicada; sem ela, cada celular vê só as próprias marcações.
+- Visual "Maré Mansa": fontes Outfit e Instrument Serif (licença OFL, pasta `fonts/`).

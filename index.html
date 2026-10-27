@@ -66,6 +66,12 @@ details.msg p { margin: 6px 0 0; background: var(--bg); padding: 10px; border-ra
 .vazio { color: var(--muted); background: var(--card); border: 1px dashed var(--line); border-radius: 14px; padding: 18px; }
 .aviso { color: var(--bad); font-size: 14px; }
 .vazio p { margin: 0 0 10px; }
+.adm { background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--navy); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; font-size: 14px; }
+.adm #admToken { display: flex; flex-direction: column; gap: 8px; }
+.adm #admToken[hidden] { display: none; }
+.adm input { font: inherit; padding: 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+button.link { background: none; border: 0; color: var(--muted); text-decoration: underline; font: inherit; font-size: 13px; align-self: flex-start; padding: 0; cursor: pointer; }
+.okmsg { color: var(--teal-ink); font-weight: 700; font-size: 14px; }
 button.grande { width: 100%; font: inherit; font-weight: 700; font-size: 17px; padding: 14px; border: 0; border-radius: 12px; background: var(--navy); color: #fff; cursor: pointer; margin-top: 4px; }
 /* tela da senha */
 #trava { position: fixed; inset: 0; background: var(--navy); color: #fff; display: flex; align-items: center; justify-content: center; padding: 24px; z-index: 20; }
@@ -98,12 +104,22 @@ button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visibl
       <h1>Lista do dia</h1>
       <div class="sub" id="sub">Carregando…</div>
     </div>
-    <button type="button" id="btAtualizar" aria-label="Carregar lista nova">📥 Carregar lista</button>
-    <input type="file" id="arquivo" accept=".cisper,.json,.txt,application/json,text/plain,*/*" hidden>
+    <button type="button" id="btAtualizar" aria-label="Buscar lista nova">↻ Atualizar</button>
   </div>
 </header>
 
 <main class="wrap">
+  <section class="adm" id="adm" hidden>
+    <b>Administrador</b>
+    <button type="button" class="grande" id="btPublicar" hidden>📤 Publicar lista nova</button>
+    <input type="file" id="arquivo" accept=".cisper,.json,.txt,application/json,text/plain,*/*" hidden>
+    <form id="fToken" autocomplete="off"><div id="admToken" hidden>
+      <span>Para publicar daqui, cole a chave do GitHub (só uma vez neste celular):</span>
+      <input id="token" type="password" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="github_pat_…" aria-label="Chave do GitHub">
+      <button type="submit" class="grande">Salvar chave</button>
+    </div></form>
+    <button type="button" class="link" id="btTrocarToken">Trocar chave</button>
+  </section>
   <div class="chips" id="dias" aria-label="Dia"></div>
   <div class="chips" id="quem" aria-label="Quem está usando"></div>
   <div class="prog" id="prog"></div>
@@ -116,7 +132,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visibl
       <li>O cartão fica marcado como enviado. Passe para o próximo.</li>
       <li>Se souber que o animal faleceu, <b>não envie</b> e avise o Paulo.</li>
       <li>Não envie no almoço, depois das 19h nem no domingo.</li>
-      <li>No domingo e na quarta o Paulo manda no WhatsApp o arquivo <b>Lista Cisper</b>. Toque em <b>📥 Carregar lista</b> e escolha esse arquivo. No iPhone, antes toque no arquivo no WhatsApp → compartilhar → <b>Salvar em Arquivos</b>.</li>
+      <li>O Paulo publica a lista nova no domingo e na quarta. Ela aparece sozinha quando você abre o app. Se não aparecer, toque em <b>↻ Atualizar</b>.</li>
     </ol>
   </details>
   <details class="dica">
@@ -191,45 +207,80 @@ let feitos = {}; try { feitos = JSON.parse(ls.get('cisper-enviados', '{}')) || {
 const salvar = () => ls.set('cisper-enviados', JSON.stringify(feitos));
 let atual = null;
 
-// A lista chega como arquivo pelo WhatsApp (nenhum dado de cliente fica na internet).
-// O arquivo criptografado fica guardado neste celular; a senha abre.
-async function usarEnv(env, nova) {
+// A lista fica no site, criptografada (dados.enc). Cada pessoa abre com a própria senha.
+// Só o administrador (Paulo) publica uma lista nova, direto do celular dele.
+const REPO = 'centroveterinariocisper-crypto/cisper';
+const ehAdm = () => ls.get('cisper-adm', '') === '1';
+async function baixar() {
+  const r = await fetch('dados.enc?t=' + Date.now(), { cache: 'no-store' });
+  if (r.status === 404) throw new Error('nao publicada');
+  if (!r.ok) throw new Error('sem internet');
+  return r.json();
+}
+async function usarEnv(env) {
   ENV = env;
   const senha = ls.get('cisper-senha', '');
   if (!senha) { pedirSenha(); return; }
+  try { const d = await abrir(ENV, senha); ls.set('cisper-lista', JSON.stringify(ENV)); aplicar(d); }
+  catch (e) { ls.del('cisper-senha'); pedirSenha('A senha mudou. Digite a sua senha.'); }
+}
+async function carregar(manual) {
+  const btn = $('btAtualizar'); btn.disabled = true; btn.textContent = '↻ …';
+  try { await usarEnv(await baixar()); }
+  catch (e) {
+    let env = null; try { env = JSON.parse(ls.get('cisper-lista', 'null')); } catch (x) {}
+    if (env && env.vagas) { await usarEnv(env); if (manual) $('sub').textContent = e.message === 'nao publicada' ? 'Nenhuma lista nova publicada' : 'Sem internet · mostrando a última lista'; }
+    else {
+      $('sub').textContent = 'Centro Veterinário Cisper';
+      $('lista').replaceChildren(el('div', 'vazio', e.message === 'nao publicada' ? 'A lista ainda não foi publicada. O Paulo avisa quando estiver pronta.' : 'Não consegui buscar a lista. Confira a internet e toque em Atualizar.'));
+      if (e.message === 'nao publicada' && !ls.get('cisper-senha', '')) { ENV = null; pedirSenha(); }
+    }
+  } finally { btn.disabled = false; btn.textContent = '↻ Atualizar'; mostrarAdm(); }
+}
+function alertaTopo(txt, ok) { const L = $('lista'); const p = el('p', ok ? 'okmsg' : 'aviso', txt); L.prepend(p); setTimeout(() => p.remove(), 10000); window.scrollTo(0, 0); }
+
+// ---- área do administrador
+function mostrarAdm() {
+  const box = $('adm'); box.hidden = !ehAdm(); if (!ehAdm()) return;
+  const tem = !!ls.get('cisper-token', '');
+  $('admToken').hidden = tem; $('btPublicar').hidden = !tem;
+}
+$('fToken').addEventListener('submit', (ev) => {
+  ev.preventDefault(); const v = $('token').value.trim(); if (!v) return;
+  ls.set('cisper-token', v); $('token').value = ''; mostrarAdm(); alertaTopo('Chave salva neste celular. Agora você já pode publicar.', true);
+});
+$('btTrocarToken').addEventListener('click', () => { ls.del('cisper-token'); mostrarAdm(); });
+$('btPublicar').addEventListener('click', () => $('arquivo').click());
+$('arquivo').addEventListener('change', async (ev) => {
+  const f = ev.target.files && ev.target.files[0]; $('arquivo').value = ''; if (!f) return;
+  let env;
+  try { env = JSON.parse(await f.text()); if (!env.vagas || !env.ct) throw 0; } catch (e) { alertaTopo('Esse arquivo não é uma lista da Cisper. Escolha o arquivo "Lista Cisper" que o Claude mandou.'); return; }
+  let d;
+  try { d = await abrir(env, ls.get('cisper-senha', '')); if (d.quem !== 'adm') throw 0; } catch (e) { alertaTopo('Essa lista não abre com a sua senha de administrador. Confira se é o arquivo certo.'); return; }
+  const btn = $('btPublicar'); btn.disabled = true; btn.textContent = 'Publicando…';
   try {
-    const d = await abrir(ENV, senha);
-    if (nova) ls.set('cisper-lista', JSON.stringify(ENV));
-    aplicar(d);
-  } catch (e) { ls.del('cisper-senha'); pedirSenha('Digite a sua senha para abrir esta lista.'); }
-}
-function carregar() {
-  let env = null; try { env = JSON.parse(ls.get('cisper-lista', 'null')); } catch (e) { env = null; }
-  if (env && env.vagas) { usarEnv(env, false); return; }
-  $('sub').textContent = 'Centro Veterinário Cisper';
-  const L = $('lista'); L.replaceChildren();
-  const v = el('div', 'vazio');
-  v.appendChild(el('p', null, 'Ainda não tem lista neste celular.'));
-  v.appendChild(el('p', null, 'Toque no botão abaixo e escolha o arquivo "Lista Cisper" que o Paulo mandou no WhatsApp.'));
-  const bt = el('button', 'grande', '📥 Carregar lista'); bt.type = 'button'; bt.onclick = () => $('arquivo').click(); v.appendChild(bt);
-  L.appendChild(v);
-}
-async function lerArquivo(f) {
-  if (!f) return;
-  try {
-    const env = JSON.parse(await f.text());
-    if (!env || !env.vagas || !env.ct) throw new Error('arquivo');
-    ENV_NOVO = env; await usarEnv(env, true);
-  } catch (e) { alertaTopo('Esse arquivo não é uma lista da Cisper. Escolha o arquivo "Lista Cisper" que o Paulo mandou.'); }
-  $('arquivo').value = '';
-}
-function alertaTopo(txt) { const L = $('lista'); const p = el('p', 'aviso', txt); L.prepend(p); setTimeout(() => p.remove(), 8000); window.scrollTo(0, 0); }
-let ENV_NOVO = null;
+    const tk = ls.get('cisper-token', '');
+    const h = { Authorization: 'Bearer ' + tk, Accept: 'application/vnd.github+json' };
+    let sha;
+    const g = await fetch(`https://api.github.com/repos/${REPO}/contents/dados.enc`, { headers: h, cache: 'no-store' });
+    if (g.status === 401 || g.status === 403) throw new Error('chave');
+    if (g.ok) sha = (await g.json()).sha;
+    const corpo = JSON.stringify(env);
+    const conteudo = btoa(unescape(encodeURIComponent(corpo)));
+    const r = await fetch(`https://api.github.com/repos/${REPO}/contents/dados.enc`, { method: 'PUT', headers: { ...h, 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'Lista nova (' + new Date().toLocaleDateString('pt-BR') + ')', content: conteudo, sha }) });
+    if (r.status === 401 || r.status === 403 || r.status === 404) throw new Error('chave');
+    if (!r.ok) throw new Error('falhou');
+    ls.set('cisper-lista', corpo); ENV = env; aplicar(d);
+    alertaTopo('Lista publicada! Em 1 ou 2 minutos ela aparece no celular das meninas quando abrirem o app.', true);
+  } catch (e) {
+    alertaTopo(e.message === 'chave' ? 'O GitHub recusou a chave. Toque em "Trocar chave" e cole uma chave nova.' : 'Não consegui publicar. Confira a internet e tente de novo.');
+  } finally { btn.disabled = false; btn.textContent = '📤 Publicar lista nova'; }
+});
+
 function aplicar(d) {
   DADOS = d.dias || {}; META = d;
   const dias = Object.keys(DADOS).sort(), h = hojeISO();
   if (!atual || !dias.includes(atual)) atual = dias.includes(h) ? h : (dias.find((x) => x > h) || dias[dias.length - 1]);
-  // limpa marcações de itens que não existem mais
   const vivos = new Set(Object.values(DADOS).flat().map((i) => i.k));
   for (const k of Object.keys(feitos)) if (!vivos.has(k) && Date.now() - feitos[k] > 30 * 864e5) delete feitos[k];
   salvar(); render();
@@ -240,13 +291,18 @@ function pedirSenha(erro) {
 }
 $('fTrava').addEventListener('submit', async (ev) => {
   ev.preventDefault();
-  const s = $('senha').value.trim(); if (!s || !ENV) return;
+  const s = $('senha').value.trim(); if (!s) return;
   $('erroSenha').textContent = 'Abrindo…';
-  try { const d = await abrir(ENV, s); ls.set('cisper-senha', s); ls.set('cisper-lista', JSON.stringify(ENV)); if (d.quem && QUEM.some(([id]) => id === d.quem)) { quem = d.quem; ls.set('cisper-quem', quem); } $('trava').hidden = true; $('senha').value = ''; aplicar(d); }
-  catch (e) { $('erroSenha').textContent = 'Senha errada. Tente de novo.'; }
+  if (!ENV) { try { ENV = await baixar(); } catch (e) { $('erroSenha').textContent = 'A lista ainda não foi publicada. Tente mais tarde.'; return; } }
+  try {
+    const d = await abrir(ENV, s); ls.set('cisper-senha', s); ls.set('cisper-lista', JSON.stringify(ENV));
+    ls.set('cisper-adm', d.quem === 'adm' ? '1' : '');
+    quem = d.quem === 'adm' ? 'todos' : (QUEM.some(([id]) => id === d.quem) ? d.quem : quem); ls.set('cisper-quem', quem);
+    $('trava').hidden = true; $('senha').value = ''; aplicar(d); mostrarAdm();
+  } catch (e) { $('erroSenha').textContent = 'Senha errada. Tente de novo.'; }
 });
-$('btAtualizar').addEventListener('click', () => $('arquivo').click());
-$('arquivo').addEventListener('change', (ev) => lerArquivo(ev.target.files && ev.target.files[0]));
+$('btAtualizar').addEventListener('click', () => carregar(true));
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') carregar(false); });
 
 function render() {
   if (!DADOS) return;
@@ -268,7 +324,7 @@ function render() {
   const pr = $('prog'); pr.replaceChildren(el('div', null, `${ok} de ${itens.length} mensagens enviadas`));
   const bar = el('div', 'bar'); const fill = el('i'); fill.style.width = itens.length ? (ok / itens.length * 100) + '%' : '0'; bar.appendChild(fill); pr.appendChild(bar);
   const L = $('lista'); L.replaceChildren();
-  if (atual < hojeISO() && dias[dias.length - 1] < hojeISO()) L.appendChild(el('p', 'aviso', 'Esta é a última lista carregada. Se o Paulo já mandou a nova no WhatsApp, toque em 📥 Carregar lista.'));
+  if (atual < hojeISO() && dias[dias.length - 1] < hojeISO()) L.appendChild(el('p', 'aviso', 'Esta é a última lista publicada. Toque em ↻ Atualizar para ver se já tem a nova.'));
   if (!itens.length) { L.appendChild(el('div', 'vazio', 'Nada para este dia.')); return; }
   for (const [t, titulo] of GRUPOS) {
     const grupo = itens.filter((i) => i.t === t || (t === 'orc2' && i.t === 'orc7')); if (!grupo.length) continue;
@@ -301,7 +357,7 @@ if ('serviceWorker' in navigator) {
   let recarregou = false;
   navigator.serviceWorker.addEventListener('controllerchange', () => { if (!recarregou) { recarregou = true; location.reload(); } });
 }
-carregar();
+carregar(false);
 </script>
 </body>
 </html>

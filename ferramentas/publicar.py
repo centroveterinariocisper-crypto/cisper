@@ -1,6 +1,9 @@
 """Gera dados.enc (lista da semana criptografada) para o app Cisper.
 
 Uso: python3 publicar.py <semana.json> <saida/dados.enc> nome1=senha1 [nome2=senha2 ...]
+ ou: python3 publicar.py <semana.json> <saida/dados.enc> base=<dados.enc publicado> adm=<senha do Paulo>
+     (só com a senha do Paulo: reaproveita a chave e as senhas da lista já publicada;
+      Débora e Duda continuam entrando com as mesmas senhas)
 semana.json = {"AAAA-MM-DD": [itens], ...}
 
 A lista é criptografada uma vez com uma chave aleatória (AES-256-GCM).
@@ -15,9 +18,34 @@ from cryptography.hazmat.primitives import hashes
 ITER = 200_000
 b = lambda x: base64.b64encode(x).decode()
 
+def chave_da_base(base, senha):
+    env = json.load(open(base))
+    d = base64.b64decode
+    for v in env["vagas"]:
+        k = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=d(v["salt"]), iterations=env["iter"]).derive(senha.encode())
+        try:
+            vaga = json.loads(AESGCM(k).decrypt(d(v["iv"]), d(v["ct"]), None))
+        except Exception:
+            continue
+        if vaga["quem"] == "adm":
+            return d(vaga["k"]), env
+    raise SystemExit("A senha do adm não abre a lista publicada.")
+
 def main(entrada, saida, *pares):
     dias = json.load(open(entrada, encoding="utf-8"))
     corpo = {"gerado_em": datetime.datetime.now(datetime.timezone.utc).isoformat(), "dias": dias}
+    opc = dict(p.split("=", 1) for p in pares)
+    base = opc.pop("base", None)
+    if base:
+        chave, env_base = chave_da_base(base, opc["adm"])
+        iv = os.urandom(12)
+        ct = AESGCM(chave).encrypt(iv, json.dumps(corpo, ensure_ascii=False).encode(), None)
+        saida_env = {"v": 2, "iter": env_base["iter"], "vagas": env_base["vagas"], "iv": b(iv), "ct": b(ct)}
+        if "mk" in env_base:
+            saida_env["mk"] = env_base["mk"]
+        json.dump(saida_env, open(saida, "w"))
+        print("ok", sum(len(v) for v in dias.values()), "itens em", len(dias), "dias, senhas da lista publicada mantidas")
+        return
     chave = AESGCM.generate_key(bit_length=256)
     iv = os.urandom(12)
     ct = AESGCM(chave).encrypt(iv, json.dumps(corpo, ensure_ascii=False).encode(), None)

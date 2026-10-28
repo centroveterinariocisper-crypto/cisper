@@ -9,7 +9,7 @@ App da recepção com as mensagens de WhatsApp do dia (pós-atendimento, vacinas
 ## Rotina
 
 1. Domingo e quarta à noite, o Paulo pede ao Claude: "monta a lista da semana".
-2. O Claude lê o NuvemVet (só leitura) e gera o arquivo `Lista Cisper ….cisper`, criptografado com as senhas.
+2. O Claude lê o NuvemVet (só leitura) e gera o arquivo `Lista Cisper ….cisper`. Basta a senha do Paulo: o arquivo reaproveita a chave da lista publicada, então Débora e Duda continuam com as mesmas senhas. As três senhas só são necessárias para trocar alguma delas.
 3. O Paulo abre o app como administrador, toca em **📤 Publicar lista nova** e escolhe o arquivo.
 4. A lista aparece sozinha no app da Débora e da Duda.
 

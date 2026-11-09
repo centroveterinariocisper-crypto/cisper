@@ -1061,7 +1061,9 @@ $('btCopiar').addEventListener('click', async () => {
   const t = 'Pedido – Centro Veterinário Cisper\n' + Object.keys(by).map((c) => `\n${c}:\n` + by[c].map((n) => '- ' + n).join('\n')).join('\n');
   try { await navigator.clipboard.writeText(t); toast('Lista copiada'); } catch (e) { toast('Não deu para copiar neste celular'); }
 });
-setInterval(() => { if (document.visibilityState === 'visible' && TOKM && eu) puxarEst(); }, 45000);
+setInterval(() => { if (document.visibilityState === 'visible' && TOKM && eu) puxarEst(); }, 20000);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && TOKM && eu) puxarEst(); });
+window.addEventListener('pageshow', () => { if (TOKM && eu) puxarEst(); });
 
 // ---- entrada e troca de pessoa
 // Cada pessoa sempre digita a própria senha ao trocar. Nenhuma senha fica lembrada para a troca.

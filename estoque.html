@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#FBFAF7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Estoque">
+<link rel="apple-touch-icon" href="data:image/webp;base64,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">
+<link rel="icon" href="data:image/webp;base64,UklGRjINAABXRUJQVlA4WAoAAAAgAAAAdwAAdwAASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggRAsAABAxAJ0BKngAeAA+USKORSOiIRUI1bg4BQSgDSqh9fnqtQW+U4gQ4Xaljk9WX5p/5Hqu9Jj9ovUJ+y/7Re9F/kvU1/rvUA/uvUa+gj5cf7X/Cv+73pO5p5/Y+zf+xfaT2Q/h/2n5UfQHmR/E/tP+V/MbzivAH4vfy3qBfif8a/vP5f+ensupgPUC9qvqX+m/s35EeUd6M+IB+r/+x433yH2AP5T/dP9Z91X0wfzX/d/zX5ke2j8//wv/a/vXwF/yj+uf8T1pfZr+53sjfrh//z6ngxv18/uDZYDkIGzjBG9kGgmf///nLmgd2SIPvJr2Nzxo6VTH6T5vCyv9P9Qg4tf2ZG8Epr/GO6XFqkSdqDEfP20fqra+EhnKTVswzy1WcabRxX7/4bfRXogCsK2/C7dFJBDSCO7hOwAelVU5wD12o7Jby2C+VvZaPHWp99If+xu59+inWjxi/5CC5aeB4H0z9x+cDwqwhbELDGhqzUMFCcw87I9aOm0nQQ6BcWnOuxVmMt/HQh0lo6tijz6OujAAAP79wNSwgMVw3DCLWiqRtut909rgZxRYyjZx7Vn1/IGd1e1s1z8naybC1KFDh/hlnlV2OYk95/ysmv2ea57CptZ7NnIt+66NyG+08QVP445zcoLWdUToIgoQy2WhkHOeJFb9TunJ9tTfMuPUClw9U+9r7IpHFFOn5vnmbwklVz6Du/+DF6myRXLDJXjyeRiUUzJAK33bgfPGTjBbt6fMLbTC/wI7vKYBGPHbrPrgu0fLiyspWByr5jf0lZFARy1/MN6Wa27iKwIDRNItuceCkYHHEt6EObDW1dTqaplIAQfez5p6ezf8K47OogzhS+s/eyg2O9avYXBGe22msPrY/wv9tuiYe3FmLbDoY9B/R2NaN9hb1whVcYir2aPnnjt2Rl/eCZDxf/msg20VK16fI8bmWVqNS8Pov9ffPVKv6dl1pcXTBt93Qgplo9f7uGEq4w61r3ysCMZ2dh9L/L75/WZ+ZLUR4X9vnhAYMy9j02PN1JDOTGoGThbNgdwsLqcuytwTMF1jhHAkxJlHSYJURjy0xdKqSBSum156isOEW/pCqbq23CGBecmqKcF+W9i+Pak7Pj1rliPxRm8psETJwmwaGa1xRpH/qimemMzjj3pRZ2Y0F7WXWAbpYonop+3YKNHLz6Pw/fRlvgt3q8drOcmBhLZWrRrUg/RpVG0AH1nbGTmch3vxqVccgE9Q76n7R/DX8WT1eYjJ80b9+GmPzbyXuYIwIenpxZ+iTEFNYcuUl5RdC1kt3Wq8f96Z/hBG/aDtHo2D/cm0fmhELoFI1XBNLClEw2JPRPoNxvjURYRdnfPptMpLrxG81KWybIz39uygsTB870KWkOW5peUHXECafZT7rqAb2v+c8Ju3+/hk61pj777xXDbR5Cuj+HNn6dxTtIQeBKmaCCp/Sd1eTxgmyjLVXunZJEghlftO1ivs80IqX6XEQsr6NDOegtUZSfMRr9A5WU0jO+RjM4yJr5OtpwKYIKzwI3ZY7FcDmwMA7NBhxtBvAjFmCr8iRxILEbG1pIJ7a4uO1Hu8ej+iTsBx7PbU/56yc36HnfKACzx8GrVL3sNJT0FQzDiOZQk+pwZ5gPpzNbxAl+cHvUwp6/XnA8qAK6sWZLNQCOPNrntB1XVxSgXkX+iLs4LX/FulLcJeRSMGQWZRex68cYu4CDOEyg5whIzQGQHLrex/GxDGl/9pR1KMd0q5ulbi64cdtw1V7tHFX5LnkTf/JJCJ0hYH7jLV4O+CDxdPgq4lBz1GZKeVuTApcRvI24/+qZr4dbtj479ZGwbHqh4IqL2QaDmI904MJIhjDfy4BC4llX3XCrRIkFj4jRNq8hMncGfhozSV5cG5up6UaasrxpN93B73scd2pWcKXcQUrgGzU3V3g7j/0X/S2y/0P7CSnNY7NCcCN51i32y03PzXVNQfygDZ70wXnZPurHhIhbCwRfJwYDPQdhOLwoY/+7/mlr0vAZL0Q5XxeFJqyM06k9M5fKlRXhWizrRzM9TkzPOSvjHgH/ymRf5GTWVbVT+ayUHEBxGSp5LNaOopcp7rw60tNtKjZAJGRCOmb3r59IQrInxUf6gf4vzf98dnmxLF0tMgjc1QYX/+XFfGH/iwew7mlkPqNyzIYnEPi/pwjcdrebWcpBMfvbIEVETTcaacM7M0TJ8QfWjSU7cQMGCT+reDzqtuHAhRuXFJD2ztQ/vVqFrvmNe7W67bmsWviPS3VBDuCtJ7Z9jbUxfHtLfrKHbonl563AqWbfipV5qStfK0o+H9uii6BDrrcS6VxEiEm4zTpa86MfXaxCHn4F/mO0rLWPEpHIuda6OStCmX+E0iVk48N+b306Zkx9UM2MIoWCl9lE/0AxuhbqcYa6NRIhYyhpbCcKFDqgzV1YD8EElbfyYMav2/k6Q8/CXbcEOjz3ZFIn9AUKPouastz064Yj9PUHBtHDXe++LU74AyuU87Ds/w2FjB+EsdIFrbl6aK3bj5OzZ9e55uMKihqIBstwyAwgXFeOujZaROk9jQy70KEWqHpH7r230fDNtSUISLGOynhvVKFP/vf+MCbl1aavC3pxGL5hL4F82STS4ohnZ52TWgA5q0sHhG1dtHm8ULalEuBJDMurZU05iw6/+DQ0Q8gJYoXccftUMPslub3T1WXLupNaFmNwZR46q4j7db5SsfjdlgWMigTfob+B+tzT1PoRN4c/IFuizO+8fL/Cxr4NIqfhORiJI2zYy7QeLHs1zCXfmWmCLhhZ48SQ/GAGiFGXLMpSv+c+kqMe+ctaylVVEl82srsKuWRAU42XuL6K+ajBYivlFS/o7YvRNbfbOWZbMO7jX1hwWGl2FrNArfitDNkW0kJ0VUXxbHM5IggsHlUb+nycN7VepISO1lLspqOlb38YVN9m7JgwSZMmEowRVR7ewxfNb8J6+CIU26gRnCjTCQkI6AzHCe+Zj5Wo2MtPqillaIVgUI3UfciPA5/71r5uAqTTliQ+VFeuLPTL9v9QsS3gryxFeqTb95Z6/znwQMebP/qySh9Ey4dzriJ0w9xn7OloHkCLwTTWgg10GRyRRvoxM0jBrI/5X/ZbRnDolmJj6wJZKzaTZ0W7jqGmDYmsReLzOVu7YJZRgMWeK73daxKmAcj1XVqasv6WSD3ibOwK1oUhjUWAz8HzbHgeqXdY5zYCtXuMJBFJHXlTHp4diyv5TfVmMGRsUu54ZJTW+xY20nxAqRBTvqcDX/zXr3J85G2TV0pT2pXgmrkQBjiD/3ncx4dXQ7s0QnsH0nQlO3gIxMxilC4KtUWIoeI6Oj7bUDeNkDQ5/pGZ+R3J0YvhOFqD/banOZDT3gWoa2GJWhTXmjUPBB5wn15HZtVdpgzD870L+UTkgjvKkUVTjeWng6u3qAGmKFfBTB5zGLS3Aakk43Uj3V1h07JYyUXjgjspfuEk/4mmtx8xe4nV32aREvh7xf/yeZL5/c4/hFMMSJqQJP9r2YH4zWtvPkXgmOs6w44r59pN/z40UP09eSJKvnQXN3cdQWE/En6n3xrDOnBRhT07bt43Hmdcok2hd9xahF/6Mm5rvWaoQB6XgD+vGhjk07RjcZL6xX+T6+H41QPEK4a/wmxyMa0Gd3d37vpnXcSu7Zjv+hfXC7o3rxYUQd80UgedBcEn8BMSVLTQqftvoAakQilfTq5CVOms0gLZoSqni4hWxscDWjIH0KjxhaTp4WiCHxwXPiMrv2BrmfAKbgSxHpQy/8HvK5D97Pi3kofU6mh8Qcs4nGJO2EBYrLvNY0/ysvPygq9x5ECsc74fcuKpgASH4oqi4AAAAAAAA=">
+<title>Estoque Cisper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@1,9..144,600,100,1&family=Outfit:wght@400;500;600;700&display=swap">
+<style>
+/* Família da Lista do dia (Maré Mansa). Calmo por padrão: o que tem fica discreto; só o que falta ganha cor.
+   Topo com logo · painel azul com ondas · mosaico de categorias · lista de itens tocáveis · folha de compras */
+:root{
+  --navy:#1B2A6B; --navy-2:#2a4593; --teal:#2fa9a3; --teal-2:#7fd6cf; --teal-soft:#e6f5f4;
+  --bg:#FBFAF7; --card:#ffffff; --surface:#F3F1EC; --line:#ECE9E2; --line-2:#E2DED5;
+  --ink:#16204A; --muted:#6B7290; --faint:#9aa0b6;
+  --ok:#1f9d55; --ok-soft:#e9f6ef; --bad:#d0412f; --bad-ink:#b0301f; --bad-soft:#fdeeec;
+  --serif:"Fraunces",Georgia,serif; --sans:"Outfit",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --sh:0 1px 0 rgba(22,32,74,.03),0 12px 28px -20px rgba(22,32,74,.30);
+  color-scheme:light;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg)}
+body{color:var(--ink);font:16px/1.45 var(--sans);letter-spacing:.005em}
+button{font:inherit;cursor:pointer;color:inherit}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.serifa{font-family:var(--serif);font-style:italic;font-weight:600;font-variation-settings:'SOFT' 100,'WONK' 1;letter-spacing:-.01em}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+
+/* topo */
+.topo{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:rgba(251,250,247,.9);backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line);
+  padding:10px max(18px,env(safe-area-inset-right,0px)) 10px max(18px,env(safe-area-inset-left,0px))}
+.topo-in{max-width:640px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.topo img{width:42px;height:42px;border-radius:13px;flex:none;box-shadow:0 3px 10px rgba(27,42,107,.12)}
+.topo .tit{flex:1;min-width:0}
+.topo h1{margin:0;font-size:22px;color:var(--navy);line-height:1.1}
+.topo h1 em{color:var(--teal)}
+.topo .sub{font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-top:2px}
+.sinc{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);white-space:nowrap}
+.sinc i{width:8px;height:8px;border-radius:50%;background:var(--faint)}
+.sinc.ok i{background:var(--ok);box-shadow:0 0 0 4px var(--ok-soft)}
+
+.wrap{max-width:640px;margin:0 auto;padding:18px max(18px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 110px) max(18px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:18px}
+
+/* painel */
+.painel{position:relative;overflow:hidden;border-radius:28px;padding:22px 22px 30px;color:#fff;background:radial-gradient(120% 140% at 100% 0%,#3655a8 0%,transparent 55%),linear-gradient(150deg,var(--navy),#16235c);box-shadow:0 18px 36px -18px rgba(27,42,107,.65)}
+.painel>*{position:relative;z-index:1}
+.painel .eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.7;margin:0}
+.painel .ola{margin:6px 0 0;font-size:30px;line-height:1.05}
+.painel .row{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-top:18px}
+.painel .conta b{display:block;font-size:56px;line-height:.9;font-weight:700;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.painel .conta span{font-size:14px;opacity:.8}
+.painel .pill{display:inline-flex;align-items:center;gap:8px;border:0;background:#fff;color:var(--navy);font-weight:700;font-size:15px;border-radius:99px;padding:10px 14px 10px 12px;box-shadow:0 8px 18px -10px rgba(0,0,0,.5);white-space:nowrap}
+.painel .pill .dot{width:22px;height:22px;border-radius:50%;background:var(--bad);color:#fff;display:grid;place-items:center;font-size:12.5px;font-variant-numeric:tabular-nums}
+.painel .pill.ok{background:rgba(255,255,255,.14);color:#fff;box-shadow:none;cursor:default}
+.painel .pill.ok .dot{background:var(--teal-2);color:var(--navy)}
+.painel .bar{height:6px;background:rgba(255,255,255,.18);border-radius:99px;overflow:hidden;margin-top:18px}
+.painel .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal-2),#fff);border-radius:99px;transition:width .5s ease}
+.painel .ondas{position:absolute;left:0;right:0;bottom:0;width:100%;height:70px;z-index:0;pointer-events:none}
+
+/* busca */
+.busca{position:relative}
+.busca svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:19px;height:19px;color:var(--faint)}
+.busca input{width:100%;font:inherit;padding:14px 16px 14px 46px;border-radius:18px;border:1px solid var(--line-2);background:var(--card);color:var(--ink);box-shadow:var(--sh)}
+.busca input::placeholder{color:var(--faint)}
+
+.rotulo{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:2px 2px -6px}
+.rotulo h2{margin:0;font-size:23px;color:var(--navy)}
+.rotulo small{color:var(--muted);font-size:13px}
+
+/* mosaico de categorias */
+.mosaico{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tile{display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px;box-shadow:var(--sh);min-width:0;transition:transform .15s}
+.tile:active{transform:scale(.98)}
+.tile .ic{width:38px;height:38px;border-radius:12px;background:var(--teal-soft);color:var(--teal);display:grid;place-items:center}
+.tile .ic svg{width:20px;height:20px}
+.tile b{font-size:15px;font-weight:600;line-height:1.2}
+.tile small{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.tile small i{width:7px;height:7px;border-radius:50%;background:var(--ok)}
+.tile.has{border-color:#f3cfc9;background:linear-gradient(180deg,#fff,#fff8f6)}
+.tile.has .ic{background:var(--bad-soft);color:var(--bad)}
+.tile.has small{color:var(--bad-ink);font-weight:600}
+.tile.has small i{background:var(--bad)}
+
+/* grupos */
+.grupo{background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:var(--sh);overflow:hidden;scroll-margin-top:84px}
+.grupo summary{list-style:none;display:flex;align-items:center;gap:12px;padding:15px 16px;cursor:pointer}
+.grupo summary::-webkit-details-marker{display:none}
+.grupo .ic{width:36px;height:36px;border-radius:12px;background:var(--teal-soft);color:var(--teal);display:grid;place-items:center;flex:none}
+.grupo .ic svg{width:19px;height:19px}
+.grupo .gt{flex:1;min-width:0}
+.grupo .gt b{display:block;font-size:17px;font-weight:600;line-height:1.2}
+.grupo .gt small{color:var(--muted);font-size:13px}
+.grupo .gt small em{font-style:normal;color:var(--bad-ink);font-weight:600}
+.chev{width:20px;height:20px;color:var(--faint);flex:none;transition:transform .2s}
+.grupo[open] .chev{transform:rotate(180deg)}
+.itens{border-top:1px solid var(--line);padding:4px 0}
+
+/* item: a linha inteira é o botão */
+.item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:none;border:0;padding:11px 16px;position:relative}
+.item+.item::before{content:"";position:absolute;left:16px;right:16px;top:0;height:1px;background:var(--line)}
+.item .tx{flex:1;min-width:0}
+.item .nm{display:block;font-size:15.5px;font-weight:500;overflow-wrap:anywhere;line-height:1.3}
+.item .sp{display:block;font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+.st{flex:none;display:inline-flex;align-items:center;gap:6px;border-radius:99px;font-size:13px;font-weight:600;padding:6px 11px 6px 8px;transition:background .2s,color .2s}
+.st svg{width:16px;height:16px}
+.st.tem{background:var(--ok-soft);color:var(--ok)}
+.st.falta{background:var(--bad);color:#fff;box-shadow:0 6px 12px -8px var(--bad)}
+.item.falta{background:linear-gradient(90deg,#fff6f4,transparent)}
+.item.falta .nm{font-weight:700}
+.item:disabled{cursor:default}
+.dica{font-size:13px;color:var(--muted);text-align:center;margin:-6px 0 0}
+
+.vazio{color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:22px;padding:26px 20px;text-align:center}
+.vazio b{color:var(--ok)}
+.aviso{color:var(--bad-ink);font-size:14px;margin:0;background:var(--bad-soft);border-radius:16px;padding:12px 14px}
+
+/* barra inferior: compras e novo item */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:15;padding:10px max(18px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px));background:linear-gradient(180deg,rgba(251,250,247,0),var(--bg) 40%)}
+.dock-in{max-width:640px;margin:0 auto;display:flex;gap:10px}
+.dock button{border:0;border-radius:18px;padding:15px 18px;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;gap:10px}
+.dock .comprar{flex:1;background:linear-gradient(135deg,var(--navy),var(--navy-2));color:#fff;box-shadow:0 14px 26px -14px var(--navy)}
+.dock .comprar .n{background:var(--bad);color:#fff;border-radius:99px;font-size:13px;padding:1px 8px;font-variant-numeric:tabular-nums}
+.dock .novo{background:var(--card);color:var(--navy);border:1px solid var(--line-2);box-shadow:var(--sh);width:56px;padding:0}
+.dock svg{width:22px;height:22px}
+
+/* folha (lista de compras / novo item) */
+.fundo{position:fixed;inset:0;z-index:30;background:rgba(22,32,74,.38);display:flex;align-items:flex-end;justify-content:center;padding:12px;padding-bottom:max(12px,env(safe-area-inset-bottom,0px));animation:aparece .18s ease-out}
+.folha{width:100%;max-width:560px;max-height:calc(100% - 24px - env(safe-area-inset-top,0px));display:flex;flex-direction:column;background:var(--card);border-radius:28px;box-shadow:0 24px 48px -16px rgba(22,32,74,.45);animation:sobe .22s ease-out;overflow:hidden}
+.folha .cab{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:18px 20px 12px}
+.folha .cab h2{margin:0;font-size:26px;color:var(--navy)}
+.folha .x{width:38px;height:38px;border-radius:50%;border:0;background:var(--surface);color:var(--muted);display:grid;place-items:center;flex:none}
+.folha .x svg{width:18px;height:18px}
+.folha .corpo{overflow:auto;padding:0 20px 8px}
+.folha .pe{padding:12px 20px 18px;display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line)}
+.compra h3{margin:14px 0 2px;letter-spacing:.12em;text-transform:uppercase;font-size:11.5px;font-weight:700;color:var(--muted)}
+.compra h3:first-child{margin-top:2px}
+.ci{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--line)}
+.ci .bola{width:9px;height:9px;border-radius:50%;background:var(--bad);flex:none;box-shadow:0 0 0 4px var(--bad-soft)}
+.ci .tx{flex:1;min-width:0}
+.ci .nm{display:block;font-weight:600;overflow-wrap:anywhere}
+.ci .sp{display:block;font-size:13px;color:var(--muted)}
+button.chegou{flex:none;background:var(--ok-soft);color:var(--ok);border:0;border-radius:12px;padding:8px 12px;font-weight:700;font-size:14px}
+button.grande{width:100%;font-weight:700;font-size:16.5px;padding:15px;border:0;border-radius:16px;background:linear-gradient(135deg,var(--navy),var(--navy-2));color:#fff;box-shadow:0 12px 22px -14px var(--navy)}
+.nota{font-size:13px;color:var(--muted);margin:0;text-align:center}
+.campo{display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:600;color:var(--muted);margin-bottom:12px}
+.campo input,.campo select{font:inherit;font-weight:400;font-size:16px;color:var(--ink);background:var(--bg);border:1px solid var(--line-2);border-radius:14px;padding:13px 14px;min-width:0}
+.feliz{text-align:center;padding:18px 0 10px;color:var(--muted)}
+.feliz .sel{width:56px;height:56px;border-radius:50%;background:var(--ok-soft);color:var(--ok);display:grid;place-items:center;margin:0 auto 10px}
+.feliz .sel svg{width:28px;height:28px}
+.feliz b{display:block;color:var(--ink);font-size:17px;margin-bottom:2px}
+
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(92px + env(safe-area-inset-bottom,0px));background:var(--ink);color:#fff;padding:11px 18px;border-radius:99px;font-size:14.5px;font-weight:500;z-index:40;white-space:nowrap;box-shadow:0 10px 24px -10px rgba(22,32,74,.5);animation:pop .2s ease-out}
+@keyframes aparece{from{opacity:0}}
+@keyframes sobe{from{transform:translateY(28px);opacity:0}}
+@keyframes pop{from{transform:translate(-50%,12px);opacity:0}}
+@media (min-width:560px){.mosaico{grid-template-columns:repeat(3,minmax(0,1fr))}.fundo{align-items:center}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+<style>body{margin:0}[hidden]{display:none!important}
+.trava{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
+.trava form{width:100%;max-width:360px;text-align:center;display:flex;flex-direction:column;gap:14px}
+.trava img{width:76px;height:76px;border-radius:22px;margin:0 auto 4px;box-shadow:0 8px 20px -8px rgba(27,42,107,.35)}
+.trava h1{margin:0;font-size:32px;color:var(--navy)} .trava h1 em{color:var(--teal)}
+.trava p{margin:0;color:var(--muted)}
+.trava input{font:inherit;font-size:17px;text-align:center;padding:15px;border-radius:16px;border:1px solid var(--line-2);background:#fff;color:var(--ink)}
+.trava .erro{color:var(--bad-ink);font-size:14px;min-height:1.2em}
+</style>
+</head><body>
+<div class="trava" id="trava" hidden><form id="frmSenha">
+<img src="data:image/webp;base64,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" alt=""><h1 class="serifa">Estoque <em>da clínica</em></h1>
+<p>Só o administrador entra. Use a <b>mesma senha</b> da Lista do dia.</p>
+<input id="tSenha" type="password" autocomplete="current-password" placeholder="Sua senha" aria-label="Senha">
+<button class="grande" id="btEntrar" type="submit">Entrar</button><div class="erro" id="erroS" role="alert"></div>
+</form></div>
+
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-busca" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.2 4.2L19 7"/></symbol>
+  <symbol id="i-alerta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-sacola" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"/><path d="M3 7.5 12 12l9-4.5M12 12v9"/></symbol>
+  <symbol id="i-seringa" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m18 2 4 4M20 4l-9.5 9.5M14 6l4 4M8.5 11.5l4 4M11 9l-6.5 6.5V19.5H8.5L15 13M3 21l1.5-1.5"/></symbol>
+  <symbol id="i-frasco" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v4l-1 1v11a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V8l-1-1V3"/><path d="M9 13h6"/></symbol>
+  <symbol id="i-gota" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></symbol>
+  <symbol id="i-veia" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10M9 3v4h6V3M8 7h8l-1 6H9z"/><path d="M12 13v4c0 2 2 3 4 3"/></symbol>
+  <symbol id="i-curativo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="8" width="19" height="8" rx="4" transform="rotate(-45 12 12)"/><path d="M10.5 10.5h.01M13.5 13.5h.01M13.5 10.5h.01M10.5 13.5h.01"/></symbol>
+  <symbol id="i-luva" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 21v-4l-2.5-4.5a1.5 1.5 0 0 1 2.6-1.5L8 12V5a1.5 1.5 0 0 1 3 0v5V4a1.5 1.5 0 0 1 3 0v6V5a1.5 1.5 0 0 1 3 0v8c0 4-2 6-3 8"/></symbol>
+  <symbol id="i-spray" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8h6v13H8zM9 8V5h4l3-2M16 6h2M17 9h2M16 12h2"/></symbol>
+  <symbol id="i-sonda" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20c4 0 4-16 8-16s4 16 8 16"/></symbol>
+  <symbol id="i-teste" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2"/><rect x="10" y="7" width="4" height="4" rx="1"/><path d="M10 15h4"/></symbol>
+  <symbol id="i-pilula" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="8.5" width="19" height="7" rx="3.5" transform="rotate(-45 12 12)"/><path d="m8.5 8.5 7 7"/></symbol>
+  <symbol id="i-escudo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6z"/></symbol>
+</svg>
+
+<header class="topo">
+  <div class="topo-in">
+    <img src="data:image/webp;base64,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" alt="">
+    <div class="tit"><h1 class="serifa">Estoque <em>da clínica</em></h1><div class="sub">Centro Veterinário Cisper</div></div>
+    <span class="sinc" id="sinc"><i></i><span>conectando</span></span>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="painel" aria-live="polite">
+    <p class="eyebrow" id="hoje">Estoque</p>
+    <p class="ola serifa" id="ola">Carregando…</p>
+    <div class="row">
+      <div class="conta"><b id="nTem">–</b><span id="nTotal">itens com estoque</span></div>
+      <button class="pill ok" id="pill" type="button"><span class="dot" id="pillN">✓</span><span id="pillT">Tudo certo</span></button>
+    </div>
+    <div class="bar"><i id="barra"></i></div>
+    <svg class="ondas" id="ondas" viewBox="0 0 400 70" preserveAspectRatio="none" aria-hidden="true"></svg>
+  </section>
+
+  <p class="aviso" id="aviso" hidden></p>
+
+  <div class="busca"><svg><use href="#i-busca"/></svg><input id="busca" type="search" placeholder="Buscar um item" aria-label="Buscar um item"></div>
+
+  <div class="rotulo" id="rotCat"><h2 class="serifa">Categorias</h2><small>toque para abrir</small></div>
+  <div class="mosaico" id="mosaico"></div>
+
+  <div class="rotulo"><h2 class="serifa" id="tLista">Itens</h2><small id="sLista"></small></div>
+  <p class="dica">Toque no item quando ele acabar. Toque de novo quando chegar.</p>
+  <div id="lista" style="display:flex;flex-direction:column;gap:12px"><div class="vazio">Carregando os itens…</div></div>
+</main>
+
+<nav class="dock">
+  <div class="dock-in">
+    <button class="comprar" id="abrirCompra" type="button"><svg><use href="#i-sacola"/></svg>Lista de compras <span class="n" id="dockN" hidden></span></button>
+    <button class="novo" id="abrirNovo" type="button" aria-label="Adicionar item"><svg><use href="#i-plus"/></svg></button>
+  </div>
+</nav>
+
+<div class="fundo" id="fCompra" hidden>
+  <div class="folha" role="dialog" aria-modal="true" aria-labelledby="tCompra">
+    <div class="cab"><h2 class="serifa" id="tCompra">Para comprar</h2><button class="x" data-fecha aria-label="Fechar"><svg><use href="#i-x"/></svg></button></div>
+    <div class="corpo compra" id="compra"></div>
+    <div class="pe"><button class="grande" id="copiar">Copiar lista para o pedido</button><p class="nota">Quando chegar, toque em <b>Chegou</b>.</p></div>
+  </div>
+</div>
+
+<div class="fundo" id="fNovo" hidden>
+  <form class="folha" id="frmAdd" role="dialog" aria-modal="true" aria-labelledby="tNovo">
+    <div class="cab"><h2 class="serifa" id="tNovo">Novo item</h2><button class="x" type="button" data-fecha aria-label="Fechar"><svg><use href="#i-x"/></svg></button></div>
+    <div class="corpo">
+      <label class="campo">Nome do item<input id="novoNome" placeholder="ex.: Atadura crepe 10 cm" autocomplete="off"></label>
+      <label class="campo">Categoria<select id="novoCat"></select></label>
+    </div>
+    <div class="pe"><button class="grande" type="submit">Adicionar ao estoque</button></div>
+  </form>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const slug=s=>s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const porNome=(a,b)=>a.nome.localeCompare(b.nome,'pt');
+const ICON={'Controlados e anestesia':'escudo','Injetáveis':'frasco','Soros e fluidos':'gota','Seringas e agulhas':'seringa','Acesso venoso':'veia','Sondas':'sonda','Proteção':'luva','Curativo e cirurgia':'curativo','Limpeza':'spray','Testes rápidos':'teste','Revenda':'pilula'};
+let db=null,canWrite=true,itens=new Map(),carregou=false,abertos=new Set();
+try{abertos=new Set(JSON.parse(localStorage.getItem('estoque-abertos')||'[]'))}catch(e){}
+const salvaAbertos=()=>{try{localStorage.setItem('estoque-abertos',JSON.stringify([...abertos]))}catch(e){}};
+function toast(t){document.querySelectorAll('.toast').forEach(x=>x.remove());const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),1900)}
+function aviso(t){const a=$('#aviso');a.textContent=t;a.hidden=false}
+// separa "Dipirona 50% fr 50 ml" em nome + apresentação
+function partes(n){const m=n.match(/^(.*?)(\s(?:\(|\d|cx |fr |amp |pct |c\/ |s\/ ).*)$/i);return m&&m[1].length>2?[m[1],m[2].trim()]:[n,'']}
+function ondas(svg,linhas,alt,cor,op){let h='';for(let j=0;j<linhas;j++){const t=j/Math.max(1,linhas-1),y0=alt*(.25+.7*t),amp=3+7*t,ph=j*.35;let d='';for(let x=0;x<=400;x+=10){const y=y0+amp*Math.sin(x/95+ph)+amp*.35*Math.sin(x/41+ph*1.7);d+=(x?'L':'M')+x+' '+y.toFixed(1)}h+=`<path d="${d}" fill="none" stroke="${cor}" stroke-opacity="${(op*(.35+.65*t)).toFixed(2)}" stroke-width="${(.8+.9*t).toFixed(2)}" vector-effect="non-scaling-stroke"/>`}svg.innerHTML=h}
+ondas($('#ondas'),8,70,'#ffffff',.45);
+$('#hoje').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'});
+
+function render(){
+  if(!carregou)return;
+  const arr=[...itens.values()].filter(i=>!i.arquivado);
+  const falta=arr.filter(i=>i.falta).sort(porNome), tem=arr.length-falta.length;
+  $('#ola').textContent=falta.length?(falta.length===1?'Falta 1 item':`Faltam ${falta.length} itens`):'Estoque em dia';
+  $('#nTem').textContent=tem; $('#nTotal').textContent=`de ${arr.length} com estoque`;
+  $('#barra').style.width=(arr.length?tem/arr.length*100:0)+'%';
+  const pill=$('#pill'); pill.classList.toggle('ok',!falta.length); $('#pillN').textContent=falta.length||'✓'; $('#pillT').textContent=falta.length?'Ver compras':'Tudo certo';
+  const dn=$('#dockN'); dn.hidden=!falta.length; dn.textContent=falta.length;
+  const cats=[...new Set(arr.map(i=>i.cat))].sort((a,b)=>a.localeCompare(b,'pt'));
+  const sel=$('#novoCat'),cur=sel.value; sel.innerHTML=cats.map(c=>`<option ${c===cur?'selected':''}>${esc(c)}</option>`).join('');
+
+  const q=$('#busca').value.trim().toLowerCase();
+  $('#rotCat').hidden=$('#mosaico').hidden=!!q;
+  $('#mosaico').innerHTML=cats.map(c=>{const nf=arr.filter(i=>i.cat===c&&i.falta).length,tot=arr.filter(i=>i.cat===c).length;return `<button class="tile ${nf?'has':''}" data-ir="${esc(c)}" type="button"><span class="ic"><svg><use href="#i-${ICON[c]||'box'}"/></svg></span><b>${esc(c)}</b><small><i></i>${nf?(nf===1?'1 em falta':nf+' em falta'):tot+' itens · ok'}</small></button>`}).join('');
+
+  const vis=arr.filter(i=>!q||i.nome.toLowerCase().includes(q));
+  $('#tLista').textContent=q?'Resultado':'Itens'; $('#sLista').textContent=q?`${vis.length} encontrados`:`${arr.length} no total`;
+  if(!arr.length){$('#lista').innerHTML='<div class="vazio">Nenhum item ainda. Toque em <b>+</b> para adicionar.</div>';return}
+  if(!vis.length){$('#lista').innerHTML='<div class="vazio">Nenhum item com essa busca.</div>';return}
+  const by={};vis.forEach(i=>(by[i.cat]??=[]).push(i));
+  $('#lista').innerHTML=Object.keys(by).sort((a,b)=>a.localeCompare(b,'pt')).map(c=>{
+    const tot=arr.filter(i=>i.cat===c),nf=tot.filter(i=>i.falta).length;
+    return `<details class="grupo" id="g-${slug(c)}" data-cat="${esc(c)}" ${q||abertos.has(c)?'open':''}><summary><span class="ic"><svg><use href="#i-${ICON[c]||'box'}"/></svg></span><span class="gt"><b>${esc(c)}</b><small>${tot.length} itens${nf?` · <em>${nf} em falta</em>`:''}</small></span><svg class="chev"><use href="#i-chev"/></svg></summary><div class="itens">${by[c].sort(porNome).map(i=>{const [n,s]=partes(i.nome);return `<button class="item ${i.falta?'falta':''}" data-id="${esc(i.id)}" aria-pressed="${!!i.falta}" ${canWrite?'':'disabled'}><span class="tx"><span class="nm">${esc(n)}</span>${s?`<span class="sp">${esc(s)}</span>`:''}</span><span class="st ${i.falta?'falta':'tem'}"><svg><use href="#i-${i.falta?'alerta':'check'}"/></svg>${i.falta?'Falta':'Tem'}</span></button>`}).join('')}</div></details>`}).join('');
+
+  // compras
+  if(!falta.length)$('#compra').innerHTML='<div class="feliz"><div class="sel"><svg><use href="#i-check"/></svg></div><b>Nada para comprar</b>Quando um item acabar, toque nele na lista.</div>';
+  else{const by={};falta.forEach(i=>(by[i.cat]??=[]).push(i));
+    $('#compra').innerHTML=Object.keys(by).sort((a,b)=>a.localeCompare(b,'pt')).map(c=>`<h3>${esc(c)}</h3>${by[c].map(i=>{const [n,s]=partes(i.nome);return `<div class="ci"><span class="bola"></span><span class="tx"><span class="nm">${esc(n)}</span>${s?`<span class="sp">${esc(s)}</span>`:''}</span><button class="chegou" data-chegou="${esc(i.id)}" ${canWrite?'':'disabled'}>Chegou</button></div>`}).join('')}`).join('')}
+}
+
+async function marcar(id,falta){
+  const it=itens.get(id); if(!it||!db||!!it.falta===falta)return;
+  try{await db.collection('itens').doc(id).update({falta,marcadoEm:new Date().toISOString()});toast(falta?'Adicionado à lista de compras':'Marcado como tem')}
+  catch(e){if(e&&e.code==='invalid_argument'){canWrite=false;render();aviso('Você pode ver o estoque, mas não pode marcar. Peça ao Paulo acesso de colaborador.')}else toast('Não salvou. Tente de novo.')}
+}
+$('#lista').addEventListener('click',e=>{const b=e.target.closest('.item');if(b){const it=itens.get(b.dataset.id);if(it)marcar(it.id,!it.falta)}});
+$('#lista').addEventListener('toggle',e=>{const d=e.target;if(!(d instanceof HTMLDetailsElement)||$('#busca').value)return;d.open?abertos.add(d.dataset.cat):abertos.delete(d.dataset.cat);salvaAbertos()},true);
+$('#mosaico').addEventListener('click',e=>{const t=e.target.closest('[data-ir]');if(!t)return;const g=document.getElementById('g-'+slug(t.dataset.ir));if(g){g.open=true;g.scrollIntoView({behavior:'smooth',block:'start'})}});
+$('#busca').addEventListener('input',render);
+const abre=id=>{$(id).hidden=false;document.body.style.overflow='hidden'},fecha=()=>{document.querySelectorAll('.fundo').forEach(f=>f.hidden=true);document.body.style.overflow=''};
+$('#abrirCompra').addEventListener('click',()=>abre('#fCompra'));
+$('#pill').addEventListener('click',()=>{if(!$('#pill').classList.contains('ok'))abre('#fCompra')});
+$('#abrirNovo').addEventListener('click',()=>{abre('#fNovo');setTimeout(()=>$('#novoNome').focus(),250)});
+document.querySelectorAll('.fundo').forEach(f=>f.addEventListener('click',e=>{if(e.target===f||e.target.closest('[data-fecha]'))fecha()}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')fecha()});
+$('#compra').addEventListener('click',e=>{const b=e.target.closest('[data-chegou]');if(b)marcar(b.dataset.chegou,false)});
+$('#copiar').addEventListener('click',async()=>{
+  const falta=[...itens.values()].filter(i=>i.falta&&!i.arquivado).sort(porNome);const by={};falta.forEach(i=>(by[i.cat]??=[]).push(i.nome));
+  const t='Pedido – Centro Veterinário Cisper\n'+(Object.keys(by).sort().map(c=>`\n${c}:\n`+by[c].map(n=>'- '+n).join('\n')).join('\n')||'(nada)');
+  try{await navigator.clipboard.writeText(t);toast('Lista copiada')}catch(err){toast('Não deu para copiar neste aparelho')}
+});
+$('#frmAdd').addEventListener('submit',async e=>{
+  e.preventDefault(); if(!db)return; const nome=$('#novoNome').value.trim(),cat=$('#novoCat').value||'Outros'; if(!nome){$('#novoNome').focus();return}
+  try{await db.collection('itens').doc(slug(nome).slice(0,60)+'-'+Date.now().toString(36)).set({nome,cat,falta:false,criado:new Date().toISOString()});$('#novoNome').value='';fecha();toast('Item adicionado')}catch(err){toast('Não salvou. Tente de novo.')}
+});
+
+(function(){
+  const BASE=[{"id": "metadona", "nome": "Metadona 10 mg/ml (Mytedom) cx 25 amp", "cat": "Controlados e anestesia"}, {"id": "morfina", "nome": "Morfina 10 mg/ml amp 1 ml", "cat": "Controlados e anestesia"}, {"id": "buprenorfina", "nome": "Buprenorfina (Beniv) fr 5 ml", "cat": "Controlados e anestesia"}, {"id": "fentanil", "nome": "Fentanil 50 mcg/ml fr 10 ml", "cat": "Controlados e anestesia"}, {"id": "cetamina", "nome": "Cetamina 10% fr 50 ml", "cat": "Controlados e anestesia"}, {"id": "xilazina2", "nome": "Xilazina 2% fr 50 ml", "cat": "Controlados e anestesia"}, {"id": "xilazina10", "nome": "Xilazina 10% fr 20 ml", "cat": "Controlados e anestesia"}, {"id": "acepromazina", "nome": "Acepromazina 0,2% fr 20 ml", "cat": "Controlados e anestesia"}, {"id": "propofol", "nome": "Propofol 1% cx 5 fr 20 ml", "cat": "Controlados e anestesia"}, {"id": "isoflurano", "nome": "Isoflurano fr 240 ml", "cat": "Controlados e anestesia"}, {"id": "midazolam", "nome": "Midazolam 5 mg/ml cx 5 amp 3 ml", "cat": "Controlados e anestesia"}, {"id": "dexmedetomidina", "nome": "Dexmedetomidina cx 5 amp 2 ml", "cat": "Controlados e anestesia"}, {"id": "ioimbina", "nome": "Ioimbina 1% (Reset) fr 50 ml", "cat": "Controlados e anestesia"}, {"id": "lidocaina", "nome": "Lidocaína s/ vaso fr 50 ml", "cat": "Controlados e anestesia"}, {"id": "bupivacaina", "nome": "Bupivacaína 0,5% fr 20 ml", "cat": "Controlados e anestesia"}, {"id": "efedrina", "nome": "Efedrina 50 mg amp 1 ml", "cat": "Controlados e anestesia"}, {"id": "norepinefrina", "nome": "Norepinefrina 2 mg/ml amp 4 ml", "cat": "Controlados e anestesia"}, {"id": "oxibuprocaina", "nome": "Colírio anestésico oxibuprocaína 10 ml", "cat": "Controlados e anestesia"}, {"id": "tramadol-fr", "nome": "Tramadol 20 mg/ml (Cronidor) fr 20 ml", "cat": "Injetáveis"}, {"id": "tramadol-amp", "nome": "Tramadol 50 mg/ml amp 2 ml", "cat": "Injetáveis"}, {"id": "maropitant", "nome": "Maropitant (Marovet) fr 20 ml", "cat": "Injetáveis"}, {"id": "agemoxi", "nome": "Amoxicilina (Agemoxi) fr 100 ml", "cat": "Injetáveis"}, {"id": "meloxicam-inj", "nome": "Meloxicam 0,2% (Flamavet) fr 20 ml", "cat": "Injetáveis"}, {"id": "dipirona-fr", "nome": "Dipirona 50% fr 50 ml", "cat": "Injetáveis"}, {"id": "dipirona-amp", "nome": "Dipirona 500 mg/ml amp 2 ml", "cat": "Injetáveis"}, {"id": "dexa-amp", "nome": "Dexametasona 4 mg/ml amp 2,5 ml", "cat": "Injetáveis"}, {"id": "dexa-fr", "nome": "Dexametasona (Dexaflan) fr 100 ml", "cat": "Injetáveis"}, {"id": "prometazina", "nome": "Prometazina 25 mg/ml amp 2 ml", "cat": "Injetáveis"}, {"id": "adrenalina", "nome": "Adrenalina 1 mg/ml amp 1 ml", "cat": "Injetáveis"}, {"id": "atropina", "nome": "Atropina 0,5 mg amp 2 ml", "cat": "Injetáveis"}, {"id": "furosemida", "nome": "Furosemida 10 mg/ml amp 2 ml", "cat": "Injetáveis"}, {"id": "ceftriaxona", "nome": "Ceftriaxona 1 g fr", "cat": "Injetáveis"}, {"id": "ampicilina", "nome": "Ampicilina 1 g fr", "cat": "Injetáveis"}, {"id": "meropenem", "nome": "Meropenem 500 mg fr", "cat": "Injetáveis"}, {"id": "tranexamico", "nome": "Ácido tranexâmico 50 mg/ml amp 5 ml", "cat": "Injetáveis"}, {"id": "acetilcisteina", "nome": "Acetilcisteína 10% cx 5 amp 3 ml", "cat": "Injetáveis"}, {"id": "imidocarb", "nome": "Imidocarb + B12 (Izoot) fr 15 ml", "cat": "Injetáveis"}, {"id": "b12", "nome": "Vitamina B12 (Hipovita) fr 20 ml", "cat": "Injetáveis"}, {"id": "citoneurin", "nome": "Citoneurin 5000 cx 3 amp", "cat": "Injetáveis"}, {"id": "filgrastim", "nome": "Filgrastim 300 mcg fr", "cat": "Injetáveis"}, {"id": "fenobarbital", "nome": "Fenobarbital 100 mg/ml amp 2 ml", "cat": "Injetáveis"}, {"id": "hidrocortisona", "nome": "Hidrocortisona 500 mg fr", "cat": "Injetáveis"}, {"id": "ornitil", "nome": "Ornitil fr 100 ml", "cat": "Injetáveis"}, {"id": "heparina", "nome": "Heparina 5000 UI/ml fr 5 ml", "cat": "Injetáveis"}, {"id": "kcl", "nome": "Cloreto de potássio 19,1% amp 10 ml", "cat": "Injetáveis"}, {"id": "buscofin", "nome": "Buscofin composto fr 50 ml", "cat": "Injetáveis"}, {"id": "antitoxico", "nome": "Antitóxico SM fr 100 ml", "cat": "Injetáveis"}, {"id": "ringer250", "nome": "Ringer lactato 250 ml (bolsa)", "cat": "Soros e fluidos"}, {"id": "ringer500", "nome": "Ringer lactato 500 ml", "cat": "Soros e fluidos"}, {"id": "sf250", "nome": "Soro fisiológico 250 ml (bolsa)", "cat": "Soros e fluidos"}, {"id": "agua-inj", "nome": "Água para injeção amp 10 ml", "cat": "Soros e fluidos"}, {"id": "seringa1-500", "nome": "Seringa 1 ml s/ agulha cx 500", "cat": "Seringas e agulhas"}, {"id": "seringa3-500", "nome": "Seringa 3 ml c/ agulha 25x7 cx 500", "cat": "Seringas e agulhas"}, {"id": "seringa3-100", "nome": "Seringa 3 ml c/ agulha 25x7 cx 100", "cat": "Seringas e agulhas"}, {"id": "seringa3sa", "nome": "Seringa 3 ml s/ agulha cx 100", "cat": "Seringas e agulhas"}, {"id": "seringa5", "nome": "Seringa 5 ml s/ agulha cx 100", "cat": "Seringas e agulhas"}, {"id": "seringa10", "nome": "Seringa 10 ml c/ agulha cx 50", "cat": "Seringas e agulhas"}, {"id": "agulha25x7", "nome": "Agulha 25x7 cx 100", "cat": "Seringas e agulhas"}, {"id": "agulha40x12", "nome": "Agulha 40x12 cx 100", "cat": "Seringas e agulhas"}, {"id": "agulha20x55", "nome": "Agulha 20x5,5 cx 100", "cat": "Seringas e agulhas"}, {"id": "agulha25x6", "nome": "Agulha 25x6 cx 100", "cat": "Seringas e agulhas"}, {"id": "cateter22", "nome": "Cateter 22G cx 50", "cat": "Acesso venoso"}, {"id": "cateter24", "nome": "Cateter 24G cx 50", "cat": "Acesso venoso"}, {"id": "cateter20", "nome": "Cateter 20G", "cat": "Acesso venoso"}, {"id": "cateter26", "nome": "Cateter 26G pediátrico", "cat": "Acesso venoso"}, {"id": "scalp23", "nome": "Scalp 23G cx 100", "cat": "Acesso venoso"}, {"id": "equipo", "nome": "Equipo macrogotas", "cat": "Acesso venoso"}, {"id": "extensor", "nome": "Extensor de equipo 120 cm", "cat": "Acesso venoso"}, {"id": "torneira", "nome": "Torneira 3 vias", "cat": "Acesso venoso"}, {"id": "prn", "nome": "Adaptador PRN", "cat": "Acesso venoso"}, {"id": "sonda-et-30", "nome": "Sonda endotraqueal 3,0", "cat": "Sondas"}, {"id": "sonda-et-35", "nome": "Sonda endotraqueal 3,5", "cat": "Sondas"}, {"id": "sonda-et-40", "nome": "Sonda endotraqueal 4,0", "cat": "Sondas"}, {"id": "sonda-et-45", "nome": "Sonda endotraqueal 4,5", "cat": "Sondas"}, {"id": "sonda-et-50", "nome": "Sonda endotraqueal 5,0", "cat": "Sondas"}, {"id": "sonda-et-60", "nome": "Sonda endotraqueal 6,0", "cat": "Sondas"}, {"id": "sonda-et-65", "nome": "Sonda endotraqueal 6,5", "cat": "Sondas"}, {"id": "sonda-et-70", "nome": "Sonda endotraqueal 7,0", "cat": "Sondas"}, {"id": "sonda-et-75", "nome": "Sonda endotraqueal 7,5", "cat": "Sondas"}, {"id": "sonda-et-80", "nome": "Sonda endotraqueal 8,0", "cat": "Sondas"}, {"id": "sonda-uretral", "nome": "Sonda uretral (n. 4 a 16)", "cat": "Sondas"}, {"id": "sonda-levine", "nome": "Sonda gástrica Levine (n. 4 a 16)", "cat": "Sondas"}, {"id": "luva-latex-m", "nome": "Luva de procedimento látex M cx 100", "cat": "Proteção"}, {"id": "luva-nitrilica-m", "nome": "Luva nitrílica M cx 100", "cat": "Proteção"}, {"id": "luva-nitrilica-g", "nome": "Luva nitrílica G cx 100", "cat": "Proteção"}, {"id": "luva-cirurgica", "nome": "Luva cirúrgica estéril (par)", "cat": "Proteção"}, {"id": "mascara", "nome": "Máscara descartável pct 50", "cat": "Proteção"}, {"id": "avental", "nome": "Avental descartável pct 10", "cat": "Proteção"}, {"id": "touca", "nome": "Touca descartável pct 100", "cat": "Proteção"}, {"id": "gaze", "nome": "Compressa de gaze pct 500", "cat": "Curativo e cirurgia"}, {"id": "atadura6", "nome": "Atadura crepe 6 cm pct 12", "cat": "Curativo e cirurgia"}, {"id": "esparadrapo10", "nome": "Esparadrapo 10 cm x 4,5 m", "cat": "Curativo e cirurgia"}, {"id": "esparadrapo25", "nome": "Esparadrapo 2,5 cm x 50 m", "cat": "Curativo e cirurgia"}, {"id": "esparadrapo5", "nome": "Esparadrapo 5 cm x 50 m", "cat": "Curativo e cirurgia"}, {"id": "micropore", "nome": "Micropore 10 cm x 4,5 m", "cat": "Curativo e cirurgia"}, {"id": "bandagem", "nome": "Bandagem elástica 5 cm", "cat": "Curativo e cirurgia"}, {"id": "bisturi", "nome": "Lâmina de bisturi 24 cx 100", "cat": "Curativo e cirurgia"}, {"id": "nylon20", "nome": "Fio nylon 2-0", "cat": "Curativo e cirurgia"}, {"id": "nylon30", "nome": "Fio nylon 3-0", "cat": "Curativo e cirurgia"}, {"id": "rifamicina", "nome": "Rifamicina spray 20 ml", "cat": "Curativo e cirurgia"}, {"id": "colar", "nome": "Colar elizabetano (n. 1 a 9)", "cat": "Curativo e cirurgia"}, {"id": "alcool", "nome": "Álcool 70% 1 L", "cat": "Limpeza"}, {"id": "agua-oxigenada", "nome": "Água oxigenada 10 vol 1 L", "cat": "Limpeza"}, {"id": "clorex-02", "nome": "Clorexidina 0,2% dermo suave 1 L", "cat": "Limpeza"}, {"id": "clorex-degerm", "nome": "Clorexidina degermante 4% 1 L", "cat": "Limpeza"}, {"id": "clorex-alcool", "nome": "Clorexidina alcoólica 0,5% 1 L", "cat": "Limpeza"}, {"id": "duofor", "nome": "Desinfetante Duofor 5 L", "cat": "Limpeza"}, {"id": "benzalconio", "nome": "Desinfetante benzalcônio 10% 5 L", "cat": "Limpeza"}, {"id": "papel-toalha", "nome": "Papel toalha interfolha pct 1000", "cat": "Limpeza"}, {"id": "formol", "nome": "Formol 10% 1 L", "cat": "Limpeza"}, {"id": "kit-cinomose", "nome": "Teste rápido cinomose cx 5", "cat": "Testes rápidos"}, {"id": "kit-parvo", "nome": "Teste rápido parvovirose cx 10", "cat": "Testes rápidos"}, {"id": "silmox50", "nome": "Silmox CL 50 mg cx 10 comp", "cat": "Revenda"}, {"id": "silmox150", "nome": "Silmox CL 150 mg cx 10 comp", "cat": "Revenda"}, {"id": "silmox300", "nome": "Silmox CL 300 mg cx 10 comp", "cat": "Revenda"}, {"id": "meloxicam-comp", "nome": "Meloxicam 0,5 mg display 100 comp", "cat": "Revenda"}, {"id": "omeprazol-comp", "nome": "Omeprazol 20 mg cx 56 comp", "cat": "Revenda"}, {"id": "pantoprazol", "nome": "Pantoprazol 40 mg cx 28 comp", "cat": "Revenda"}, {"id": "biosan", "nome": "Biosan Flora B12 seringa 14 g", "cat": "Revenda"}, {"id": "auritec", "nome": "Auritec 100 ml", "cat": "Revenda"}, {"id": "ototop", "nome": "Oto Top Clean 100 ml", "cat": "Revenda"}, {"id": "vetaglos", "nome": "Vetaglos pomada 50 g", "cat": "Revenda"}, {"id": "cikadol", "nome": "Cikadol pomada 50 g", "cat": "Revenda"}, {"id": "solucel", "nome": "Colírio Solucel 15 ml", "cat": "Revenda"}, {"id": "tobramicina", "nome": "Colírio tobramicina 0,3% 5 ml", "cat": "Revenda"}, {"id": "vidisic", "nome": "Vidisic gel oftálmico 10 g", "cat": "Revenda"}, {"id": "fluoresceina", "nome": "Colírio fluoresceína 1% 3 ml", "cat": "Revenda"}, {"id": "cort-trat", "nome": "Dexametasona 0,5 mg cx 20 comp", "cat": "Revenda"}, {"id": "simeticona", "nome": "Simeticona gotas 10 ml", "cat": "Revenda"}, {"id": "oleo-mineral", "nome": "Óleo mineral 100 ml", "cat": "Revenda"}], KEY='estoque-cisper-v1';
+  let est={falta:{},extras:[]};
+  try{est=Object.assign(est,JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){}
+  const grava=()=>{try{localStorage.setItem(KEY,JSON.stringify(est))}catch(e){}};
+  const monta=()=>{itens=new Map([...BASE,...est.extras].map(i=>[i.id,{...i,falta:!!est.falta[i.id]}]));carregou=true;render()};
+  db={collection:()=>({doc:id=>({
+    update:async d=>{if(d.falta)est.falta[id]=true;else delete est.falta[id];grava();monta()},
+    set:async d=>{est.extras.push({id,nome:d.nome,cat:d.cat});grava();monta()}
+  })})};
+  const st=$('#sinc');st.classList.add('ok');st.querySelector('span').textContent='salvo neste celular';
+  const b64=x=>Uint8Array.from(atob(x),c=>c.charCodeAt(0));
+  async function ehAdm(env,senha){
+    const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(senha),'PBKDF2',false,['deriveKey']);
+    for(const v of (env.vagas||[])){
+      const k=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(v.salt),iterations:env.iter,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['decrypt']);
+      try{const vaga=JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(v.iv)},k,b64(v.ct))));if(vaga.quem==='adm')return true}catch(e){}
+    }
+    return false;
+  }
+  async function pegaEnv(){
+    try{const r=await fetch('dados.enc?t='+Date.now(),{cache:'no-store'});if(r.ok)return await r.json()}catch(e){}
+    try{return JSON.parse(localStorage.getItem('cisper-lista'))}catch(e){return null}
+  }
+  const ok=()=>{try{localStorage.setItem('estoque-adm','1')}catch(e){};$('#trava').hidden=true;document.body.style.overflow='';monta()};
+  const lsg=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
+  (async()=>{
+    if(lsg('estoque-adm')==='1')return ok();
+    const s=lsg('cisper-senha'); if(s){const env=await pegaEnv();if(env&&await ehAdm(env,s).catch(()=>false))return ok()}
+    $('#trava').hidden=false;document.body.style.overflow='hidden';$('#tSenha').focus();
+  })();
+  $('#frmSenha').addEventListener('submit',async e=>{
+    e.preventDefault();const v=$('#tSenha').value.trim();if(!v)return;
+    const bt=$('#btEntrar');bt.disabled=true;bt.textContent='Conferindo…';$('#erroS').textContent='';
+    const env=await pegaEnv();
+    let bom=false;try{bom=!!env&&await ehAdm(env,v)}catch(err){}
+    bt.disabled=false;bt.textContent='Entrar';
+    if(bom){$('#tSenha').value='';ok()}else{$('#erroS').textContent=env?'Senha errada. Use a sua senha de administrador da Lista do dia.':'Sem internet. Tente de novo.';$('#tSenha').select()}
+  });
+})();
+</script>
+</body></html>

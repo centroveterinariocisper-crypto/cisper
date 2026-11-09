@@ -319,6 +319,18 @@ body.est .topo h1 em { color: var(--est-2); }
   .jaFalta .chips2 { max-height: none; flex-direction: column; flex-wrap: nowrap; }
   .jaFalta .chips2 button { border-radius: 12px; justify-content: flex-start; text-align: left; }
 }
+.estAbas button.on { color: var(--est); }
+.hist h3 { margin: 14px 0 2px; }
+.hItem { display: flex; gap: 12px; padding: 11px 0; border-top: 1px solid var(--line); align-items: flex-start; }
+.hist h3 + .hItem { border-top: 0; }
+.hItem .hora { flex: 0 0 auto; width: 44px; color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; padding-top: 2px; }
+.hItem .ic { flex: 0 0 auto; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 700; }
+.hItem .ic.add { background: #FDECEB; color: var(--bad); }
+.hItem .ic.del { background: var(--est-soft); color: var(--est); }
+.hItem .tx { flex: 1; min-width: 0; font-size: 14.5px; line-height: 1.35; overflow-wrap: anywhere; }
+.hItem .tx b { font-weight: 700; }
+.hItem .tx small { display: block; color: var(--muted); font-size: 12.5px; }
+.histQuem button.on { background: var(--est); border-color: var(--est); }
 .toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(24px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: #fff; padding: 12px 18px; border-radius: 99px; font-size: 15px; font-weight: 500; z-index: 40; white-space: nowrap; box-shadow: 0 10px 24px -10px rgba(22,32,74,.5); animation: aparece .2s ease-out; }
 </style>
 </head>
@@ -400,10 +412,17 @@ body.est .topo h1 em { color: var(--est-2); }
       <p class="info" id="estInfo"></p>
       <svg class="ondas" id="ondasEst" viewBox="0 0 400 64" preserveAspectRatio="none" aria-hidden="true"></svg>
     </section>
+    <div class="abas estAbas" id="estAbas" hidden><button type="button" data-v="compras" class="on">🛒 Para comprar</button><button type="button" data-v="hist">🕓 Histórico</button></div>
+    <div id="estCompras" style="display:flex;flex-direction:column;gap:14px">
     <button type="button" class="avisar" id="btAvisar"><span class="mais">+</span>Avisar que acabou algo</button>
     <div class="secao">Para comprar <span class="n" id="estN">0</span></div>
     <div class="compras" id="compras"></div>
     <button type="button" class="cobrar" id="btCopiar" hidden>📋 Copiar lista para o pedido</button>
+    </div>
+    <div id="estHist" hidden style="display:flex;flex-direction:column;gap:12px">
+      <div class="chips" id="histQuem"></div>
+      <div class="compras hist" id="histLista"></div>
+    </div>
     <p class="estNota" id="estNota"></p>
   </section>
   <section class="painel" id="painel" hidden aria-live="polite">
@@ -859,8 +878,11 @@ let modo = location.hash === '#estoque' ? 'estoque' : (ls.get('cisper-modo', 'ms
 let estMeu = {};   // id -> [falta 0/1, ts, nome?, cat?] (o que este celular marcou)
 let estRem = {};   // id -> { f, ts, por, nome, cat } (juntando todos)
 let estSinc = 0, estErro = '';
+let estLogMeu = [];  // [{i, f, t, n}] o que este celular fez
+let estHistRem = []; // [{i, f, t, n, por}] de todos
+let estVista = 'compras', histQuem = 'todos';
 const kEst = () => 'cisper-est-' + (eu || 'x');
-function carregarEstMeu() { try { estMeu = JSON.parse(ls.get(kEst(), '{}')) || {}; } catch (e) { estMeu = {}; } }
+function carregarEstMeu() { try { estMeu = JSON.parse(ls.get(kEst(), '{}')) || {}; } catch (e) { estMeu = {}; } try { estLogMeu = JSON.parse(ls.get(kEst() + '-log', '[]')) || []; } catch (e) { estLogMeu = []; } }
 const NOMES = { debora: 'Débora', duda: 'Duda', adm: 'Paulo' };
 function estado() {
   const out = {};
@@ -897,21 +919,25 @@ function marcarEst(id, f, nome, cat) {
   const a = [f ? 1 : 0, Date.now()]; if (nome) { a.push(nome, cat || 'Outros'); }
   else if (!catInfo[id]) { const v = estado()[id]; if (v && v.nome) a.push(v.nome, v.cat || 'Outros'); }
   estMeu[id] = a; ls.set(kEst(), JSON.stringify(estMeu));
+  const nomeLog = (catInfo[id] && catInfo[id].nome) || nome || (estado()[id] && estado()[id].nome) || id;
+  estLogMeu.push({ i: id, f: f ? 1 : 0, t: a[1], n: nomeLog }); if (estLogMeu.length > 500) estLogMeu = estLogMeu.slice(-500);
+  ls.set(kEst() + '-log', JSON.stringify(estLogMeu));
   render(); empurrarEstDepois();
 }
 async function puxarEst() {
   if (!TOKM || !KDADOS) return;
-  const novo = {};
+  const novo = {}, hist = [];
   try {
     for (const p of ['debora', 'duda', 'adm']) {
       const r = await fetch(`https://api.github.com/repos/${REPO_M}/contents/estoque-${p}.json?t=` + Date.now(), { headers: { ...hM(), Accept: 'application/vnd.github.raw' }, cache: 'no-store' });
       if (r.status === 404) continue;
       if (r.status === 401 || r.status === 403) throw new Error('chave');
       if (!r.ok) throw new Error('rede');
-      let e = {}; try { e = (await decifrar(KDADOS, await r.json())).e || {}; } catch (x) { continue; }
+      let e = {}, h = []; try { const o = await decifrar(KDADOS, await r.json()); e = o.e || {}; h = o.h || []; } catch (x) { continue; }
+      for (const x of h) hist.push({ ...x, por: p });
       for (const [id, a] of Object.entries(e)) if (!novo[id] || a[1] > novo[id].ts) novo[id] = { f: a[0], ts: a[1], por: p, nome: a[2], cat: a[3] };
     }
-    estRem = novo; estSinc = Date.now(); estErro = '';
+    estRem = novo; estHistRem = hist; estSinc = Date.now(); estErro = '';
   } catch (e) { estErro = e.message === 'chave' ? 'chave' : 'rede'; }
   render();
 }
@@ -922,7 +948,7 @@ async function empurrarEst(tent) {
     const caminho = `https://api.github.com/repos/${REPO_M}/contents/estoque-${eu}.json`;
     let sha; const g = await fetch(caminho + '?t=' + Date.now(), { headers: hM(), cache: 'no-store' });
     if (g.ok) sha = (await g.json()).sha;
-    const corpo = JSON.stringify(await cifrar(KDADOS, { e: estMeu }));
+    const corpo = JSON.stringify(await cifrar(KDADOS, { e: estMeu, h: estLogMeu }));
     const r = await fetch(caminho, { method: 'PUT', headers: { ...hM(), 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'estoque ' + eu, content: btoa(corpo), sha }) });
     if (r.status === 409 && !tent) return empurrarEst(1);
     if (!r.ok) throw 0;
@@ -930,8 +956,39 @@ async function empurrarEst(tent) {
   } catch (e) { estErro = 'envio'; }
   render();
 }
+function historico() {
+  const vistos = new Set(), out = [];
+  for (const x of estHistRem.concat(estLogMeu.map((y) => ({ ...y, por: eu })))) { const k = x.por + x.t + x.i + x.f; if (vistos.has(k)) continue; vistos.add(k); out.push(x); }
+  return out.sort((a, b) => b.t - a.t);
+}
+function renderHist() {
+  const qx = $('histQuem'); qx.replaceChildren(); qx.classList.add('histQuem');
+  for (const [id, nome] of [['todos', 'Todos'], ['debora', 'Débora'], ['duda', 'Duda'], ['adm', 'Paulo']]) { const b = el('button', id === histQuem ? 'on' : '', nome); b.type = 'button'; b.onclick = () => { histQuem = id; renderHist(); }; qx.appendChild(b); }
+  const L = $('histLista'); L.replaceChildren();
+  const hs = historico().filter((x) => histQuem === 'todos' || x.por === histQuem);
+  if (!hs.length) { const v = el('div', 'estVazio'); v.appendChild(el('b', null, 'Nada registrado ainda')); v.appendChild(document.createTextNode('Tudo o que for avisado ou tirado da lista aparece aqui.')); L.appendChild(v); return; }
+  let dia = '';
+  for (const x of hs.slice(0, 300)) {
+    const d = new Date(x.t), hoje = new Date(), ontem = new Date(); ontem.setDate(hoje.getDate() - 1);
+    const rot = d.toDateString() === hoje.toDateString() ? 'Hoje' : d.toDateString() === ontem.toDateString() ? 'Ontem' : d.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+    if (rot !== dia) { L.appendChild(el('h3', null, rot)); dia = rot; }
+    const row = el('div', 'hItem'); row.appendChild(el('span', 'hora', hora(x.t)));
+    row.appendChild(el('span', 'ic ' + (x.f ? 'add' : 'del'), x.f ? '!' : '✓'));
+    const tx = el('div', 'tx'); tx.appendChild(el('b', null, NOMES[x.por] || 'Alguém'));
+    tx.appendChild(document.createTextNode(x.f ? ' avisou que falta ' : ' marcou que chegou '));
+    tx.appendChild(el('b', null, partes(x.n || x.i)[0]));
+    const sp = partes(x.n || '')[1]; if (sp) tx.appendChild(el('small', null, sp));
+    row.appendChild(tx); L.appendChild(row);
+  }
+}
+document.querySelectorAll('#estAbas button').forEach((b) => b.addEventListener('click', () => { estVista = b.dataset.v; if (estVista === 'hist') puxarEst(); render(); }));
 function renderEstoque() {
   const fal = faltando(), n = fal.length;
+  const verHist = ehAdm() && estVista === 'hist';
+  $('estAbas').hidden = !ehAdm();
+  document.querySelectorAll('#estAbas button').forEach((b) => b.classList.toggle('on', b.dataset.v === (verHist ? 'hist' : 'compras')));
+  $('estCompras').hidden = verHist; $('estHist').hidden = !verHist;
+  if (verHist) renderHist();
   $('estOla').textContent = n ? (n === 1 ? 'Falta 1 item' : `Faltam ${n} itens`) : 'Estoque em dia';
   $('estInfo').textContent = n ? 'Quando o produto chegar, toque em Chegou.' : 'Acabou alguma coisa? Toque no botão abaixo e avise.';
   ondas($('ondasEst'), 7, 64, '#ffffff', 0.5);
@@ -1037,7 +1094,7 @@ $('fTrava').addEventListener('submit', async (ev) => {
   catch (e) { $('erroSenha').textContent = 'Senha errada. Toque no olhinho para conferir e tente de novo.'; }
 });
 $('btOlho').addEventListener('click', () => { const i = $('senha'); const ver = i.type === 'password'; i.type = ver ? 'text' : 'password'; $('btOlho').setAttribute('aria-pressed', ver ? 'true' : 'false'); $('btOlho').setAttribute('aria-label', ver ? 'Esconder senha' : 'Mostrar senha'); i.focus(); });
-const sair = () => { TOKM = ''; KDADOS = ''; REM = {}; estRem = {}; estMeu = {}; $('modos').hidden = true; $('estoque').hidden = true; document.body.classList.remove('est'); aba = 'lista'; $('acomp').hidden = true; $('lista').hidden = false; ls.del('cisper-senha'); ls.del('cisper-eu'); eu = ''; $('perfil').hidden = true; $('painel').hidden = true; $('adm').hidden = true; $('btSair').hidden = true; pedirSenha(); };
+const sair = () => { TOKM = ''; KDADOS = ''; REM = {}; estRem = {}; estMeu = {}; estLogMeu = []; estHistRem = []; estVista = 'compras'; $('modos').hidden = true; $('estoque').hidden = true; document.body.classList.remove('est'); aba = 'lista'; $('acomp').hidden = true; $('lista').hidden = false; ls.del('cisper-senha'); ls.del('cisper-eu'); eu = ''; $('perfil').hidden = true; $('painel').hidden = true; $('adm').hidden = true; $('btSair').hidden = true; pedirSenha(); };
 function perguntarSair() {
   const P = PESSOAS[ehAdm() ? 'todos' : eu];
   $('confTit').textContent = P ? `Deseja realmente sair, ${P.nome}?` : 'Deseja realmente sair?';

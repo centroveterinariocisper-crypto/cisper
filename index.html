@@ -258,7 +258,8 @@ body.iniciando > :not(#splash) { visibility: hidden; }
 .modos button.on[data-m="estoque"] { color: var(--est); }
 .modos .n { background: var(--bad); color: #fff; border-radius: 99px; font-size: 12.5px; font-weight: 700; padding: 0 7px; min-width: 20px; line-height: 20px; font-variant-numeric: tabular-nums; }
 body.est .topo h1 em { color: var(--est-2); }
-.topo h1 { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.topo h1 { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 20px; }
+.perfil { padding: 5px 10px 5px 5px; font-size: 13.5px; }
 .painelEst { --cor: var(--est); --cor2: #0F4C35; }
 .painelEst .ola { font-size: 30px; }
 .avisar { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; border: 0; border-radius: 18px; padding: 17px; font-weight: 700; font-size: 17.5px; color: #fff; background: linear-gradient(135deg, var(--est-2), var(--est)); box-shadow: 0 12px 22px -14px var(--est); }
@@ -296,6 +297,28 @@ body.est .topo h1 em { color: var(--est-2); }
 .catalogo button.it:disabled .add { color: var(--bad); }
 .catalogo button.novo { margin-top: 10px; border: 1.5px dashed var(--est-claro); border-radius: 14px; background: var(--est-soft); color: var(--est); justify-content: center; font-weight: 700; padding: 13px; }
 .catalogo .nada { color: var(--muted); text-align: center; padding: 12px 0 0; margin: 0; }
+.jaFalta { background: #FFF6F4; border: 1px solid #F6D5CF; border-radius: 16px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
+.jaFalta > b { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--bad); font-weight: 700; }
+.jaFalta .chips2 { display: flex; flex-wrap: wrap; gap: 6px; max-height: 92px; overflow-y: auto; }
+.jaFalta .chips2 button { border: 1px solid #F1C9C2; background: #fff; color: var(--ink); border-radius: 99px; padding: 6px 10px 6px 9px; font-size: 13.5px; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
+.jaFalta .chips2 button::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--bad); }
+#confEst { z-index: 35; }
+#confEst .folha { gap: 12px; }
+#confEst .ic { width: 58px; height: 58px; border-radius: 50%; margin: 0 auto; display: grid; place-items: center; font-size: 26px; background: var(--est-soft); color: var(--est); }
+#confEst .ic.add { background: #FDECEB; color: var(--bad); }
+#confEst .nomeItem { margin: 0; font-weight: 700; font-size: 19px; color: var(--ink); }
+#confEst .detItem { margin: -8px 0 4px; color: var(--muted); font-size: 14px; }
+#confEst .sim { background: linear-gradient(135deg, var(--est-2), var(--est)); }
+#confEst .sim.add { background: var(--bad); }
+.estLado { display: none; }
+@media (min-width: 900px) {
+  .folhaEst { max-width: 860px; display: grid; grid-template-columns: 1fr 300px; grid-template-rows: auto auto 1fr; column-gap: 18px; }
+  .folhaEst .cabEst, .folhaEst #buscaEst, .folhaEst .catalogo { grid-column: 1; }
+  .folhaEst .catalogo { grid-row: 3; }
+  .folhaEst #jaFalta { grid-column: 2; grid-row: 1 / span 3; align-self: start; max-height: 100%; }
+  .jaFalta .chips2 { max-height: none; flex-direction: column; flex-wrap: nowrap; }
+  .jaFalta .chips2 button { border-radius: 12px; justify-content: flex-start; text-align: left; }
+}
 .toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(24px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: #fff; padding: 12px 18px; border-radius: 99px; font-size: 15px; font-weight: 500; z-index: 40; white-space: nowrap; box-shadow: 0 10px 24px -10px rgba(22,32,74,.5); animation: aparece .2s ease-out; }
 </style>
 </head>
@@ -304,7 +327,7 @@ body.est .topo h1 em { color: var(--est-2); }
 <div id="trava" hidden>
   <form id="fTrava" autocomplete="off">
     <img src="apple-touch-icon.png" alt="">
-    <h1>Cisper <em>em dia</em></h1>
+    <h1>Equipe <em>Cisper</em></h1>
     <p>Centro Veterinário Cisper</p>
     <p id="pergQuem">Quem vai usar agora? Toque no seu nome.</p>
     <div class="quem3" id="quem3">
@@ -338,7 +361,19 @@ body.est .topo h1 em { color: var(--est-2); }
   <div class="folha folhaEst">
     <div class="cabEst"><p class="ct" id="tAvisar">O que acabou?</p><button type="button" class="x" id="btFecharAvisar" aria-label="Fechar">✕</button></div>
     <input id="buscaEst" type="search" placeholder="Digite o nome. Ex.: gaze, seringa" autocomplete="off" aria-label="Buscar item">
+    <div class="jaFalta" id="jaFalta" hidden><b id="jaFaltaT">Já está faltando</b><div class="chips2" id="jaFaltaL"></div></div>
     <div class="catalogo" id="catalogo"></div>
+  </div>
+</div>
+
+<div id="confEst" class="fundo" hidden role="dialog" aria-modal="true" aria-labelledby="confEstT">
+  <div class="folha">
+    <div class="ic" id="confEstIc">✓</div>
+    <p class="ct" id="confEstT"></p>
+    <p class="nomeItem" id="confEstN"></p>
+    <p class="detItem" id="confEstD"></p>
+    <button type="button" class="sim" id="confEstSim"></button>
+    <button type="button" class="nao" id="confEstNao">Cancelar</button>
   </div>
 </div>
 
@@ -346,7 +381,7 @@ body.est .topo h1 em { color: var(--est-2); }
   <div class="topo-in">
     <img src="apple-touch-icon.png" alt="Centro Veterinário Cisper">
     <div class="tit">
-      <h1>Cisper <em>em dia</em></h1>
+      <h1>Equipe <em>Cisper</em></h1>
       <div class="sub" id="sub">Centro Veterinário Cisper</div>
     </div>
     <button type="button" class="perfil" id="perfil" hidden aria-label="Trocar de pessoa"><span class="ini" id="perfilIni"></span><span id="perfilNome"></span><span class="troca" aria-hidden="true">⇄</span></button>
@@ -843,6 +878,20 @@ function partes(n) { const m = String(n).match(/^(.*?)(\s(?:\(|\d|cx |fr |amp |p
 function quando(ts) { const d = new Date(ts), h = new Date(); const ontem = new Date(h); ontem.setDate(h.getDate() - 1);
   const dia = d.toDateString() === h.toDateString() ? 'hoje' : d.toDateString() === ontem.toDateString() ? 'ontem' : d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
   return dia + ' ' + hora(ts); }
+let confResolver = null;
+function confirmar(tipo, nome) {
+  const add = tipo === 'add', [nm, sp] = partes(nome);
+  $('confEstT').textContent = add ? 'Está faltando?' : 'Chegou?';
+  $('confEstN').textContent = nm; $('confEstD').textContent = sp || '';
+  $('confEstIc').textContent = add ? '!' : '✓'; $('confEstIc').classList.toggle('add', add);
+  const s = $('confEstSim'); s.textContent = add ? 'Sim, adicionar à lista' : 'Sim, chegou. Tirar da lista'; s.classList.toggle('add', add);
+  $('confEst').hidden = false; setTimeout(() => s.focus(), 30);
+  return new Promise((res) => { confResolver = res; });
+}
+function fecharConf(v) { $('confEst').hidden = true; if (confResolver) { const r = confResolver; confResolver = null; r(v); } }
+$('confEstSim').addEventListener('click', () => fecharConf(true));
+$('confEstNao').addEventListener('click', () => fecharConf(false));
+$('confEst').addEventListener('click', (e) => { if (e.target === $('confEst')) fecharConf(false); });
 function toast(t) { document.querySelectorAll('.toast').forEach((x) => x.remove()); const d = el('div', 'toast', t); document.body.appendChild(d); setTimeout(() => d.remove(), 2000); }
 function marcarEst(id, f, nome, cat) {
   const a = [f ? 1 : 0, Date.now()]; if (nome) { a.push(nome, cat || 'Outros'); }
@@ -900,7 +949,7 @@ function renderEstoque() {
       const tx = el('div', 'tx'); tx.appendChild(el('b', null, nm));
       const sm = el('small'); if (sp) sm.appendChild(document.createTextNode(sp + ' · '));
       sm.appendChild(el('i', null, 'avisado por ' + (NOMES[i.por] || 'alguém') + ', ' + quando(i.ts))); tx.appendChild(sm); row.appendChild(tx);
-      const b = el('button', 'chegou', 'Chegou'); b.type = 'button'; b.onclick = () => { marcarEst(i.id, 0); toast('Saiu da lista de compras'); };
+      const b = el('button', 'chegou', 'Chegou'); b.type = 'button'; b.onclick = async () => { if (!(await confirmar('del', i.nome))) return; marcarEst(i.id, 0); toast('Saiu da lista de compras'); };
       row.appendChild(b); C.appendChild(row);
     }
   }
@@ -917,6 +966,10 @@ document.querySelectorAll('#modos button').forEach((b) => b.addEventListener('cl
 function desenharCatalogo() {
   const q = $('buscaEst').value.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
   const e = estado(), K = $('catalogo'); K.replaceChildren();
+  const fal = faltando(), JF = $('jaFaltaL'); JF.replaceChildren(); $('jaFalta').hidden = !fal.length;
+  $('jaFaltaT').textContent = fal.length === 1 ? 'Já está faltando (1)' : `Já estão faltando (${fal.length})`;
+  for (const i of fal) { const c = el('button', null, partes(i.nome)[0]); c.type = 'button'; c.title = 'Tocar se já chegou';
+    c.onclick = async () => { if (!(await confirmar('del', i.nome))) return; marcarEst(i.id, 0); desenharCatalogo(); toast('Saiu da lista de compras'); }; JF.appendChild(c); }
   const norm = (t) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
   const extras = Object.entries(e).filter(([id, v]) => !catInfo[id] && v.nome).map(([id, v]) => [id, v.nome, v.cat || 'Outros']);
   const lista = CAT.concat(extras).filter(([, nome, c]) => !q || norm(nome).includes(q) || norm(c).includes(q))
@@ -928,14 +981,14 @@ function desenharCatalogo() {
     const b = el('button', 'it'); b.type = 'button'; b.disabled = !!ja;
     const tx = el('span', 'tx'); tx.appendChild(el('b', null, nm)); if (sp) tx.appendChild(el('small', null, sp)); b.appendChild(tx);
     b.appendChild(el('span', 'add', ja ? 'Já na lista' : '+ Falta'));
-    b.onclick = () => { marcarEst(id, 1); fecharAvisar(); toast('Adicionado à lista de compras'); };
+    b.onclick = async () => { if (!(await confirmar('add', nome))) return; marcarEst(id, 1); desenharCatalogo(); toast('Adicionado à lista de compras'); };
     K.appendChild(b);
   }
   if (!lista.length) K.appendChild(el('p', 'nada', 'Nenhum item com esse nome.'));
   const txt = $('buscaEst').value.trim();
   if (txt.length >= 3 && !lista.length) {
     const nb = el('button', 'it novo', `+ Adicionar "${txt}" à lista`); nb.type = 'button';
-    nb.onclick = () => { const id = 'x-' + norm(txt).replace(/[^a-z0-9]+/g, '-').slice(0, 40); marcarEst(id, 1, txt.charAt(0).toUpperCase() + txt.slice(1), 'Outros'); fecharAvisar(); toast('Adicionado à lista de compras'); };
+    nb.onclick = async () => { const nome = txt.charAt(0).toUpperCase() + txt.slice(1); if (!(await confirmar('add', nome))) return; const id = 'x-' + norm(txt).replace(/[^a-z0-9]+/g, '-').slice(0, 40); marcarEst(id, 1, nome, 'Outros'); $('buscaEst').value = ''; desenharCatalogo(); toast('Adicionado à lista de compras'); };
     K.appendChild(nb);
   }
 }
@@ -944,7 +997,7 @@ function fecharAvisar() { $('fAvisar').hidden = true; document.body.style.overfl
 $('btAvisar').addEventListener('click', abrirAvisar);
 $('btFecharAvisar').addEventListener('click', fecharAvisar);
 $('fAvisar').addEventListener('click', (e) => { if (e.target === $('fAvisar')) fecharAvisar(); });
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('fAvisar').hidden) fecharAvisar(); });
+document.addEventListener('keydown', (e) => { if (e.key !== 'Escape') return; if (!$('confEst').hidden) fecharConf(false); else if (!$('fAvisar').hidden) fecharAvisar(); });
 $('buscaEst').addEventListener('input', desenharCatalogo);
 $('btCopiar').addEventListener('click', async () => {
   const by = {}; for (const i of faltando()) (by[i.cat] = by[i.cat] || []).push(i.nome);

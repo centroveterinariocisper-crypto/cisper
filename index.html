@@ -183,6 +183,12 @@ details.msg p { background: var(--surface); border-radius: 14px; }
 .adm b.t { font-family: Serifa, Georgia, serif; font-style: italic; font-weight: 600; font-variation-settings: 'SOFT' 100, 'WONK' 1; letter-spacing: -.01em; font-size: 20px; color: var(--navy); }
 button.grande { border-radius: 14px; font-weight: 700; }
 .vazio { background: var(--card); border: 1px solid var(--line); border-radius: 20px; }
+.estoqueLink { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #2A1736; background: linear-gradient(135deg, #F6EEF9, #FBF0E1); border: 1px solid #E7D7EE; border-radius: 14px; padding: 12px 14px; }
+.estoqueLink .ic { font-size: 22px; }
+.estoqueLink .tx { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.estoqueLink .tx b { color: #4A2463; }
+.estoqueLink .tx small { color: var(--muted); font-size: 13px; }
+.estoqueLink .seta { font-size: 24px; color: var(--muted); }
 /* abas do administrador */
 .abas { display: grid; grid-template-columns: 1fr 1fr; background: var(--surface); border-radius: 14px; padding: 4px; gap: 4px; }
 .abas button { border: 0; background: transparent; border-radius: 11px; padding: 10px 6px; font-weight: 600; color: var(--muted); }
@@ -309,6 +315,7 @@ body.iniciando > :not(#splash) { visibility: hidden; }
   <section class="adm" id="adm" hidden>
     <b class="t">Área do administrador</b>
     <div class="abas" role="tablist"><button type="button" id="abaLista" class="on">📋 Lista</button><button type="button" id="abaAcomp">📊 Acompanhamento</button></div>
+    <a class="estoqueLink" href="estoque.html"><span class="ic" aria-hidden="true">📦</span><span class="tx"><b>Estoque da clínica</b><small>Marcar o que tem e o que falta</small></span><span class="seta" aria-hidden="true">›</span></a>
     <div class="sinc" id="sinc"></div>
     <button type="button" class="grande" id="btPublicar" hidden>📤 Publicar lista nova</button>
     <input type="file" id="arquivo" accept=".cisper,.json,.txt,application/json,text/plain,*/*" hidden>

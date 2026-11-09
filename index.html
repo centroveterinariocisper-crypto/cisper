@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Cisper</title>
-<meta name="description" content="Mensagens do dia da recepção do Centro Veterinário Cisper">
+<meta name="description" content="Mensagens e estoque do Centro Veterinário Cisper">
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#ffffff">
 <meta name="color-scheme" content="light">
@@ -183,14 +183,6 @@ details.msg p { background: var(--surface); border-radius: 14px; }
 .adm b.t { font-family: Serifa, Georgia, serif; font-style: italic; font-weight: 600; font-variation-settings: 'SOFT' 100, 'WONK' 1; letter-spacing: -.01em; font-size: 20px; color: var(--navy); }
 button.grande { border-radius: 14px; font-weight: 700; }
 .vazio { background: var(--card); border: 1px solid var(--line); border-radius: 20px; }
-.estoqueLink { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; background: linear-gradient(135deg, #4A2463, #8a4fae); border-radius: 16px; padding: 14px 16px; box-shadow: 0 12px 22px -12px rgba(74,36,99,.7); }
-.estoqueLink .ic { font-size: 22px; }
-.estoqueLink .tx { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-.estoqueLink .tx b { color: #fff; font-size: 17px; }
-.estoqueLink .tx small { color: #F3C77A; font-size: 13px; }
-.estoqueLink .seta { font-size: 26px; color: #F3C77A; }
-.btEstoque { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: #fff; font-weight: 700; font-size: 15px; background: linear-gradient(135deg, #4A2463, #8a4fae); border-radius: 99px; padding: 9px 14px; box-shadow: 0 8px 16px -10px rgba(74,36,99,.8); white-space: nowrap; }
-.btEstoqueLogin { justify-content: center; margin-top: 14px; padding: 13px 18px; font-size: 16px; }
 /* abas do administrador */
 .abas { display: grid; grid-template-columns: 1fr 1fr; background: var(--surface); border-radius: 14px; padding: 4px; gap: 4px; }
 .abas button { border: 0; background: transparent; border-radius: 11px; padding: 10px 6px; font-weight: 600; color: var(--muted); }
@@ -257,6 +249,54 @@ body.iniciando > :not(#splash) { visibility: hidden; }
 #trava form { margin: 0 auto; min-height: calc(100% - 118px); justify-content: center; padding-bottom: 8px; }
 #trava .erro:empty { min-height: 0; }
 #trava button.olho svg { width: 24px; height: 24px; display: block; margin: auto; }
+
+/* ===== modos: Mensagens | Estoque ===== */
+:root { --est: #17694A; --est-2: #2E9E6E; --est-soft: #E8F5EE; --est-claro: #A8E3C4; }
+.modos { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; background: var(--surface); border-radius: 16px; padding: 4px; }
+.modos button { border: 0; background: transparent; border-radius: 12px; padding: 11px 6px; font-weight: 600; font-size: 15.5px; color: var(--muted); display: flex; align-items: center; justify-content: center; gap: 7px; }
+.modos button.on { background: var(--card); color: var(--navy); box-shadow: 0 2px 10px rgba(22,32,74,.10); }
+.modos button.on[data-m="estoque"] { color: var(--est); }
+.modos .n { background: var(--bad); color: #fff; border-radius: 99px; font-size: 12.5px; font-weight: 700; padding: 0 7px; min-width: 20px; line-height: 20px; font-variant-numeric: tabular-nums; }
+body.est .topo h1 em { color: var(--est-2); }
+.topo h1 { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.painelEst { --cor: var(--est); --cor2: #0F4C35; }
+.painelEst .ola { font-size: 30px; }
+.avisar { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; border: 0; border-radius: 18px; padding: 17px; font-weight: 700; font-size: 17.5px; color: #fff; background: linear-gradient(135deg, var(--est-2), var(--est)); box-shadow: 0 12px 22px -14px var(--est); }
+.avisar .mais { width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,.22); display: grid; place-items: center; font-size: 20px; line-height: 1; }
+.compras { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 4px 16px; box-shadow: 0 10px 24px -20px rgba(22,32,74,.3); }
+.compras h3 { margin: 14px 0 2px; letter-spacing: .12em; text-transform: uppercase; font-size: 11px; font-weight: 700; color: var(--muted); }
+.fItem { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
+.compras h3 + .fItem { border-top: 0; }
+.fItem .bola { width: 10px; height: 10px; border-radius: 50%; background: var(--bad); flex: 0 0 auto; box-shadow: 0 0 0 4px #FDECEB; }
+.fItem .tx { flex: 1; min-width: 0; }
+.fItem .tx b { display: block; font-weight: 600; font-size: 16px; overflow-wrap: anywhere; }
+.fItem .tx small { display: block; color: var(--muted); font-size: 13px; overflow-wrap: anywhere; }
+.fItem .tx small i { font-style: normal; color: var(--est); }
+.chegou { flex: 0 0 auto; border: 0; border-radius: 12px; padding: 9px 13px; font-weight: 700; font-size: 14px; background: var(--est-soft); color: var(--est); }
+.estVazio { text-align: center; padding: 26px 16px; color: var(--muted); }
+.estVazio .sel { width: 54px; height: 54px; border-radius: 50%; background: var(--est-soft); color: var(--est); display: grid; place-items: center; margin: 0 auto 10px; font-size: 26px; font-weight: 700; }
+.estVazio b { display: block; color: var(--ink); font-size: 17px; margin-bottom: 2px; }
+.estNota { font-size: 12.5px; color: var(--muted); text-align: center; margin: 0; }
+.folhaEst { text-align: left; max-width: 560px; max-height: calc(100vh - 40px - env(safe-area-inset-top, 0px)); padding: 18px 16px 12px; gap: 12px; }
+.folhaEst .cabEst { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.folhaEst .ct { color: var(--est); }
+.folhaEst .x { width: 40px; height: 40px; padding: 0; border-radius: 50%; background: var(--surface); color: var(--muted); font-size: 18px; }
+.folhaEst input { font: inherit; font-size: 17px; padding: 14px 16px; border-radius: 16px; border: 1.5px solid var(--line); background: var(--bg); color: var(--ink); width: 100%; }
+.folhaEst input:focus { outline: none; border-color: var(--est-2); }
+.catalogo { overflow-y: auto; margin: 0 -16px; padding: 0 16px 6px; -webkit-overflow-scrolling: touch; }
+.catalogo h3 { margin: 14px 0 4px; letter-spacing: .12em; text-transform: uppercase; font-size: 11px; font-weight: 700; color: var(--muted); }
+.catalogo h3:first-child { margin-top: 2px; }
+.catalogo button.it { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; border: 0; background: none; padding: 11px 2px; border-top: 1px solid var(--line); border-radius: 0; font-weight: 400; font-size: 15.5px; color: var(--ink); }
+.catalogo h3 + button.it { border-top: 0; }
+.catalogo button.it .tx { flex: 1; min-width: 0; }
+.catalogo button.it b { display: block; font-weight: 600; }
+.catalogo button.it small { display: block; color: var(--muted); font-size: 13px; }
+.catalogo button.it .add { flex: 0 0 auto; color: var(--est); font-weight: 700; font-size: 14px; }
+.catalogo button.it:disabled { opacity: .55; }
+.catalogo button.it:disabled .add { color: var(--bad); }
+.catalogo button.novo { margin-top: 10px; border: 1.5px dashed var(--est-claro); border-radius: 14px; background: var(--est-soft); color: var(--est); justify-content: center; font-weight: 700; padding: 13px; }
+.catalogo .nada { color: var(--muted); text-align: center; padding: 12px 0 0; margin: 0; }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(24px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: #fff; padding: 12px 18px; border-radius: 99px; font-size: 15px; font-weight: 500; z-index: 40; white-space: nowrap; box-shadow: 0 10px 24px -10px rgba(22,32,74,.5); animation: aparece .2s ease-out; }
 </style>
 </head>
 <body class="iniciando">
@@ -264,7 +304,7 @@ body.iniciando > :not(#splash) { visibility: hidden; }
 <div id="trava" hidden>
   <form id="fTrava" autocomplete="off">
     <img src="apple-touch-icon.png" alt="">
-    <h1>Lista do <em>dia</em></h1>
+    <h1>Cisper <em>em dia</em></h1>
     <p>Centro Veterinário Cisper</p>
     <p id="pergQuem">Quem vai usar agora? Toque no seu nome.</p>
     <div class="quem3" id="quem3">
@@ -280,7 +320,6 @@ body.iniciando > :not(#splash) { visibility: hidden; }
     <button type="submit">Entrar</button>
     <div class="erro" id="erroSenha" aria-live="polite"></div>
     <button type="button" class="admlink" id="btAdmArquivo" hidden>Sou o administrador: abrir com o arquivo da lista</button>
-    <a class="btEstoque btEstoqueLogin" href="estoque.html">📦 Abrir o estoque</a>
     <input type="file" id="arquivoLogin" accept=".cisper,.json,.txt,application/json,text/plain,*/*" hidden>
   </form>
   <svg class="ondasBase" id="ondasBase" viewBox="0 0 400 120" preserveAspectRatio="none" aria-hidden="true"></svg>
@@ -295,19 +334,43 @@ body.iniciando > :not(#splash) { visibility: hidden; }
   </div>
 </div>
 
+<div id="fAvisar" class="fundo" hidden role="dialog" aria-modal="true" aria-labelledby="tAvisar">
+  <div class="folha folhaEst">
+    <div class="cabEst"><p class="ct" id="tAvisar">O que acabou?</p><button type="button" class="x" id="btFecharAvisar" aria-label="Fechar">✕</button></div>
+    <input id="buscaEst" type="search" placeholder="Digite o nome. Ex.: gaze, seringa" autocomplete="off" aria-label="Buscar item">
+    <div class="catalogo" id="catalogo"></div>
+  </div>
+</div>
+
 <header class="topo">
   <div class="topo-in">
     <img src="apple-touch-icon.png" alt="Centro Veterinário Cisper">
     <div class="tit">
-      <h1>Lista do <em>dia</em></h1>
+      <h1>Cisper <em>em dia</em></h1>
       <div class="sub" id="sub">Centro Veterinário Cisper</div>
     </div>
-    <a class="btEstoque" href="estoque.html" aria-label="Abrir o estoque">📦 Estoque</a>
     <button type="button" class="perfil" id="perfil" hidden aria-label="Trocar de pessoa"><span class="ini" id="perfilIni"></span><span id="perfilNome"></span><span class="troca" aria-hidden="true">⇄</span></button>
   </div>
 </header>
 
 <main class="wrap">
+  <nav class="modos" id="modos" hidden aria-label="Escolher a tela">
+    <button type="button" data-m="msg" class="on">💬 Mensagens</button>
+    <button type="button" data-m="estoque">📦 Estoque <span class="n" id="nFalta" hidden></span></button>
+  </nav>
+
+  <section id="estoque" hidden style="display:flex;flex-direction:column;gap:14px">
+    <section class="painel painelEst" aria-live="polite">
+      <p class="ola" id="estOla">Estoque</p>
+      <p class="info" id="estInfo"></p>
+      <svg class="ondas" id="ondasEst" viewBox="0 0 400 64" preserveAspectRatio="none" aria-hidden="true"></svg>
+    </section>
+    <button type="button" class="avisar" id="btAvisar"><span class="mais">+</span>Avisar que acabou algo</button>
+    <div class="secao">Para comprar <span class="n" id="estN">0</span></div>
+    <div class="compras" id="compras"></div>
+    <button type="button" class="cobrar" id="btCopiar" hidden>📋 Copiar lista para o pedido</button>
+    <p class="estNota" id="estNota"></p>
+  </section>
   <section class="painel" id="painel" hidden aria-live="polite">
     <p class="ola" id="ola"></p>
     <p class="info" id="info"></p>
@@ -319,7 +382,6 @@ body.iniciando > :not(#splash) { visibility: hidden; }
   <section class="adm" id="adm" hidden>
     <b class="t">Área do administrador</b>
     <div class="abas" role="tablist"><button type="button" id="abaLista" class="on">📋 Lista</button><button type="button" id="abaAcomp">📊 Acompanhamento</button></div>
-    <a class="estoqueLink" href="estoque.html"><span class="ic" aria-hidden="true">📦</span><span class="tx"><b>Estoque da clínica</b><small>Marcar o que tem e o que falta</small></span><span class="seta" aria-hidden="true">›</span></a>
     <div class="sinc" id="sinc"></div>
     <button type="button" class="grande" id="btPublicar" hidden>📤 Publicar lista nova</button>
     <input type="file" id="arquivo" accept=".cisper,.json,.txt,application/json,text/plain,*/*" hidden>
@@ -469,7 +531,8 @@ async function prepararSinc(d) {
   KDADOS = d._k || ''; TOKM = '';
   if (d.quem === 'adm' && ls.get('cisper-token-marcas', '')) TOKM = ls.get('cisper-token-marcas', '');
   else if (ENV && ENV.mk && KDADOS) { try { TOKM = (await decifrar(KDADOS, ENV.mk)).t || ''; } catch (e) {} }
-  if (TOKM) puxar();
+  carregarEstMeu();
+  if (TOKM) { puxar(); puxarEst(); }
 }
 const hM = () => ({ Authorization: 'Bearer ' + TOKM, Accept: 'application/vnd.github+json' });
 async function puxar() {
@@ -549,6 +612,7 @@ function entrar(d) {
   eu = d.quem === 'adm' ? 'adm' : d.quem; ls.set('cisper-eu', eu);
   if (!ehAdm()) quem = eu; else if (!['todos', 'debora', 'duda'].includes(quem)) quem = 'todos';
   ls.set('cisper-quem', quem);
+  carregarEstMeu();
   aplicar(d);
   pronto();
   prepararSinc(d);
@@ -580,6 +644,16 @@ function render() {
   $('btSair').hidden = false;
   const g = META && META.gerado_em ? new Date(META.gerado_em) : null;
   $('sub').textContent = g && !isNaN(g) ? 'Atualizada em ' + g.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) : 'Centro Veterinário Cisper';
+  // modos: Mensagens | Estoque
+  $('modos').hidden = false; badgeEst();
+  document.querySelectorAll('#modos button').forEach((b) => b.classList.toggle('on', b.dataset.m === modo));
+  const est = modo === 'estoque'; document.body.classList.toggle('est', est); $('estoque').hidden = !est;
+  document.querySelectorAll('.ajuda').forEach((x) => { x.hidden = est; });
+  if (est) {
+    for (const id of ['painel', 'adm', 'linhaDias', 'lista', 'acomp']) $(id).hidden = true;
+    $('sub').textContent = 'Estoque da clínica';
+    renderEstoque(); return;
+  }
   // administrador
   $('adm').hidden = !ehAdm();
   if (ehAdm()) {
@@ -743,6 +817,142 @@ function cartaoFeito(i) {
   return c;
 }
 
+
+// ---- estoque (compartilhado entre os celulares, igual às marcações)
+const CAT = [["metadona", "Metadona 10 mg/ml (Mytedom) cx 25 amp", "Controlados e anestesia"], ["morfina", "Morfina 10 mg/ml amp 1 ml", "Controlados e anestesia"], ["buprenorfina", "Buprenorfina (Beniv) fr 5 ml", "Controlados e anestesia"], ["fentanil", "Fentanil 50 mcg/ml fr 10 ml", "Controlados e anestesia"], ["cetamina", "Cetamina 10% fr 50 ml", "Controlados e anestesia"], ["xilazina2", "Xilazina 2% fr 50 ml", "Controlados e anestesia"], ["xilazina10", "Xilazina 10% fr 20 ml", "Controlados e anestesia"], ["acepromazina", "Acepromazina 0,2% fr 20 ml", "Controlados e anestesia"], ["propofol", "Propofol 1% cx 5 fr 20 ml", "Controlados e anestesia"], ["isoflurano", "Isoflurano fr 240 ml", "Controlados e anestesia"], ["midazolam", "Midazolam 5 mg/ml cx 5 amp 3 ml", "Controlados e anestesia"], ["dexmedetomidina", "Dexmedetomidina cx 5 amp 2 ml", "Controlados e anestesia"], ["ioimbina", "Ioimbina 1% (Reset) fr 50 ml", "Controlados e anestesia"], ["lidocaina", "Lidocaína s/ vaso fr 50 ml", "Controlados e anestesia"], ["bupivacaina", "Bupivacaína 0,5% fr 20 ml", "Controlados e anestesia"], ["efedrina", "Efedrina 50 mg amp 1 ml", "Controlados e anestesia"], ["norepinefrina", "Norepinefrina 2 mg/ml amp 4 ml", "Controlados e anestesia"], ["oxibuprocaina", "Colírio anestésico oxibuprocaína 10 ml", "Controlados e anestesia"], ["tramadol-fr", "Tramadol 20 mg/ml (Cronidor) fr 20 ml", "Injetáveis"], ["tramadol-amp", "Tramadol 50 mg/ml amp 2 ml", "Injetáveis"], ["maropitant", "Maropitant (Marovet) fr 20 ml", "Injetáveis"], ["agemoxi", "Amoxicilina (Agemoxi) fr 100 ml", "Injetáveis"], ["meloxicam-inj", "Meloxicam 0,2% (Flamavet) fr 20 ml", "Injetáveis"], ["dipirona-fr", "Dipirona 50% fr 50 ml", "Injetáveis"], ["dipirona-amp", "Dipirona 500 mg/ml amp 2 ml", "Injetáveis"], ["dexa-amp", "Dexametasona 4 mg/ml amp 2,5 ml", "Injetáveis"], ["dexa-fr", "Dexametasona (Dexaflan) fr 100 ml", "Injetáveis"], ["prometazina", "Prometazina 25 mg/ml amp 2 ml", "Injetáveis"], ["adrenalina", "Adrenalina 1 mg/ml amp 1 ml", "Injetáveis"], ["atropina", "Atropina 0,5 mg amp 2 ml", "Injetáveis"], ["furosemida", "Furosemida 10 mg/ml amp 2 ml", "Injetáveis"], ["ceftriaxona", "Ceftriaxona 1 g fr", "Injetáveis"], ["ampicilina", "Ampicilina 1 g fr", "Injetáveis"], ["meropenem", "Meropenem 500 mg fr", "Injetáveis"], ["tranexamico", "Ácido tranexâmico 50 mg/ml amp 5 ml", "Injetáveis"], ["acetilcisteina", "Acetilcisteína 10% cx 5 amp 3 ml", "Injetáveis"], ["imidocarb", "Imidocarb + B12 (Izoot) fr 15 ml", "Injetáveis"], ["b12", "Vitamina B12 (Hipovita) fr 20 ml", "Injetáveis"], ["citoneurin", "Citoneurin 5000 cx 3 amp", "Injetáveis"], ["filgrastim", "Filgrastim 300 mcg fr", "Injetáveis"], ["fenobarbital", "Fenobarbital 100 mg/ml amp 2 ml", "Injetáveis"], ["hidrocortisona", "Hidrocortisona 500 mg fr", "Injetáveis"], ["ornitil", "Ornitil fr 100 ml", "Injetáveis"], ["heparina", "Heparina 5000 UI/ml fr 5 ml", "Injetáveis"], ["kcl", "Cloreto de potássio 19,1% amp 10 ml", "Injetáveis"], ["buscofin", "Buscofin composto fr 50 ml", "Injetáveis"], ["antitoxico", "Antitóxico SM fr 100 ml", "Injetáveis"], ["ringer250", "Ringer lactato 250 ml (bolsa)", "Soros e fluidos"], ["ringer500", "Ringer lactato 500 ml", "Soros e fluidos"], ["sf250", "Soro fisiológico 250 ml (bolsa)", "Soros e fluidos"], ["agua-inj", "Água para injeção amp 10 ml", "Soros e fluidos"], ["seringa1-500", "Seringa 1 ml s/ agulha cx 500", "Seringas e agulhas"], ["seringa3-500", "Seringa 3 ml c/ agulha 25x7 cx 500", "Seringas e agulhas"], ["seringa3-100", "Seringa 3 ml c/ agulha 25x7 cx 100", "Seringas e agulhas"], ["seringa3sa", "Seringa 3 ml s/ agulha cx 100", "Seringas e agulhas"], ["seringa5", "Seringa 5 ml s/ agulha cx 100", "Seringas e agulhas"], ["seringa10", "Seringa 10 ml c/ agulha cx 50", "Seringas e agulhas"], ["agulha25x7", "Agulha 25x7 cx 100", "Seringas e agulhas"], ["agulha40x12", "Agulha 40x12 cx 100", "Seringas e agulhas"], ["agulha20x55", "Agulha 20x5,5 cx 100", "Seringas e agulhas"], ["agulha25x6", "Agulha 25x6 cx 100", "Seringas e agulhas"], ["cateter22", "Cateter 22G cx 50", "Acesso venoso"], ["cateter24", "Cateter 24G cx 50", "Acesso venoso"], ["cateter20", "Cateter 20G", "Acesso venoso"], ["cateter26", "Cateter 26G pediátrico", "Acesso venoso"], ["scalp23", "Scalp 23G cx 100", "Acesso venoso"], ["equipo", "Equipo macrogotas", "Acesso venoso"], ["extensor", "Extensor de equipo 120 cm", "Acesso venoso"], ["torneira", "Torneira 3 vias", "Acesso venoso"], ["prn", "Adaptador PRN", "Acesso venoso"], ["sonda-et-30", "Sonda endotraqueal 3,0", "Sondas"], ["sonda-et-35", "Sonda endotraqueal 3,5", "Sondas"], ["sonda-et-40", "Sonda endotraqueal 4,0", "Sondas"], ["sonda-et-45", "Sonda endotraqueal 4,5", "Sondas"], ["sonda-et-50", "Sonda endotraqueal 5,0", "Sondas"], ["sonda-et-60", "Sonda endotraqueal 6,0", "Sondas"], ["sonda-et-65", "Sonda endotraqueal 6,5", "Sondas"], ["sonda-et-70", "Sonda endotraqueal 7,0", "Sondas"], ["sonda-et-75", "Sonda endotraqueal 7,5", "Sondas"], ["sonda-et-80", "Sonda endotraqueal 8,0", "Sondas"], ["sonda-uretral", "Sonda uretral (n. 4 a 16)", "Sondas"], ["sonda-levine", "Sonda gástrica Levine (n. 4 a 16)", "Sondas"], ["luva-latex-m", "Luva de procedimento látex M cx 100", "Proteção"], ["luva-nitrilica-m", "Luva nitrílica M cx 100", "Proteção"], ["luva-nitrilica-g", "Luva nitrílica G cx 100", "Proteção"], ["luva-cirurgica", "Luva cirúrgica estéril (par)", "Proteção"], ["mascara", "Máscara descartável pct 50", "Proteção"], ["avental", "Avental descartável pct 10", "Proteção"], ["touca", "Touca descartável pct 100", "Proteção"], ["gaze", "Compressa de gaze pct 500", "Curativo e cirurgia"], ["atadura6", "Atadura crepe 6 cm pct 12", "Curativo e cirurgia"], ["esparadrapo10", "Esparadrapo 10 cm x 4,5 m", "Curativo e cirurgia"], ["esparadrapo25", "Esparadrapo 2,5 cm x 50 m", "Curativo e cirurgia"], ["esparadrapo5", "Esparadrapo 5 cm x 50 m", "Curativo e cirurgia"], ["micropore", "Micropore 10 cm x 4,5 m", "Curativo e cirurgia"], ["bandagem", "Bandagem elástica 5 cm", "Curativo e cirurgia"], ["bisturi", "Lâmina de bisturi 24 cx 100", "Curativo e cirurgia"], ["nylon20", "Fio nylon 2-0", "Curativo e cirurgia"], ["nylon30", "Fio nylon 3-0", "Curativo e cirurgia"], ["rifamicina", "Rifamicina spray 20 ml", "Curativo e cirurgia"], ["colar", "Colar elizabetano (n. 1 a 9)", "Curativo e cirurgia"], ["alcool", "Álcool 70% 1 L", "Limpeza"], ["agua-oxigenada", "Água oxigenada 10 vol 1 L", "Limpeza"], ["clorex-02", "Clorexidina 0,2% dermo suave 1 L", "Limpeza"], ["clorex-degerm", "Clorexidina degermante 4% 1 L", "Limpeza"], ["clorex-alcool", "Clorexidina alcoólica 0,5% 1 L", "Limpeza"], ["duofor", "Desinfetante Duofor 5 L", "Limpeza"], ["benzalconio", "Desinfetante benzalcônio 10% 5 L", "Limpeza"], ["papel-toalha", "Papel toalha interfolha pct 1000", "Limpeza"], ["formol", "Formol 10% 1 L", "Limpeza"], ["kit-cinomose", "Teste rápido cinomose cx 5", "Testes rápidos"], ["kit-parvo", "Teste rápido parvovirose cx 10", "Testes rápidos"], ["silmox50", "Silmox CL 50 mg cx 10 comp", "Revenda"], ["silmox150", "Silmox CL 150 mg cx 10 comp", "Revenda"], ["silmox300", "Silmox CL 300 mg cx 10 comp", "Revenda"], ["meloxicam-comp", "Meloxicam 0,5 mg display 100 comp", "Revenda"], ["omeprazol-comp", "Omeprazol 20 mg cx 56 comp", "Revenda"], ["pantoprazol", "Pantoprazol 40 mg cx 28 comp", "Revenda"], ["biosan", "Biosan Flora B12 seringa 14 g", "Revenda"], ["auritec", "Auritec 100 ml", "Revenda"], ["ototop", "Oto Top Clean 100 ml", "Revenda"], ["vetaglos", "Vetaglos pomada 50 g", "Revenda"], ["cikadol", "Cikadol pomada 50 g", "Revenda"], ["solucel", "Colírio Solucel 15 ml", "Revenda"], ["tobramicina", "Colírio tobramicina 0,3% 5 ml", "Revenda"], ["vidisic", "Vidisic gel oftálmico 10 g", "Revenda"], ["fluoresceina", "Colírio fluoresceína 1% 3 ml", "Revenda"], ["cort-trat", "Dexametasona 0,5 mg cx 20 comp", "Revenda"], ["simeticona", "Simeticona gotas 10 ml", "Revenda"], ["oleo-mineral", "Óleo mineral 100 ml", "Revenda"]];
+let modo = location.hash === '#estoque' ? 'estoque' : (ls.get('cisper-modo', 'msg') === 'estoque' ? 'estoque' : 'msg');
+let estMeu = {};   // id -> [falta 0/1, ts, nome?, cat?] (o que este celular marcou)
+let estRem = {};   // id -> { f, ts, por, nome, cat } (juntando todos)
+let estSinc = 0, estErro = '';
+const kEst = () => 'cisper-est-' + (eu || 'x');
+function carregarEstMeu() { try { estMeu = JSON.parse(ls.get(kEst(), '{}')) || {}; } catch (e) { estMeu = {}; } }
+const NOMES = { debora: 'Débora', duda: 'Duda', adm: 'Paulo' };
+function estado() {
+  const out = {};
+  for (const [id, v] of Object.entries(estRem)) out[id] = v;
+  for (const [id, a] of Object.entries(estMeu)) if (!out[id] || a[1] >= out[id].ts) out[id] = { f: a[0], ts: a[1], por: eu, nome: a[2] || (out[id] && out[id].nome), cat: a[3] || (out[id] && out[id].cat) };
+  return out;
+}
+const catInfo = Object.fromEntries(CAT.map(([id, nome, c]) => [id, { nome, cat: c }]));
+function faltando() {
+  const e = estado();
+  return Object.entries(e).filter(([, v]) => v.f).map(([id, v]) => ({ id, ...v, nome: (catInfo[id] && catInfo[id].nome) || v.nome || id, cat: (catInfo[id] && catInfo[id].cat) || v.cat || 'Outros' }))
+    .sort((a, b) => a.cat.localeCompare(b.cat, 'pt') || a.nome.localeCompare(b.nome, 'pt'));
+}
+function partes(n) { const m = String(n).match(/^(.*?)(\s(?:\(|\d|cx |fr |amp |pct |c\/ |s\/ ).*)$/i); return m && m[1].length > 2 ? [m[1], m[2].trim()] : [n, '']; }
+function quando(ts) { const d = new Date(ts), h = new Date(); const ontem = new Date(h); ontem.setDate(h.getDate() - 1);
+  const dia = d.toDateString() === h.toDateString() ? 'hoje' : d.toDateString() === ontem.toDateString() ? 'ontem' : d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+  return dia + ' ' + hora(ts); }
+function toast(t) { document.querySelectorAll('.toast').forEach((x) => x.remove()); const d = el('div', 'toast', t); document.body.appendChild(d); setTimeout(() => d.remove(), 2000); }
+function marcarEst(id, f, nome, cat) {
+  const a = [f ? 1 : 0, Date.now()]; if (nome) { a.push(nome, cat || 'Outros'); }
+  else if (!catInfo[id]) { const v = estado()[id]; if (v && v.nome) a.push(v.nome, v.cat || 'Outros'); }
+  estMeu[id] = a; ls.set(kEst(), JSON.stringify(estMeu));
+  render(); empurrarEstDepois();
+}
+async function puxarEst() {
+  if (!TOKM || !KDADOS) return;
+  const novo = {};
+  try {
+    for (const p of ['debora', 'duda', 'adm']) {
+      const r = await fetch(`https://api.github.com/repos/${REPO_M}/contents/estoque-${p}.json?t=` + Date.now(), { headers: { ...hM(), Accept: 'application/vnd.github.raw' }, cache: 'no-store' });
+      if (r.status === 404) continue;
+      if (r.status === 401 || r.status === 403) throw new Error('chave');
+      if (!r.ok) throw new Error('rede');
+      let e = {}; try { e = (await decifrar(KDADOS, await r.json())).e || {}; } catch (x) { continue; }
+      for (const [id, a] of Object.entries(e)) if (!novo[id] || a[1] > novo[id].ts) novo[id] = { f: a[0], ts: a[1], por: p, nome: a[2], cat: a[3] };
+    }
+    estRem = novo; estSinc = Date.now(); estErro = '';
+  } catch (e) { estErro = e.message === 'chave' ? 'chave' : 'rede'; }
+  render();
+}
+let tEst = null;
+function empurrarEstDepois() { if (!TOKM || !KDADOS || !eu) return; clearTimeout(tEst); tEst = setTimeout(empurrarEst, 800); }
+async function empurrarEst(tent) {
+  try {
+    const caminho = `https://api.github.com/repos/${REPO_M}/contents/estoque-${eu}.json`;
+    let sha; const g = await fetch(caminho + '?t=' + Date.now(), { headers: hM(), cache: 'no-store' });
+    if (g.ok) sha = (await g.json()).sha;
+    const corpo = JSON.stringify(await cifrar(KDADOS, { e: estMeu }));
+    const r = await fetch(caminho, { method: 'PUT', headers: { ...hM(), 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'estoque ' + eu, content: btoa(corpo), sha }) });
+    if (r.status === 409 && !tent) return empurrarEst(1);
+    if (!r.ok) throw 0;
+    estSinc = Date.now(); estErro = '';
+  } catch (e) { estErro = 'envio'; }
+  render();
+}
+function renderEstoque() {
+  const fal = faltando(), n = fal.length;
+  $('estOla').textContent = n ? (n === 1 ? 'Falta 1 item' : `Faltam ${n} itens`) : 'Estoque em dia';
+  $('estInfo').textContent = n ? 'Quando o produto chegar, toque em Chegou.' : 'Acabou alguma coisa? Toque no botão abaixo e avise.';
+  ondas($('ondasEst'), 7, 64, '#ffffff', 0.5);
+  $('estN').textContent = n;
+  const C = $('compras'); C.replaceChildren();
+  if (!n) {
+    const v = el('div', 'estVazio'); v.appendChild(el('div', 'sel', '✓')); v.appendChild(el('b', null, 'Nada faltando'));
+    v.appendChild(document.createTextNode('A lista de compras está vazia.')); C.appendChild(v);
+  } else {
+    let ultima = '';
+    for (const i of fal) {
+      if (i.cat !== ultima) { C.appendChild(el('h3', null, i.cat)); ultima = i.cat; }
+      const [nm, sp] = partes(i.nome);
+      const row = el('div', 'fItem'); row.appendChild(el('span', 'bola'));
+      const tx = el('div', 'tx'); tx.appendChild(el('b', null, nm));
+      const sm = el('small'); if (sp) sm.appendChild(document.createTextNode(sp + ' · '));
+      sm.appendChild(el('i', null, 'avisado por ' + (NOMES[i.por] || 'alguém') + ', ' + quando(i.ts))); tx.appendChild(sm); row.appendChild(tx);
+      const b = el('button', 'chegou', 'Chegou'); b.type = 'button'; b.onclick = () => { marcarEst(i.id, 0); toast('Saiu da lista de compras'); };
+      row.appendChild(b); C.appendChild(row);
+    }
+  }
+  $('btCopiar').hidden = !(ehAdm() && n);
+  const nota = $('estNota');
+  if (!TOKM) nota.textContent = 'As marcações ficam só neste celular até a lista ser publicada de novo.';
+  else if (estErro === 'chave') nota.textContent = '⚠ A chave das marcações não funcionou.';
+  else if (estErro) nota.textContent = '⚠ Sem internet agora. Fica salvo aqui e envia depois.';
+  else nota.textContent = estSinc ? 'Atualizado às ' + hora(estSinc) : '';
+}
+function badgeEst() { const n = faltando().length; const b = $('nFalta'); b.hidden = !n; b.textContent = n; }
+function trocarModo(m) { modo = m; ls.set('cisper-modo', m); history.replaceState(null, '', m === 'estoque' ? '#estoque' : location.pathname + location.search); if (m === 'estoque') puxarEst(); render(); window.scrollTo(0, 0); }
+document.querySelectorAll('#modos button').forEach((b) => b.addEventListener('click', () => trocarModo(b.dataset.m)));
+function desenharCatalogo() {
+  const q = $('buscaEst').value.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const e = estado(), K = $('catalogo'); K.replaceChildren();
+  const norm = (t) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const extras = Object.entries(e).filter(([id, v]) => !catInfo[id] && v.nome).map(([id, v]) => [id, v.nome, v.cat || 'Outros']);
+  const lista = CAT.concat(extras).filter(([, nome, c]) => !q || norm(nome).includes(q) || norm(c).includes(q))
+    .sort((a, b) => a[2].localeCompare(b[2], 'pt') || a[1].localeCompare(b[1], 'pt'));
+  let ultima = '';
+  for (const [id, nome, c] of lista) {
+    if (c !== ultima) { K.appendChild(el('h3', null, c)); ultima = c; }
+    const [nm, sp] = partes(nome); const ja = e[id] && e[id].f;
+    const b = el('button', 'it'); b.type = 'button'; b.disabled = !!ja;
+    const tx = el('span', 'tx'); tx.appendChild(el('b', null, nm)); if (sp) tx.appendChild(el('small', null, sp)); b.appendChild(tx);
+    b.appendChild(el('span', 'add', ja ? 'Já na lista' : '+ Falta'));
+    b.onclick = () => { marcarEst(id, 1); fecharAvisar(); toast('Adicionado à lista de compras'); };
+    K.appendChild(b);
+  }
+  if (!lista.length) K.appendChild(el('p', 'nada', 'Nenhum item com esse nome.'));
+  const txt = $('buscaEst').value.trim();
+  if (txt.length >= 3 && !lista.length) {
+    const nb = el('button', 'it novo', `+ Adicionar "${txt}" à lista`); nb.type = 'button';
+    nb.onclick = () => { const id = 'x-' + norm(txt).replace(/[^a-z0-9]+/g, '-').slice(0, 40); marcarEst(id, 1, txt.charAt(0).toUpperCase() + txt.slice(1), 'Outros'); fecharAvisar(); toast('Adicionado à lista de compras'); };
+    K.appendChild(nb);
+  }
+}
+function abrirAvisar() { $('buscaEst').value = ''; desenharCatalogo(); $('fAvisar').hidden = false; document.body.style.overflow = 'hidden'; $('catalogo').scrollTop = 0; setTimeout(() => $('buscaEst').focus(), 60); }
+function fecharAvisar() { $('fAvisar').hidden = true; document.body.style.overflow = ''; }
+$('btAvisar').addEventListener('click', abrirAvisar);
+$('btFecharAvisar').addEventListener('click', fecharAvisar);
+$('fAvisar').addEventListener('click', (e) => { if (e.target === $('fAvisar')) fecharAvisar(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('fAvisar').hidden) fecharAvisar(); });
+$('buscaEst').addEventListener('input', desenharCatalogo);
+$('btCopiar').addEventListener('click', async () => {
+  const by = {}; for (const i of faltando()) (by[i.cat] = by[i.cat] || []).push(i.nome);
+  const t = 'Pedido – Centro Veterinário Cisper\n' + Object.keys(by).map((c) => `\n${c}:\n` + by[c].map((n) => '- ' + n).join('\n')).join('\n');
+  try { await navigator.clipboard.writeText(t); toast('Lista copiada'); } catch (e) { toast('Não deu para copiar neste celular'); }
+});
+setInterval(() => { if (document.visibilityState === 'visible' && TOKM && eu) puxarEst(); }, 45000);
+
 // ---- entrada e troca de pessoa
 // Cada pessoa sempre digita a própria senha ao trocar. Nenhuma senha fica lembrada para a troca.
 ls.del('cisper-salvas');
@@ -774,7 +984,7 @@ $('fTrava').addEventListener('submit', async (ev) => {
   catch (e) { $('erroSenha').textContent = 'Senha errada. Toque no olhinho para conferir e tente de novo.'; }
 });
 $('btOlho').addEventListener('click', () => { const i = $('senha'); const ver = i.type === 'password'; i.type = ver ? 'text' : 'password'; $('btOlho').setAttribute('aria-pressed', ver ? 'true' : 'false'); $('btOlho').setAttribute('aria-label', ver ? 'Esconder senha' : 'Mostrar senha'); i.focus(); });
-const sair = () => { TOKM = ''; KDADOS = ''; REM = {}; aba = 'lista'; $('acomp').hidden = true; $('lista').hidden = false; ls.del('cisper-senha'); ls.del('cisper-eu'); eu = ''; $('perfil').hidden = true; $('painel').hidden = true; $('adm').hidden = true; $('btSair').hidden = true; pedirSenha(); };
+const sair = () => { TOKM = ''; KDADOS = ''; REM = {}; estRem = {}; estMeu = {}; $('modos').hidden = true; $('estoque').hidden = true; document.body.classList.remove('est'); aba = 'lista'; $('acomp').hidden = true; $('lista').hidden = false; ls.del('cisper-senha'); ls.del('cisper-eu'); eu = ''; $('perfil').hidden = true; $('painel').hidden = true; $('adm').hidden = true; $('btSair').hidden = true; pedirSenha(); };
 function perguntarSair() {
   const P = PESSOAS[ehAdm() ? 'todos' : eu];
   $('confTit').textContent = P ? `Deseja realmente sair, ${P.nome}?` : 'Deseja realmente sair?';

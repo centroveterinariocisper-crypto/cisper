@@ -190,6 +190,7 @@ button.grande { border-radius: 14px; font-weight: 700; }
 .estoqueLink .tx small { color: #F3C77A; font-size: 13px; }
 .estoqueLink .seta { font-size: 26px; color: #F3C77A; }
 .btEstoque { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: #fff; font-weight: 700; font-size: 15px; background: linear-gradient(135deg, #4A2463, #8a4fae); border-radius: 99px; padding: 9px 14px; box-shadow: 0 8px 16px -10px rgba(74,36,99,.8); white-space: nowrap; }
+.btEstoqueLogin { justify-content: center; margin-top: 14px; padding: 13px 18px; font-size: 16px; }
 /* abas do administrador */
 .abas { display: grid; grid-template-columns: 1fr 1fr; background: var(--surface); border-radius: 14px; padding: 4px; gap: 4px; }
 .abas button { border: 0; background: transparent; border-radius: 11px; padding: 10px 6px; font-weight: 600; color: var(--muted); }
@@ -279,6 +280,7 @@ body.iniciando > :not(#splash) { visibility: hidden; }
     <button type="submit">Entrar</button>
     <div class="erro" id="erroSenha" aria-live="polite"></div>
     <button type="button" class="admlink" id="btAdmArquivo" hidden>Sou o administrador: abrir com o arquivo da lista</button>
+    <a class="btEstoque btEstoqueLogin" href="estoque.html">📦 Abrir o estoque</a>
     <input type="file" id="arquivoLogin" accept=".cisper,.json,.txt,application/json,text/plain,*/*" hidden>
   </form>
   <svg class="ondasBase" id="ondasBase" viewBox="0 0 400 120" preserveAspectRatio="none" aria-hidden="true"></svg>

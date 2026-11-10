@@ -1,6 +1,6 @@
 // Equipe Cisper — service worker
 // Sempre busca a versão nova na internet; usa a cópia guardada só quando estiver sem internet.
-const VERSAO = 'cisper-v23';
+const VERSAO = 'cisper-v24';
 const ARQUIVOS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', (e) => {

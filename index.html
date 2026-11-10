@@ -142,9 +142,9 @@ button.link { background: none; border: 0; color: var(--muted); text-decoration:
 @media (prefers-reduced-motion: reduce) { .painel .bar i { transition: none; } }
 
 /* ===== Maré Mansa: visual novo ===== */
-@font-face { font-family: Outfit; src: url(fonts/Outfit-Regular.ttf) format("truetype"); font-weight: 400 600; font-display: block; }
-@font-face { font-family: Outfit; src: url(fonts/Outfit-Bold.ttf) format("truetype"); font-weight: 700 900; font-display: block; }
-@font-face { font-family: Serifa; src: url(fonts/Fraunces-Italic.woff2) format("woff2"); font-style: italic; font-weight: 100 900; font-display: block; }
+@font-face { font-family: Outfit; src: url(fonts/Outfit-Regular.ttf) format("truetype"); font-weight: 400 600; font-display: swap; }
+@font-face { font-family: Outfit; src: url(fonts/Outfit-Bold.ttf) format("truetype"); font-weight: 700 900; font-display: swap; }
+@font-face { font-family: Serifa; src: url(fonts/Fraunces-Italic.woff2) format("woff2"); font-style: italic; font-weight: 100 900; font-display: swap; }
 :root { --bg: #FBFAF7; --card: #ffffff; --surface: #F3F1EC; --line: #E8E5DE; --ink: #16204A; --muted: #6B7290; }
 html, body { background: var(--bg); }
 body { font-family: Outfit, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; letter-spacing: .005em; }
@@ -341,6 +341,9 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; touch-action: man
 .folhaEst { max-height: calc(var(--vvh, 100dvh) - 28px - env(safe-area-inset-top, 0px)); overflow: hidden; }
 .folhaEst .cabEst, .folhaEst > input { flex: 0 0 auto; }
 .folhaEst .catalogo { flex: 1 1 auto; min-height: 0; }
+
+/* ===== leve para celular simples: sem desfoque (pesado ao rolar) ===== */
+.topo { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; background: #fff !important; }
 </style>
 </head>
 <body class="iniciando">
@@ -1199,6 +1202,21 @@ carregar(false);
     else if (!n && empurrado) { empurrado = false; if (history.state && history.state.folha) history.back(); }
   }).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['hidden'] });
   addEventListener('popstate', () => { if (!empurrado) return; empurrado = false; abertas().forEach((f) => { const b = f.querySelector('.x, .nao, [data-fecha]'); if (b) b.click(); else f.hidden = true; }); });
+})();
+
+// ===== atualiza sozinho quando sair versão nova
+(() => {
+  let v0 = null;
+  const ver = async () => {
+    try {
+      const t = await (await fetch('./sw.js?t=' + Date.now(), { cache: 'no-store' })).text();
+      const v = (t.match(/VERSAO = '([^']+)'/) || [])[1]; if (!v) return;
+      const ocupado = [...document.querySelectorAll('.fundo')].some((f) => !f.hidden) || /^(INPUT|TEXTAREA)$/.test((document.activeElement || {}).tagName || '');
+      if (v0 && v !== v0 && !ocupado) { location.reload(); return; }
+      if (!v0) v0 = v;
+    } catch (e) {}
+  };
+  ver(); document.addEventListener('visibilitychange', () => { if (!document.hidden) ver(); }); setInterval(ver, 5 * 60 * 1000);
 })();
 </script>
 </body>

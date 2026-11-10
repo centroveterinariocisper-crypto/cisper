@@ -1074,10 +1074,12 @@ function marcarPessoas() {
   const nomes = { debora: 'da Débora', duda: 'da Duda', adm: 'do Paulo' };
   $('txtSenha').innerHTML = escolhido ? 'Digite a senha <b>' + nomes[escolhido] + '</b>.' : 'Digite a <b>sua</b> senha para entrar.';
 }
-async function entrarCom(s) {
+async function entrarCom(s, quemEsperado) {
   if (!ENV) ENV = await baixar();
   let d, env = ENV;
   try { d = await abrir(env, s); } catch (e) { env = await baixar(); d = await abrir(env, s); }
+  // cada pessoa só entra com a PRÓPRIA senha: senha de outra pessoa não abre
+  if (quemEsperado && d.quem !== quemEsperado) throw new Error('senha de outra pessoa');
   ENV = env; ls.set('cisper-senha', s); ls.set('cisper-lista', JSON.stringify(ENV));
   $('trava').hidden = true; $('senha').value = ''; $('senha').type = 'password'; $('btOlho').setAttribute('aria-pressed', 'false');
   if (d.quem === 'adm') quem = 'todos';
@@ -1090,9 +1092,10 @@ function pedirSenha(erro) { if (!$('trava').hidden) { if (erro) $('erroSenha').t
 $('fTrava').addEventListener('submit', async (ev) => {
   ev.preventDefault();
   const s = $('senha').value.trim(); if (!s) return;
+  if (!escolhido) { $('erroSenha').textContent = 'Primeiro toque no seu nome, depois digite a sua senha.'; return; }
   $('erroSenha').textContent = 'Abrindo…';
   if (!ENV) { try { ENV = await baixar(); } catch (e) { $('erroSenha').textContent = 'A lista ainda não foi publicada. Se você é o administrador, toque no link abaixo.'; $('btAdmArquivo').hidden = false; return; } }
-  try { await entrarCom(s); $('erroSenha').textContent = ''; }
+  try { await entrarCom(s, escolhido); $('erroSenha').textContent = ''; }
   catch (e) { $('erroSenha').textContent = 'Senha errada. Toque no olhinho para conferir e tente de novo.'; }
 });
 $('btOlho').addEventListener('click', () => { const i = $('senha'); const ver = i.type === 'password'; i.type = ver ? 'text' : 'password'; $('btOlho').setAttribute('aria-pressed', ver ? 'true' : 'false'); $('btOlho').setAttribute('aria-label', ver ? 'Esconder senha' : 'Mostrar senha'); i.focus(); });

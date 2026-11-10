@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>Cisper</title>
 <meta name="description" content="Mensagens e estoque do Centro Veterinário Cisper">
 <meta name="robots" content="noindex,nofollow">
@@ -332,6 +332,15 @@ body.est .topo h1 em { color: var(--est-2); }
 .hItem .tx small { display: block; color: var(--muted); font-size: 12.5px; }
 .histQuem button.on { background: var(--est); border-color: var(--est); }
 .toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(24px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: #fff; padding: 12px 18px; border-radius: 99px; font-size: 15px; font-weight: 500; z-index: 40; white-space: nowrap; box-shadow: 0 10px 24px -10px rgba(22,32,74,.5); animation: aparece .2s ease-out; }
+
+/* ===== jeito de aplicativo: sem zoom e janelas que cabem acima do teclado ===== */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; touch-action: manipulation; }
+@supports (-webkit-touch-callout: none) { input, textarea, select { font-size: 16px !important; } }
+.fundo { top: var(--vvt, 0px); bottom: auto; height: var(--vvh, 100dvh); }
+.folha { max-height: calc(var(--vvh, 100dvh) - 28px); overflow-y: auto; }
+.folhaEst { max-height: calc(var(--vvh, 100dvh) - 28px - env(safe-area-inset-top, 0px)); overflow: hidden; }
+.folhaEst .cabEst, .folhaEst > input { flex: 0 0 auto; }
+.folhaEst .catalogo { flex: 1 1 auto; min-height: 0; }
 </style>
 </head>
 <body class="iniciando">
@@ -1173,6 +1182,24 @@ if ('serviceWorker' in navigator) {
   // sem recarregar a tela sozinho: a versão nova entra na próxima vez que o app abrir
 }
 carregar(false);
+
+// ===== jeito de aplicativo
+(() => {
+  const vv = window.visualViewport, R = document.documentElement;
+  const ajusta = () => { R.style.setProperty('--vvh', (vv ? vv.height : innerHeight) + 'px'); R.style.setProperty('--vvt', (vv ? vv.offsetTop : 0) + 'px'); };
+  ajusta(); if (vv) { vv.addEventListener('resize', ajusta); vv.addEventListener('scroll', ajusta); } addEventListener('resize', ajusta);
+  // sem zoom de pinça (o toque duplo já é bloqueado pelo touch-action)
+  document.addEventListener('gesturestart', (e) => e.preventDefault());
+  // o botão "voltar" do celular fecha a janela aberta, em vez de sair do app
+  const abertas = () => [...document.querySelectorAll('.fundo')].filter((f) => !f.hidden);
+  let empurrado = false;
+  new MutationObserver(() => {
+    const n = abertas().length;
+    if (n && !empurrado) { history.pushState({ folha: 1 }, ''); empurrado = true; }
+    else if (!n && empurrado) { empurrado = false; if (history.state && history.state.folha) history.back(); }
+  }).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['hidden'] });
+  addEventListener('popstate', () => { if (!empurrado) return; empurrado = false; abertas().forEach((f) => { const b = f.querySelector('.x, .nao, [data-fecha]'); if (b) b.click(); else f.hidden = true; }); });
+})();
 </script>
 </body>
 </html>

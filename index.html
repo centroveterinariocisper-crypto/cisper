@@ -166,6 +166,19 @@ label.marcar.on { border-style: solid; border-color: #cfe9da; background: var(--
 .manChk label.ok { color: var(--muted); text-decoration: line-through; }
 .folhaMan button.limpa { background: var(--surface); color: var(--navy); font-size: 13.5px; padding: 10px; }
 .manNota { font-size: 12px; color: var(--muted); }
+.folhaCel .celLink { background: var(--surface); border-radius: 12px; padding: 10px; font-weight: 800; color: var(--navy); word-break: break-all; font-size: 14px; user-select: all; -webkit-user-select: all; }
+.folha.folhaCel { text-align: left; }
+.folhaCel { text-align: left; max-height: calc(100vh - 40px - env(safe-area-inset-top, 0px)); overflow-y: auto; }
+.folhaCel .ct, .folhaCel > .cs { text-align: center; }
+.celPasso { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; line-height: 1.45; background: #f7f7f4; border-radius: 16px; padding: 12px; }
+.celPasso > div { flex: 1; display: block; }
+.celPasso > div > * + * { margin-top: 8px; }
+.celPasso .celBt { width: 100%; }
+.celPasso .n { flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%; background: var(--navy); color: #fff; font-weight: 800; display: grid; place-items: center; }
+.celSO { background: #fff; border-radius: 10px; padding: 8px 10px; font-size: 13.5px; }
+.btCelGrande { display: block; width: 100%; margin: 14px 0 4px; border: 0; border-radius: 16px; padding: 14px; font-weight: 800; font-size: 15px; color: var(--navy); background: #eef1fb; }
+.folhaCel .celPassos { text-align: left; display: flex; flex-direction: column; gap: 8px; font-size: 13.5px; line-height: 1.4; background: #f7f7f4; border-radius: 14px; padding: 12px; }
+.folhaCel .sim.celBt { background: var(--navy); }
 .manSeta { display: flex; flex-direction: column; gap: 4px; }
 .manSeta > div { background: #eef1fb; border-left: 4px solid var(--navy); border-radius: 8px; padding: 7px 10px; font-weight: 700; color: var(--navy); font-size: 13.5px; }
 .manLink { display: inline-block; align-self: flex-start; background: var(--navy); color: #fff; text-decoration: none; border-radius: 99px; padding: 8px 14px; font-weight: 800; font-size: 13.5px; }
@@ -447,6 +460,22 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; touch-action: man
   </div>
 </div>
 
+<div id="fCel" class="fundo" hidden role="dialog" aria-modal="true" aria-labelledby="tCel">
+  <div class="folha folhaCel">
+    <p class="ct" id="tCel">Usar no seu celular</p>
+    <p class="cs">São só 3 passos. Você entra com a sua própria senha.</p>
+    <div class="celPasso"><span class="n">1</span><div><b>Copie o link</b><div class="celLink" id="celLink"></div>
+      <button type="button" class="sim celBt" id="btCelCopiar">📋 Copiar link</button>
+      <button type="button" class="nao celBt" id="btCelEnviar" hidden>📤 Mandar para mim no WhatsApp</button></div></div>
+    <div class="celPasso"><span class="n">2</span><div><b>No seu celular, abra o navegador</b> (Chrome no Android, Safari no iPhone), toque na barra de endereço, <b>cole o link</b> e entre com a sua senha.</div></div>
+    <div class="celPasso"><span class="n">3</span><div><b>Deixe o ícone na tela inicial</b>, para abrir como aplicativo:
+      <div class="celSO">🤖 <b>Android (Chrome):</b> toque nos <b>3 pontinhos ⋮</b> no canto de cima → <b>Adicionar à tela inicial</b> (ou <b>Instalar app</b>) → <b>Adicionar</b>.</div>
+      <div class="celSO">📱 <b>iPhone (Safari):</b> toque em <b>Compartilhar</b> (quadrado com seta para cima ⬆️) → <b>Adicionar à Tela de Início</b> → <b>Adicionar</b>.</div></div></div>
+    <p class="cs" style="font-size:13px">Pronto! O ícone da Cisper aparece junto dos seus outros aplicativos.</p>
+    <button type="button" class="nao celBt" id="btCelFechar">Fechar</button>
+  </div>
+</div>
+
 <div id="fManual" class="fundo" hidden role="dialog" aria-modal="true" aria-labelledby="tManual">
   <div class="folha folhaMan">
     <div class="cabMan"><button type="button" id="btManVoltar" hidden>‹ Voltar</button><p class="ct" id="tManual">Manual</p><button type="button" class="x" id="btFecharManual" aria-label="Fechar">✕</button></div>
@@ -568,6 +597,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; touch-action: man
       <li>Se o cliente não responder, não mande outra mensagem.</li>
     </ul>
   </details>
+  <button type="button" class="btCelGrande" id="btCel">📲 Usar o app no meu celular</button>
   <button type="button" class="link" id="btSair" hidden>Trocar de pessoa</button>
 </main>
 
@@ -1378,6 +1408,18 @@ function avisarNova() {
   const b = $('barraAtt'); b.classList.add('novo'); setTimeout(() => b.classList.remove('novo'), 10000);
 }
 $('btManual').addEventListener('click', abrirManual);
+const LINK_APP = 'https://centroveterinariocisper-crypto.github.io/cisper/';
+$('btCel').addEventListener('click', () => { $('celLink').textContent = LINK_APP; $('btCelEnviar').hidden = !navigator.share; $('btCelCopiar').textContent = '📋 Copiar link'; $('fCel').hidden = false; });
+$('btCelFechar').addEventListener('click', () => { $('fCel').hidden = true; });
+$('fCel').addEventListener('click', (ev) => { if (ev.target.id === 'fCel') $('fCel').hidden = true; });
+$('btCelCopiar').addEventListener('click', async () => {
+  let ok = false;
+  try { await navigator.clipboard.writeText(LINK_APP); ok = true; } catch (e) {
+    try { const t = document.createElement('textarea'); t.value = LINK_APP; document.body.appendChild(t); t.select(); ok = document.execCommand('copy'); t.remove(); } catch (e2) {}
+  }
+  $('btCelCopiar').textContent = ok ? '✅ Link copiado! Cole no navegador do celular' : 'Segure o dedo no link acima para copiar';
+});
+$('btCelEnviar').addEventListener('click', async () => { try { await navigator.share({ title: 'Equipe Cisper', text: 'App da Equipe Cisper (entre com a sua senha):', url: LINK_APP }); } catch (e) {} });
 $('btFecharManual').addEventListener('click', fecharManual);
 $('btManVoltar').addEventListener('click', manLista);
 $('fManual').addEventListener('click', (ev) => { if (ev.target.id === 'fManual') fecharManual(); });

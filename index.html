@@ -469,7 +469,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; touch-action: man
 
   <section class="adm" id="adm" hidden>
     <b class="t">Área do administrador</b>
-    <div class="abas" role="tablist"><button type="button" id="abaLista" class="on">📋 Lista</button><button type="button" id="abaAcomp">📊 Acompanhamento</button></div>
+    <div class="abas" role="tablist"><button type="button" id="abaLista" class="on">📋 Lista</button><button type="button" id="abaAcomp">📊 Acompanhamento</button><button type="button" id="abaRx">💊 Receitas</button></div>
     <div class="sinc" id="sinc"></div>
     <div class="rx" id="rxAlertas" hidden></div>
     <button type="button" class="grande" id="btPublicar" hidden>📤 Publicar lista nova</button>
@@ -712,7 +712,10 @@ async function abrirAlertas(d) {
 let rxOk = {}; try { rxOk = JSON.parse(ls.get('cisper-rx-ok', '{}')) || {}; } catch (e) { rxOk = {}; }
 function desenharAlertas() {
   const box = $('rxAlertas');
-  if (!ehAdm() || aba !== 'lista' || !ALERTAS.length) { box.hidden = true; return; }
+  const nAb = ALERTAS.filter((a) => !rxOk[a.id]).length;
+  if ($('abaRx')) $('abaRx').textContent = '💊 Receitas' + (nAb ? ` (${nAb})` : '');
+  if (!ehAdm() || aba !== 'rx') { box.hidden = true; return; }
+  if (!ALERTAS.length) { box.hidden = false; box.replaceChildren(el('h3', '', '💊 Receitas para conferir'), el('div', 'vazio-rx', 'Nenhum aviso de dose nesta lista. Eu confiro as receitas toda vez que monto a lista.')); return; }
   box.hidden = false; box.replaceChildren();
   const abertos = ALERTAS.filter((a) => !rxOk[a.id]), feitos_ = ALERTAS.length - abertos.length;
   box.appendChild(el('h3', '', abertos.length ? `💊 Receitas para conferir (${abertos.length})` : '💊 Receitas conferidas'));
@@ -787,7 +790,7 @@ function render() {
     $('admToken').hidden = true; $('btPublicar').hidden = true; $('btTrocarToken').hidden = true;
     const qx = $('quem'); qx.replaceChildren();
     for (const [id, nome] of QUEM) { const b = el('button', id === quem ? 'on' : '', nome); b.type = 'button'; b.onclick = () => { quem = id; ls.set('cisper-quem', id); render(); }; qx.appendChild(b); }
-    $('abaLista').classList.toggle('on', aba === 'lista'); $('abaAcomp').classList.toggle('on', aba === 'acomp');
+    $('abaLista').classList.toggle('on', aba === 'lista'); $('abaAcomp').classList.toggle('on', aba === 'acomp'); $('abaRx').classList.toggle('on', aba === 'rx'); $('sinc').hidden = aba === 'rx';
     $('quem').parentElement.hidden = aba !== 'lista';
     $('admMarcas').hidden = true;
     desenharAlertas();
@@ -797,12 +800,12 @@ function render() {
     else if (ls.get('cisper-token-marcas', '') && !(ENV && ENV.mk)) { sx.className = 'sinc'; sx.textContent = 'Publique a lista de novo para ligar as marcações nos celulares delas.'; }
     else { sx.className = 'sinc'; sx.textContent = 'Por enquanto você vê só as marcações feitas neste celular.'; }
   }
-  const verAcomp = ehAdm() && aba === 'acomp';
-  $('acomp').hidden = !verAcomp; $('lista').hidden = verAcomp; $('painel').hidden = verAcomp;
+  const verAcomp = ehAdm() && aba === 'acomp', verRx = ehAdm() && aba === 'rx';
+  $('acomp').hidden = !verAcomp; $('lista').hidden = verAcomp || verRx; $('painel').hidden = verAcomp || verRx;
   ondas($('ondasPainel'), 7, 64, '#ffffff', 0.55);
   // dias
   const dias = Object.keys(DADOS).sort();
-  $('linhaDias').hidden = dias.length < 2;
+  $('linhaDias').hidden = dias.length < 2 || verRx;
   const bx = $('dias'); bx.replaceChildren();
   for (const d of dias) {
     const rot = d === hojeISO() ? 'Hoje' : new Date(d + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'numeric' });
@@ -1202,6 +1205,7 @@ $('fToken').addEventListener('submit', (ev) => {
 $('btTrocarToken').addEventListener('click', () => { ls.del('cisper-token'); render(); });
 $('abaLista').addEventListener('click', () => { aba = 'lista'; render(); });
 $('abaAcomp').addEventListener('click', () => { aba = 'acomp'; puxar(); render(); });
+$('abaRx').addEventListener('click', () => { aba = 'rx'; render(); window.scrollTo(0, 0); });
 $('fMarcas').addEventListener('submit', (ev) => {
   ev.preventDefault(); const v = $('tokenMarcas').value.trim(); if (!v) return;
   ls.set('cisper-token-marcas', v); $('tokenMarcas').value = ''; TOKM = v; puxar();

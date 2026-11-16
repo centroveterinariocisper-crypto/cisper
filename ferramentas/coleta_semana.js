@@ -2,6 +2,7 @@
 // Só LÊ páginas do NuvemVet. Antes de rodar, defina:
 //   window.__EXCL = [chaves já listadas nos últimos 120 dias];
 //   window.__DIAS = ['AAAA-MM-DD', ...]  // os dias de trabalho da semana, em ordem (seg a sáb)
+//   window.__VAC_DIAS = 365;  // até quantos dias para trás buscar vacina atrasada (padrão 14)
 // Resultado fica em window.__SEMANA = { gerado_em, base_servicos, dias: { 'AAAA-MM-DD': [itens] } }
 // e a função devolve um resumo curto. Pegue cada dia com: JSON.stringify(window.__SEMANA.dias['AAAA-MM-DD'])
 (async () => {
@@ -61,7 +62,7 @@
   const itens = []; // cada item tem .dia
 
   // 2) Vacinas: retornos de 14 dias atrás até 3 dias depois do fim da semana; aviso 3 dias antes do vencimento
-  const vdoc = TIPOS.has('vac') ? await doc(`relatorios_vacinas_retorno.php?data_inicio=${br(add(-14))}&data_final=${br(new Date(+ultimo + 3 * D))}&nome_proprietario=&nome_animal=&veterinario=-1&lido_retorno=-1&avisado_pelo_whats=-1&aplicada_retorno=-1`) : new DOMParser().parseFromString('', 'text/html');
+  const vdoc = TIPOS.has('vac') ? await doc(`relatorios_vacinas_retorno.php?data_inicio=${br(add(-(window.__VAC_DIAS || 14)))}&data_final=${br(new Date(+ultimo + 3 * D))}&nome_proprietario=&nome_animal=&veterinario=-1&lido_retorno=-1&avisado_pelo_whats=-1&aplicada_retorno=-1`) : new DOMParser().parseFromString('', 'text/html');
   const vacs = [];
   for (const tr of vdoc.querySelectorAll('table tbody tr')) {
     const t = tdx(tr); if (t.length < 9) continue;

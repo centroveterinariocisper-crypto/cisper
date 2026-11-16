@@ -8,7 +8,7 @@ App da recepção com as mensagens de WhatsApp do dia (pós-atendimento, vacinas
 
 ## Rotina
 
-1. Domingo e quarta à noite, o Paulo pede ao Claude: "monta a lista da semana".
+1. Domingo e quarta à noite, uma tarefa agendada do Claude monta a lista sozinha (passo a passo em `ferramentas/ROTINA-AUTOMATICA.md`). Para atualizar fora desses dias, o Paulo toca em **Executar agora** na tarefa. A tarefa usa a **chave da automação**, que fica só no computador do Paulo (Documentos\Cisper\chave-automacao.txt), nunca aqui.
 2. O Claude lê o NuvemVet (só leitura), gera a lista criptografada e publica direto neste repositório (`dados.enc`). Basta a senha do Paulo: a lista reaproveita a chave da lista publicada, então Débora e Duda continuam com as mesmas senhas. As três senhas só são necessárias para trocar alguma delas.
 3. A lista aparece sozinha no app da Débora, da Duda e do Paulo. O app não pede mais chave do GitHub: confere sozinho a cada 2 minutos, tem o botão **🔄 Atualizar** e avisa em verde quando chega lista nova.
 4. Na mesma hora o Claude roda `ferramentas/receitas.js` no NuvemVet, confere as doses das receitas desde a última lista (mg/kg × literatura) e manda o que estiver fora da faixa em `alertas.json` (`publicar.py … alertas=alertas.json`). Esses avisos aparecem **só no perfil do Paulo** ("💊 Receitas para conferir"), criptografados com uma chave que só a senha dele abre.

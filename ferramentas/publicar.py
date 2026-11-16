@@ -4,6 +4,8 @@ Uso: python3 publicar.py <semana.json> <saida/dados.enc> nome1=senha1 [nome2=sen
  ou: python3 publicar.py <semana.json> <saida/dados.enc> base=<dados.enc publicado> adm=<senha do Paulo>
      (só com a senha do Paulo: reaproveita a chave e as senhas da lista já publicada;
       Débora e Duda continuam entrando com as mesmas senhas)
+     ou: ... base=<dados.enc publicado> auto=<chave da automação>   (tarefa agendada, sem a senha do Paulo)
+     opcional: nova_auto=<arquivo>  cria a chave da automação (precisa de adm=) e grava em <arquivo>
      opcional: alertas=<alertas.json>  avisos de receita SÓ para o administrador
      (vão criptografados com uma chave que existe só na vaga do adm; Débora e Duda não leem)
 semana.json = {"AAAA-MM-DD": [itens], ...}
@@ -29,21 +31,24 @@ def vaga_adm(base, senha):
             vaga = json.loads(AESGCM(k).decrypt(d(v["iv"]), d(v["ct"]), None))
         except Exception:
             continue
-        if vaga["quem"] == "adm":
+        if vaga["quem"] in ("adm", "auto"):
             return n, k, vaga, env
-    raise SystemExit("A senha do adm não abre a lista publicada.")
+    raise SystemExit("Essa senha/chave não abre a lista publicada (precisa ser a do adm ou a chave da automação).")
 
 def chave_da_base(base, senha):
     n, k, vaga, env = vaga_adm(base, senha)
     return base64.b64decode(vaga["k"]), env
 
 def main(entrada, saida, *pares):
-    dias = json.load(open(entrada, encoding="utf-8"))
+    entrada_json = json.load(open(entrada, encoding="utf-8"))
+    dias = entrada_json["dias"] if "dias" in entrada_json and isinstance(entrada_json.get("dias"), dict) else entrada_json
     corpo = {"gerado_em": datetime.datetime.now(datetime.timezone.utc).isoformat(), "dias": dias}
+    if isinstance(entrada_json.get("historico"), dict):
+        corpo["historico"] = entrada_json["historico"]
     opc = dict(p.split("=", 1) for p in pares)
     base = opc.pop("base", None)
     if base:
-        n, k_adm, vaga, env_base = vaga_adm(base, opc["adm"])
+        n, k_adm, vaga, env_base = vaga_adm(base, opc.get("adm") or opc["auto"])
         chave = base64.b64decode(vaga["k"])
         iv = os.urandom(12)
         ct = AESGCM(chave).encrypt(iv, json.dumps(corpo, ensure_ascii=False).encode(), None)
@@ -61,6 +66,19 @@ def main(entrada, saida, *pares):
             iv3 = os.urandom(12)
             saida_env["adm"] = {"iv": b(iv3), "ct": b(AESGCM(base64.b64decode(vaga["ka"])).encrypt(iv3, json.dumps(alertas, ensure_ascii=False).encode(), None))}
             extra = f", {len(alertas)} avisos de receita só para o adm"
+        if opc.get("nova_auto"):
+            if vaga["quem"] != "adm":
+                raise SystemExit("Só a senha do adm pode criar a chave da automação.")
+            if not vaga.get("ka"):
+                raise SystemExit("Crie os avisos (alertas=) junto, para a automação levar a chave dos avisos do adm.")
+            segredo = b(os.urandom(32))
+            salt, iv4 = os.urandom(16), os.urandom(12)
+            ks = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=salt, iterations=env_base["iter"]).derive(segredo.encode())
+            conteudo = json.dumps({"quem": "auto", "k": vaga["k"], "ka": vaga["ka"]}).encode()
+            vagas[:] = [v for v in vagas if not v.get("auto")]
+            vagas.append({"salt": b(salt), "iv": b(iv4), "ct": b(AESGCM(ks).encrypt(iv4, conteudo, None)), "auto": 1})
+            open(opc["nova_auto"], "w").write(segredo)
+            extra += ", chave da automação criada"
         json.dump(saida_env, open(saida, "w"))
         print("ok", sum(len(v) for v in dias.values()), "itens em", len(dias), "dias, senhas da lista publicada mantidas" + extra)
         return

@@ -129,7 +129,7 @@ def publicar(caminho, chave, coletado, alertas_novos):
     todos_al = [a for a in alertas if a["id"] not in ids and recente(a)] + novos_al
     with tempfile.TemporaryDirectory() as t:
         ent, al = os.path.join(t, "s.json"), os.path.join(t, "a.json")
-        json.dump({"dias": dias, "historico": h}, open(ent, "w"), ensure_ascii=False)
+        json.dump({"dias": dias, "historico": h, "manual": corpo.get("manual")}, open(ent, "w"), ensure_ascii=False)
         json.dump(todos_al, open(al, "w"), ensure_ascii=False)
         saida = os.path.join(t, "dados.enc")
         publicar_main(ent, saida, "base=" + caminho, "auto=" + chave, "alertas=" + al)
@@ -138,6 +138,17 @@ def publicar(caminho, chave, coletado, alertas_novos):
     print(json.dumps({"dias": resumo, "avisos_de_receita": len(todos_al), "novos_avisos": len(novos_al)}, ensure_ascii=False))
 
 
+def manual(caminho, chave, arquivo_manual):
+    """Troca o manual (protocolos) que vai criptografado dentro da lista, sem mexer no resto."""
+    corpo, alertas = abrir(caminho, chave)
+    with tempfile.TemporaryDirectory() as t:
+        ent, al, saida = os.path.join(t, "s.json"), os.path.join(t, "a.json"), os.path.join(t, "dados.enc")
+        json.dump({"dias": corpo.get("dias") or {}, "historico": corpo.get("historico") or {}, "manual": json.load(open(arquivo_manual, encoding="utf-8"))}, open(ent, "w"), ensure_ascii=False)
+        json.dump(alertas, open(al, "w"), ensure_ascii=False)
+        publicar_main(ent, saida, "base=" + caminho, "auto=" + chave, "alertas=" + al)
+        open(caminho, "w").write(open(saida).read())
+
+
 if __name__ == "__main__":
     acao, *args = sys.argv[1:]
-    {"preparar": preparar, "publicar": publicar}[acao](*args)
+    {"preparar": preparar, "publicar": publicar, "manual": manual}[acao](*args)

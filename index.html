@@ -124,6 +124,48 @@ label.marcar.on { border-style: solid; border-color: #cfe9da; background: var(--
 .rxc .bts a, .rxc .bts button { border-radius: 99px; padding: 8px 12px; font-weight: 800; font-size: 13.5px; text-decoration: none; border: 1px solid var(--line); background: #fff; color: var(--navy); }
 .rxc .bts a { background: var(--navy); color: #fff; border-color: var(--navy); }
 .rx .ok-rx { font-size: 13px; color: var(--ok); font-weight: 700; }
+.atualizar .bts-att { display: flex; gap: 6px; flex: 0 0 auto; }
+.atualizar button.manual { background: #fff; color: var(--navy); border: 1px solid var(--line); }
+.folha.folhaMan, .folhaMan .corpoMan, .folhaMan summary, .folhaMan .sec { text-align: left; }
+.folhaMan { text-align: left; max-width: 620px; height: calc(100vh - 40px - env(safe-area-inset-top, 0px)); padding: 16px 14px 10px; gap: 10px; }
+.folhaMan .cabMan { display: flex; align-items: center; gap: 8px; }
+.folhaMan .cabMan .ct { flex: 1; font-size: 21px; }
+.folhaMan .cabMan button { padding: 8px 12px; border-radius: 99px; font-size: 14px; background: var(--surface); color: var(--navy); }
+.corpoMan { overflow-y: auto; -webkit-overflow-scrolling: touch; flex: 1; display: flex; flex-direction: column; gap: 10px; padding-bottom: 12px; }
+.protos { display: flex; flex-direction: column; gap: 8px; }
+.folhaMan button.proto { display: flex; align-items: center; gap: 12px; text-align: left; background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 12px; font-weight: 400; font-size: 14px; }
+.proto .num { flex: 0 0 auto; width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; font-weight: 800; color: #fff; background: var(--navy); }
+.proto b { display: block; color: var(--navy); font-size: 15.5px; }
+.proto span.s { color: var(--muted); font-size: 12.5px; }
+.corpoMan details { border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+.corpoMan summary { cursor: pointer; padding: 12px; font-weight: 800; color: var(--navy); font-size: 15px; list-style: none; display: flex; gap: 8px; }
+.corpoMan summary::-webkit-details-marker { display: none; }
+.corpoMan summary::after { content: '▾'; margin-left: auto; color: var(--muted); }
+.corpoMan details[open] summary::after { content: '▴'; }
+.corpoMan .sec { padding: 0 12px 12px; display: flex; flex-direction: column; gap: 8px; font-size: 14px; line-height: 1.45; }
+.corpoMan .sec p { margin: 0; }
+.corpoMan .sec ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
+.manAl { border-radius: 12px; padding: 10px 12px; font-size: 13.5px; }
+.manAl.atencao { background: #fdecea; color: #8a2a1d; }
+.manAl.info { background: #e8f1fb; color: #1d4f86; }
+.manAl.plantao { background: #fff6d6; color: #7a5b00; }
+.manAl.regra { background: var(--navy); color: #fff; }
+.manRow { border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; font-size: 13.5px; }
+.manRow .t { font-weight: 800; color: var(--navy); }
+.manRow .k { color: var(--muted); }
+.manVal { display: flex; justify-content: space-between; gap: 8px; border-radius: 10px; padding: 7px 10px; font-size: 13px; background: #f1f2f4; }
+.manVal.dia { background: #e6f5ea; } .manVal.apl { background: #fff6d6; }
+.manVal .r { text-align: right; white-space: nowrap; font-weight: 700; }
+.manDuas { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.manDuas > div { border-radius: 12px; padding: 8px 10px; font-size: 13px; background: #f1f2f4; }
+.manDuas > div + div { background: #e6f5ea; }
+.manDuas b { display: block; margin-bottom: 4px; font-size: 12px; color: var(--navy); }
+.manChk h4 { margin: 6px 0 2px; font-size: 13px; color: var(--navy); text-transform: uppercase; letter-spacing: .03em; }
+.manChk label { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; font-size: 14px; }
+.manChk input { width: 20px; height: 20px; flex: 0 0 auto; margin-top: 1px; }
+.manChk label.ok { color: var(--muted); text-decoration: line-through; }
+.folhaMan button.limpa { background: var(--surface); color: var(--navy); font-size: 13.5px; padding: 10px; }
+.manNota { font-size: 12px; color: var(--muted); }
 .atualizar.novo { border-color: var(--ok); background: color-mix(in srgb, var(--ok) 10%, #fff); }
 button.grande { width: 100%; font-weight: 800; font-size: 17px; padding: 14px; border: 0; border-radius: 12px; background: var(--navy); color: #fff; }
 button.link { background: none; border: 0; color: var(--muted); text-decoration: underline; font-size: 14px; padding: 6px 0; align-self: center; }
@@ -402,6 +444,13 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; touch-action: man
   </div>
 </div>
 
+<div id="fManual" class="fundo" hidden role="dialog" aria-modal="true" aria-labelledby="tManual">
+  <div class="folha folhaMan">
+    <div class="cabMan"><button type="button" id="btManVoltar" hidden>‹ Voltar</button><p class="ct" id="tManual">Manual</p><button type="button" class="x" id="btFecharManual" aria-label="Fechar">✕</button></div>
+    <div class="corpoMan" id="corpoMan"></div>
+  </div>
+</div>
+
 <div id="fAvisar" class="fundo" hidden role="dialog" aria-modal="true" aria-labelledby="tAvisar">
   <div class="folha folhaEst">
     <div class="cabEst"><p class="ct" id="tAvisar">O que acabou?</p><button type="button" class="x" id="btFecharAvisar" aria-label="Fechar">✕</button></div>
@@ -434,7 +483,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; touch-action: man
 </header>
 
 <main class="wrap">
-  <div class="atualizar" id="barraAtt" hidden><div class="info" id="infoAtt"></div><button type="button" id="btAtualizar">🔄 Atualizar</button></div>
+  <div class="atualizar" id="barraAtt" hidden><div class="info" id="infoAtt"></div><div class="bts-att"><button type="button" class="manual" id="btManual" hidden>📖 Manual</button><button type="button" id="btAtualizar">🔄 Atualizar</button></div></div>
   <nav class="modos" id="modos" hidden aria-label="Escolher a tela">
     <button type="button" data-m="msg" class="on">💬 Mensagens</button>
     <button type="button" data-m="estoque">📦 Estoque <span class="n" id="nFalta" hidden></span></button>
@@ -733,6 +782,70 @@ function desenharAlertas() {
   }
   if (feitos_) { const b = el('button', 'link', `Mostrar de novo os ${feitos_} já resolvidos`); b.type = 'button'; b.onclick = () => { for (const a of ALERTAS) delete rxOk[a.id]; ls.set('cisper-rx-ok', JSON.stringify(rxOk)); desenharAlertas(); }; box.appendChild(b); }
 }
+// ===== manual (protocolos) — vem criptografado dentro da lista; só quem entra com senha vê
+let manChk = {}; try { manChk = JSON.parse(ls.get('cisper-manual-check', '{}')) || {}; } catch (e) { manChk = {}; }
+function manBloco(b, M) {
+  if (b.tipo === 'p') { const p = el('p', '', b.t); if (b.b) p.style.fontWeight = '800'; return p; }
+  if (b.tipo === 'lista') { const u = el('ul'); for (const x of b.itens) u.appendChild(el('li', '', x)); return u; }
+  if (b.tipo === 'alerta') return el('div', 'manAl ' + b.n, ({ atencao: '⚠ ATENÇÃO: ', info: 'ℹ ', plantao: '🌙 PLANTÃO: ' }[b.n] || '') + b.t);
+  if (b.tipo === 'regra') { const d = el('div', 'manAl regra'); d.appendChild(el('b', '', '⭐ REGRA DE OURO — antes de qualquer procedimento ou medicação')); d.appendChild(el('div', '', M.regra)); return d; }
+  if (b.tipo === 'nota') return el('div', 'manNota', b.t);
+  if (b.tipo === 'duas') { const g = el('div', 'manDuas'); for (const [t, l] of [[b.a, b.la], [b.b, b.lb]]) { const c = el('div'); c.appendChild(el('b', '', t)); const u = el('ul'); u.style.paddingLeft = '16px'; u.style.margin = '0'; for (const x of l) u.appendChild(el('li', '', x)); c.appendChild(u); g.appendChild(c); } return g; }
+  if (b.tipo === 'tabela' && b.valores) {
+    const w = el('div'); w.style.display = 'flex'; w.style.flexDirection = 'column'; w.style.gap = '4px';
+    for (const [it, q, un, tot, tp] of b.linhas) { const r = el('div', 'manVal' + (/dia/i.test(tp) ? ' dia' : /aplic/i.test(tp) ? ' apl' : '')); r.appendChild(el('span', '', it)); r.appendChild(el('span', 'r', `${q} × ${un} = ${tot}`)); w.appendChild(r); }
+    return w;
+  }
+  if (b.tipo === 'tabela') {
+    const w = el('div'); w.style.display = 'flex'; w.style.flexDirection = 'column'; w.style.gap = '6px';
+    for (const l of b.linhas) { const r = el('div', 'manRow'); r.appendChild(el('div', 't', l[0])); for (let j = 1; j < l.length; j++) { const x = el('div'); x.appendChild(el('span', 'k', b.cab[j] + ': ')); x.appendChild(document.createTextNode(l[j])); r.appendChild(x); } w.appendChild(r); }
+    return w;
+  }
+  if (b.tipo === 'check') return el('div');
+  return el('div');
+}
+function manCheck(b, pid, si) {
+  const w = el('div', 'manChk');
+  b.grupos.forEach((g, gi) => {
+    w.appendChild(el('h4', '', g.titulo));
+    g.itens.forEach((t, ii) => {
+      const id = `${pid}.${si}.${gi}.${ii}`; const lb = el('label', manChk[id] ? 'ok' : ''); const c = document.createElement('input'); c.type = 'checkbox'; c.checked = !!manChk[id];
+      c.onchange = () => { if (c.checked) manChk[id] = 1; else delete manChk[id]; ls.set('cisper-manual-check', JSON.stringify(manChk)); lb.className = c.checked ? 'ok' : ''; };
+      lb.appendChild(c); lb.appendChild(el('span', '', t)); w.appendChild(lb);
+    });
+  });
+  const bt = el('button', 'limpa', 'Limpar checklist (novo atendimento)'); bt.type = 'button';
+  bt.onclick = () => { for (const k of Object.keys(manChk)) if (k.startsWith(`${pid}.${si}.`)) delete manChk[k]; ls.set('cisper-manual-check', JSON.stringify(manChk)); w.replaceWith(manCheck(b, pid, si)); };
+  w.appendChild(bt); return w;
+}
+function manLista() {
+  const M = META && META.manual; if (!M) return;
+  $('tManual').textContent = 'Manual'; $('btManVoltar').hidden = true;
+  const C = $('corpoMan'); C.replaceChildren(); C.scrollTop = 0;
+  C.appendChild(el('div', 'manNota', M.titulo + ' · uso interno'));
+  const L = el('div', 'protos');
+  for (const p of M.protocolos) { const b = el('button', 'proto'); b.type = 'button'; b.appendChild(el('span', 'num', String(p.n))); const t = el('div'); t.appendChild(el('b', '', p.titulo)); t.appendChild(el('span', 's', p.sub)); b.appendChild(t); b.onclick = () => manProto(p); L.appendChild(b); }
+  C.appendChild(L);
+}
+function manProto(p) {
+  const M = META.manual; $('tManual').textContent = p.titulo; $('btManVoltar').hidden = false;
+  const C = $('corpoMan'); C.replaceChildren(); C.scrollTop = 0;
+  C.appendChild(el('div', 'manNota', p.sub));
+  p.secoes.forEach((s, si) => {
+    const d = el('details'); if (si === 0) d.open = true;
+    d.appendChild(el('summary', '', `${si + 1}. ${s.titulo}`));
+    const sec = el('div', 'sec');
+    for (const b of s.blocos) sec.appendChild(b.tipo === 'check' ? manCheck(b, p.n, si) : manBloco(b, M));
+    d.appendChild(sec); C.appendChild(d);
+  });
+}
+function abrirManual() { if (!META || !META.manual) return; manLista(); $('fManual').hidden = false; document.body.style.overflow = 'hidden'; }
+function fecharManual() { $('fManual').hidden = true; document.body.style.overflow = ''; }
+function manualPrimeiraVez() {
+  const M = META && META.manual; if (!M) return;
+  const chave = 'cisper-manual-visto-' + (eu || '');
+  if (ls.get(chave, '') !== M.versao) { ls.set(chave, M.versao); setTimeout(abrirManual, 600); }
+}
 function entrar(d) {
   eu = d.quem === 'adm' ? 'adm' : d.quem; ls.set('cisper-eu', eu);
   if (!ehAdm()) quem = eu; else if (!['todos', 'debora', 'duda'].includes(quem)) quem = 'todos';
@@ -742,6 +855,7 @@ function entrar(d) {
   pronto();
   prepararSinc(d);
   abrirAlertas(d).then(desenharAlertas);
+  manualPrimeiraVez();
 }
 function aplicar(d) {
   DADOS = d.dias || {}; META = d;
@@ -771,7 +885,7 @@ function render() {
   const g = META && META.gerado_em ? new Date(META.gerado_em) : null;
   const dg = g && !isNaN(g) ? g.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + ' às ' + g.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '';
   $('sub').textContent = dg ? 'Lista de ' + dg : 'Centro Veterinário Cisper';
-  $('barraAtt').hidden = false;
+  $('barraAtt').hidden = false; $('btManual').hidden = !(META && META.manual);
   $('infoAtt').innerHTML = (dg ? 'Lista feita em <b>' + dg + '</b>' : 'Lista atual') + '<br>' + (CONFERIDA ? 'Conferido às ' + CONFERIDA.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) + ' · confere sozinho a cada 2 min' : 'Conferindo se tem lista nova…');
   // modos: Mensagens | Estoque
   $('modos').hidden = false; badgeEst();
@@ -1258,6 +1372,10 @@ function avisarNova() {
   alertaTopo('✅ Chegou lista nova' + dg + '. Você já está vendo a lista atualizada.', true);
   const b = $('barraAtt'); b.classList.add('novo'); setTimeout(() => b.classList.remove('novo'), 10000);
 }
+$('btManual').addEventListener('click', abrirManual);
+$('btFecharManual').addEventListener('click', fecharManual);
+$('btManVoltar').addEventListener('click', manLista);
+$('fManual').addEventListener('click', (ev) => { if (ev.target.id === 'fManual') fecharManual(); });
 $('btAtualizar').addEventListener('click', async () => {
   const bt = $('btAtualizar'); bt.disabled = true; bt.textContent = 'Atualizando…';
   try {

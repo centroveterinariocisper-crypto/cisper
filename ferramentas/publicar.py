@@ -45,6 +45,8 @@ def main(entrada, saida, *pares):
     corpo = {"gerado_em": datetime.datetime.now(datetime.timezone.utc).isoformat(), "dias": dias}
     if isinstance(entrada_json.get("historico"), dict):
         corpo["historico"] = entrada_json["historico"]
+    if isinstance(entrada_json.get("manual"), dict):
+        corpo["manual"] = entrada_json["manual"]
     opc = dict(p.split("=", 1) for p in pares)
     base = opc.pop("base", None)
     if base:

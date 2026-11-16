@@ -725,13 +725,13 @@ function render() {
   // administrador
   $('adm').hidden = !ehAdm();
   if (ehAdm()) {
-    const tem = !!ls.get('cisper-token', '');
-    $('admToken').hidden = tem; $('btPublicar').hidden = !tem; $('btTrocarToken').hidden = !tem;
+    // A lista agora é publicada pelo Claude direto no GitHub: o app não pede mais chave nem mostra o botão de publicar
+    $('admToken').hidden = true; $('btPublicar').hidden = true; $('btTrocarToken').hidden = true;
     const qx = $('quem'); qx.replaceChildren();
     for (const [id, nome] of QUEM) { const b = el('button', id === quem ? 'on' : '', nome); b.type = 'button'; b.onclick = () => { quem = id; ls.set('cisper-quem', id); render(); }; qx.appendChild(b); }
     $('abaLista').classList.toggle('on', aba === 'lista'); $('abaAcomp').classList.toggle('on', aba === 'acomp');
     $('quem').parentElement.hidden = aba !== 'lista';
-    $('admMarcas').hidden = !!ls.get('cisper-token-marcas', '');
+    $('admMarcas').hidden = true;
     const sx = $('sinc');
     if (sincErro) { sx.className = 'sinc'; sx.textContent = '⚠ ' + sincErro; }
     else if (TOKM && ultimaSinc) { sx.className = 'sinc ok'; sx.textContent = '● Marcações das meninas atualizadas às ' + hora(ultimaSinc); }

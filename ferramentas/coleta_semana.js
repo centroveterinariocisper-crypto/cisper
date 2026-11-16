@@ -144,6 +144,26 @@
     }
   }
 
+  // 3c) Pós-atendimento: remédios da receita feita no dia do atendimento, para a mensagem perguntar se está dando certinho
+  const posItens = itens.filter(i => i.t === 'pos');
+  if (posItens.length) {
+    const ini = new Date(Math.min(...posItens.map(i => +pd(i.d))));
+    const dd = (d) => String(d.getDate()).padStart(2, '0') + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + d.getFullYear();
+    const rdoc = await doc(`relatorio_receituarios.php?data_inicio=${dd(ini)}&data_final=${dd(hoje)}`);
+    for (const tr of rdoc.querySelectorAll('table tbody tr')) {
+      const t = tdx(tr).map(x => norm(x.textContent)); if (t.length < 6 || /cancel/i.test(t[5])) continue;
+      const cid = (tr.innerHTML.match(/id_cliente=(\d+)/) || [])[1];
+      const href = tr.querySelector('a[href*="imprimir_receita"]')?.getAttribute('href');
+      const alvo = posItens.find(i => i.cid === cid && i.d === t[2] && (i.ans || [i.a]).some(n => n.toLowerCase() === t[1].toLowerCase()));
+      if (!alvo || !href) continue;
+      const r = await doc(href); const txt = r.body.textContent.replace(/[\t ]+/g, ' ');
+      for (const m of txt.matchAll(/^\s*\d+\s*\.\s*([^_\n]+?)\s*_{3,}/gm)) {
+        const nome = m[1].replace(/\s+\d+([.,]\d+)?\s*(MG|MCG|G|ML|UI|%)(\/ML)?(?![A-Z]).*$/i, '').trim().toLowerCase().replace(/(^|\s)\p{L}/gu, (x) => x.toUpperCase());
+        if (nome && !/prob[ií][óo]?tico|alimenta/i.test(nome)) { alvo.med = alvo.med || []; if (!alvo.med.includes(nome)) alvo.med.push(nome); }
+      }
+    }
+  }
+
   // 4) Clientes parados: 20 por dia, maior gasto primeiro
   const ocupados = new Set(itens.map(i => i.cid));
   const parados = !TIPOS.has('par') ? [] : [...cli.values()]

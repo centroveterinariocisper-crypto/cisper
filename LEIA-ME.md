@@ -10,7 +10,8 @@ App da recepção com as mensagens de WhatsApp do dia (pós-atendimento, vacinas
 
 1. Domingo e quarta à noite, o Paulo pede ao Claude: "monta a lista da semana".
 2. O Claude lê o NuvemVet (só leitura), gera a lista criptografada e publica direto neste repositório (`dados.enc`). Basta a senha do Paulo: a lista reaproveita a chave da lista publicada, então Débora e Duda continuam com as mesmas senhas. As três senhas só são necessárias para trocar alguma delas.
-3. A lista aparece sozinha no app da Débora, da Duda e do Paulo. O app não pede mais chave do GitHub.
+3. A lista aparece sozinha no app da Débora, da Duda e do Paulo. O app não pede mais chave do GitHub: confere sozinho a cada 2 minutos, tem o botão **🔄 Atualizar** e avisa em verde quando chega lista nova.
+4. Na mesma hora o Claude roda `ferramentas/receitas.js` no NuvemVet, confere as doses das receitas desde a última lista (mg/kg × literatura) e manda o que estiver fora da faixa em `alertas.json` (`publicar.py … alertas=alertas.json`). Esses avisos aparecem **só no perfil do Paulo** ("💊 Receitas para conferir"), criptografados com uma chave que só a senha dele abre.
 
 ## O que tem neste repositório
 
@@ -20,7 +21,8 @@ App da recepção com as mensagens de WhatsApp do dia (pós-atendimento, vacinas
 | `sw.js`, `manifest.webmanifest`, `*.png` | Instalar no celular em tela cheia, com o ícone da clínica |
 | `dados.enc` | A lista publicada, **criptografada** (sem a senha não dá para ler) |
 | `ferramentas/coleta_semana.js` | Script que o Claude roda no NuvemVet para montar a lista da semana |
-| `ferramentas/publicar.py` | Gera o arquivo `.cisper` criptografado com as senhas |
+| `ferramentas/receitas.js` | Script que o Claude roda no NuvemVet para ler as receitas e conferir as doses |
+| `ferramentas/publicar.py` | Gera a lista criptografada (e os avisos de receita só do adm) |
 
 ## Regras da lista
 
@@ -28,6 +30,7 @@ App da recepção com as mensagens de WhatsApp do dia (pós-atendimento, vacinas
 - **Vacina:** retorno vencido há até 14 dias ou que vence nos próximos dias, sem aviso marcado no NuvemVet. A mensagem sai 3 dias antes.
 - **Depois do orçamento:** um contato, 2 dias depois, perguntando como o animal está, sem falar do orçamento. Fica de fora quem já pagou metade, fez exame ou ticket de R$ 400 ou mais.
 - **Cliente sumido:** sem visita entre 6 meses e 2 anos, quem mais gastou primeiro, 20 por dia.
+- **Pós-atendimento com receita:** a mensagem cita os remédios da receita do dia e pergunta se o tutor está conseguindo dar certinho.
 - **Para todos:** sem animal com óbito ou eutanásia; no máximo uma mensagem por semana por cliente; cliente parado só a cada 4 meses; quem tem "NÃO ENVIAR WHATSAPP" nas anotações do NuvemVet nunca entra.
 - **Divisão:** Débora fica com pós-atendimento, vacinas, depois do orçamento e os 10 primeiros clientes sumidos. Duda fica com os outros clientes sumidos.
 

@@ -111,6 +111,19 @@ label.marcar.on { border-style: solid; border-color: #cfe9da; background: var(--
 .atualizar .info b { color: var(--navy); }
 .atualizar button { flex: 0 0 auto; border: 0; border-radius: 99px; padding: 9px 14px; font-weight: 800; font-size: 14px; color: #fff; background: var(--navy); }
 .atualizar button:disabled { opacity: .6; }
+.rx { margin: 4px 0 8px; display: flex; flex-direction: column; gap: 10px; }
+.rx h3 { margin: 4px 0 0; font-size: 16px; color: var(--navy); }
+.rx .vazio-rx { font-size: 13px; color: var(--muted); }
+.rxc { border: 1px solid #f0c9b8; border-left: 5px solid var(--bad); border-radius: 14px; background: #fff; padding: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+.rxc.media { border-left-color: #e6a23c; }
+.rxc .an { font-weight: 800; color: var(--navy); font-size: 15px; }
+.rxc .meta { color: var(--muted); font-size: 12.5px; }
+.rxc .med { font-weight: 800; }
+.rxc .lin b { color: var(--navy); }
+.rxc .bts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+.rxc .bts a, .rxc .bts button { border-radius: 99px; padding: 8px 12px; font-weight: 800; font-size: 13.5px; text-decoration: none; border: 1px solid var(--line); background: #fff; color: var(--navy); }
+.rxc .bts a { background: var(--navy); color: #fff; border-color: var(--navy); }
+.rx .ok-rx { font-size: 13px; color: var(--ok); font-weight: 700; }
 .atualizar.novo { border-color: var(--ok); background: color-mix(in srgb, var(--ok) 10%, #fff); }
 button.grande { width: 100%; font-weight: 800; font-size: 17px; padding: 14px; border: 0; border-radius: 12px; background: var(--navy); color: #fff; }
 button.link { background: none; border: 0; color: var(--muted); text-decoration: underline; font-size: 14px; padding: 6px 0; align-self: center; }
@@ -458,6 +471,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; touch-action: man
     <b class="t">Área do administrador</b>
     <div class="abas" role="tablist"><button type="button" id="abaLista" class="on">📋 Lista</button><button type="button" id="abaAcomp">📊 Acompanhamento</button></div>
     <div class="sinc" id="sinc"></div>
+    <div class="rx" id="rxAlertas" hidden></div>
     <button type="button" class="grande" id="btPublicar" hidden>📤 Publicar lista nova</button>
     <input type="file" id="arquivo" accept=".cisper,.json,.txt,application/json,text/plain,*/*" hidden>
     <form id="fToken" autocomplete="off"><div id="admToken" hidden>
@@ -529,6 +543,7 @@ const rs = (v) => 'R$ ' + Math.round(v || 0).toLocaleString('pt-BR');
 const hojeISO = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
 const hora = (ms) => new Date(ms).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
+const juntaE = (l) => l.length <= 1 ? (l[0] || '') : l.slice(0, -1).join(', ') + ' e ' + l[l.length - 1];
 function msg(i) {
   const n = cap(i.c), a = i.a ? capNome(i.a) : 'seu pet';
   const dm = (x) => String(x || '').slice(0, 5);
@@ -542,7 +557,8 @@ function msg(i) {
   }
   if (i.t === 'pos') {
     const ap = (i.n || 1) > 1; const quem = ap ? `estão ${a}` : `${G ? G.o + ' ' : ''}${a} está`;
-    return `Oi, ${n}! Aqui é do Centro Veterinário Cisper 🐾 Passando para saber como ${quem} depois ${i.x === 'cirurgia' ? 'da cirurgia' : 'do atendimento'}. ${i.x === 'cirurgia' ? 'Está se recuperando bem?' : 'Melhorou?'} Se tiver qualquer dúvida sobre o tratamento, é só responder aqui. ❤️`;
+    const rem = (i.med || []).length ? ` E os remédios (${juntaE(i.med)}), está conseguindo dar certinho, nos horários e pelos dias da receita?` : '';
+    return `Oi, ${n}! Aqui é do Centro Veterinário Cisper 🐾 Passando para saber como ${quem} depois ${i.x === 'cirurgia' ? 'da cirurgia' : 'do atendimento'}. ${i.x === 'cirurgia' ? 'Está se recuperando bem?' : 'Melhorou?'}${rem} Se tiver qualquer dúvida sobre o tratamento, é só responder aqui. ❤️`;
   }
   if (i.t === 'orc2' || i.t === 'orc7') return `Oi, ${n}! Aqui é do Centro Veterinário Cisper 🐾 Passando para saber como ${G ? G.o + ' ' : ''}${a} está. Se precisar de qualquer coisa, é só responder aqui. ❤️`;
   return `Oi, ${n}! Aqui é do Centro Veterinário Cisper 🐾 Faz tempo que não vemos ${G ? G.o + ' ' : ''}${a} por aqui. Como ${G ? G.ele + ' ' : ''}está? Vacina e check-up em dia ajudam a pegar problemas cedo. ${vir} ❤️`;
@@ -550,7 +566,7 @@ function msg(i) {
 function det(i) {
   if (i.t === 'vac') return `${i.a} · vacina ${String(i.x || '').replace(/RAIVA/gi, 'antirrábica')} · vence ${String(i.d).slice(0, 5)}`;
   if (i.t === 'par') return `${i.a} · última visita em ${i.d}`;
-  if (i.t === 'pos') return `${i.a} · ${i.x} em ${String(i.d).slice(0, 5)}`;
+  if (i.t === 'pos') return `${i.a} · ${i.x} em ${String(i.d).slice(0, 5)}` + ((i.med || []).length ? ` · 💊 ${juntaE(i.med)}` : '');
   return `${i.a} · orçamento de ${rs(i.v)} em ${String(i.d).slice(0, 5)}`;
 }
 const dona = (i, lista) => { if (i.t !== 'par') return 'debora'; const p = lista.filter((x) => x.t === 'par').indexOf(i); return p < 10 ? 'debora' : 'duda'; };
@@ -565,7 +581,7 @@ async function abrir(env, senha) {
     try { vaga = JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(v.iv) }, kSenha, b64(v.ct)))); } catch (e) { continue; }
     const kDados = await crypto.subtle.importKey('raw', b64(vaga.k), 'AES-GCM', false, ['decrypt']);
     const txt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(env.iv) }, kDados, b64(env.ct));
-    const d = JSON.parse(new TextDecoder().decode(txt)); d.quem = vaga.quem; d._k = vaga.k; return d;
+    const d = JSON.parse(new TextDecoder().decode(txt)); d.quem = vaga.quem; d._k = vaga.k; d._ka = vaga.ka || ''; return d;
   }
   throw new Error('senha errada');
 }
@@ -687,6 +703,33 @@ async function carregar(manual) {
     return mudou && tinha ? 'novo' : 'igual';
   } finally { carregando = false; }
 }
+let ALERTAS = []; // avisos de receita: só o adm consegue abrir
+async function abrirAlertas(d) {
+  ALERTAS = [];
+  if (d.quem !== 'adm' || !d._ka || !ENV || !ENV.adm) return;
+  try { ALERTAS = await decifrar(d._ka, ENV.adm); } catch (e) { ALERTAS = []; }
+}
+let rxOk = {}; try { rxOk = JSON.parse(ls.get('cisper-rx-ok', '{}')) || {}; } catch (e) { rxOk = {}; }
+function desenharAlertas() {
+  const box = $('rxAlertas');
+  if (!ehAdm() || aba !== 'lista' || !ALERTAS.length) { box.hidden = true; return; }
+  box.hidden = false; box.replaceChildren();
+  const abertos = ALERTAS.filter((a) => !rxOk[a.id]), feitos_ = ALERTAS.length - abertos.length;
+  box.appendChild(el('h3', '', abertos.length ? `💊 Receitas para conferir (${abertos.length})` : '💊 Receitas conferidas'));
+  if (!abertos.length) box.appendChild(el('div', 'ok-rx', '✅ Nenhuma dose para revisar nas receitas olhadas.'));
+  for (const a of abertos) {
+    const c = el('div', 'rxc' + (a.nivel === 'atencao' ? ' media' : ''));
+    c.appendChild(el('div', 'an', `${a.animal} (${a.especie}, ${a.peso}) · ${a.cliente}`));
+    c.appendChild(el('div', 'meta', `Receita de ${a.data} · ${a.vet}`));
+    c.appendChild(el('div', 'med', (a.nivel === 'atencao' ? '🟠 ' : '🔴 ') + a.med));
+    for (const [r, t] of [['Na receita', a.prescrito], ['Referência', a.referencia], ['Sugestão', a.sugestao]]) { if (!t) continue; const l = el('div', 'lin'); l.appendChild(el('b', '', r + ': ')); l.appendChild(document.createTextNode(t)); c.appendChild(l); }
+    const bts = el('div', 'bts');
+    const lk = el('a', '', 'Abrir no NuvemVet'); lk.href = a.link; lk.target = '_blank'; lk.rel = 'noopener'; bts.appendChild(lk);
+    for (const [txt, v] of [['✓ Já corrigi', 'corrigi'], ['Está certo assim', 'certo']]) { const b = el('button', '', txt); b.type = 'button'; b.onclick = () => { rxOk[a.id] = v; ls.set('cisper-rx-ok', JSON.stringify(rxOk)); desenharAlertas(); }; bts.appendChild(b); }
+    c.appendChild(bts); box.appendChild(c);
+  }
+  if (feitos_) { const b = el('button', 'link', `Mostrar de novo os ${feitos_} já resolvidos`); b.type = 'button'; b.onclick = () => { for (const a of ALERTAS) delete rxOk[a.id]; ls.set('cisper-rx-ok', JSON.stringify(rxOk)); desenharAlertas(); }; box.appendChild(b); }
+}
 function entrar(d) {
   eu = d.quem === 'adm' ? 'adm' : d.quem; ls.set('cisper-eu', eu);
   if (!ehAdm()) quem = eu; else if (!['todos', 'debora', 'duda'].includes(quem)) quem = 'todos';
@@ -695,6 +738,7 @@ function entrar(d) {
   aplicar(d);
   pronto();
   prepararSinc(d);
+  abrirAlertas(d).then(desenharAlertas);
 }
 function aplicar(d) {
   DADOS = d.dias || {}; META = d;
@@ -746,6 +790,7 @@ function render() {
     $('abaLista').classList.toggle('on', aba === 'lista'); $('abaAcomp').classList.toggle('on', aba === 'acomp');
     $('quem').parentElement.hidden = aba !== 'lista';
     $('admMarcas').hidden = true;
+    desenharAlertas();
     const sx = $('sinc');
     if (sincErro) { sx.className = 'sinc'; sx.textContent = '⚠ ' + sincErro; }
     else if (TOKM && ultimaSinc) { sx.className = 'sinc ok'; sx.textContent = '● Marcações das meninas atualizadas às ' + hora(ultimaSinc); }
@@ -1129,7 +1174,7 @@ $('fTrava').addEventListener('submit', async (ev) => {
   catch (e) { $('erroSenha').textContent = 'Senha errada. Toque no olhinho para conferir e tente de novo.'; }
 });
 $('btOlho').addEventListener('click', () => { const i = $('senha'); const ver = i.type === 'password'; i.type = ver ? 'text' : 'password'; $('btOlho').setAttribute('aria-pressed', ver ? 'true' : 'false'); $('btOlho').setAttribute('aria-label', ver ? 'Esconder senha' : 'Mostrar senha'); i.focus(); });
-const sair = () => { TOKM = ''; KDADOS = ''; REM = {}; estRem = {}; estMeu = {}; estLogMeu = []; estHistRem = []; estVista = 'compras'; $('modos').hidden = true; $('estoque').hidden = true; document.body.classList.remove('est'); aba = 'lista'; $('acomp').hidden = true; $('lista').hidden = false; ls.del('cisper-senha'); ls.del('cisper-eu'); eu = ''; $('perfil').hidden = true; $('painel').hidden = true; $('adm').hidden = true; $('btSair').hidden = true; pedirSenha(); };
+const sair = () => { ALERTAS = []; TOKM = ''; KDADOS = ''; REM = {}; estRem = {}; estMeu = {}; estLogMeu = []; estHistRem = []; estVista = 'compras'; $('modos').hidden = true; $('estoque').hidden = true; document.body.classList.remove('est'); aba = 'lista'; $('acomp').hidden = true; $('lista').hidden = false; ls.del('cisper-senha'); ls.del('cisper-eu'); eu = ''; $('perfil').hidden = true; $('painel').hidden = true; $('adm').hidden = true; $('btSair').hidden = true; pedirSenha(); };
 function perguntarSair() {
   const P = PESSOAS[ehAdm() ? 'todos' : eu];
   $('confTit').textContent = P ? `Deseja realmente sair, ${P.nome}?` : 'Deseja realmente sair?';

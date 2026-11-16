@@ -106,6 +106,12 @@ label.marcar.on { border-style: solid; border-color: #cfe9da; background: var(--
 .vazio p { margin: 0 0 10px; }
 .aviso { color: var(--bad); font-size: 14px; margin: 0; }
 .okmsg { color: var(--ok); font-weight: 800; font-size: 14px; margin: 0; }
+.atualizar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 10px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+.atualizar .info { font-size: 13px; color: var(--muted); line-height: 1.3; }
+.atualizar .info b { color: var(--navy); }
+.atualizar button { flex: 0 0 auto; border: 0; border-radius: 99px; padding: 9px 14px; font-weight: 800; font-size: 14px; color: #fff; background: var(--navy); }
+.atualizar button:disabled { opacity: .6; }
+.atualizar.novo { border-color: var(--ok); background: color-mix(in srgb, var(--ok) 10%, #fff); }
 button.grande { width: 100%; font-weight: 800; font-size: 17px; padding: 14px; border: 0; border-radius: 12px; background: var(--navy); color: #fff; }
 button.link { background: none; border: 0; color: var(--muted); text-decoration: underline; font-size: 14px; padding: 6px 0; align-self: center; }
 
@@ -415,6 +421,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; touch-action: man
 </header>
 
 <main class="wrap">
+  <div class="atualizar" id="barraAtt" hidden><div class="info" id="infoAtt"></div><button type="button" id="btAtualizar">🔄 Atualizar</button></div>
   <nav class="modos" id="modos" hidden aria-label="Escolher a tela">
     <button type="button" data-m="msg" class="on">💬 Mensagens</button>
     <button type="button" data-m="estoque">📦 Estoque <span class="n" id="nFalta" hidden></span></button>
@@ -655,6 +662,7 @@ async function usarEnv(env) {
   catch (e) { ls.del('cisper-senha'); pedirSenha('A senha mudou. Digite a sua senha.'); }
 }
 let carregando = false;
+let CONFERIDA = null; // última vez que o app conferiu no GitHub se tinha lista nova
 async function carregar(manual) {
   if (carregando) return; carregando = true;
   try {
@@ -666,14 +674,17 @@ async function carregar(manual) {
     let novo;
     try { novo = await baixar(); }
     catch (e) {
-      if (DADOS || !$('trava').hidden) { if (manual) $('sub').textContent = e.message === 'nao publicada' ? 'Nenhuma lista nova publicada' : 'Sem internet · mostrando a última lista'; return; }
+      if (DADOS || !$('trava').hidden) { if (manual) $('sub').textContent = e.message === 'nao publicada' ? 'Nenhuma lista nova publicada' : 'Sem internet · mostrando a última lista'; return 'erro'; }
       if (salvo && salvo.vagas) { await usarEnv(salvo); return; }
       $('lista').replaceChildren(el('div', 'vazio', e.message === 'nao publicada' ? 'A lista ainda não foi publicada. O Paulo avisa quando estiver pronta.' : 'Não consegui buscar a lista. Confira a internet e abra o app de novo.'));
       if (!temSenha) { ENV = null; pedirSenha(); if (e.message === 'nao publicada') $('btAdmArquivo').hidden = false; } else pronto();
       return;
     }
     const mudou = !ENV || novo.ct !== ENV.ct || JSON.stringify(novo.mk || null) !== JSON.stringify(ENV.mk || null);
+    const tinha = !!DADOS;
     if (mudou) await usarEnv(novo); else if (!ls.get('cisper-senha', '')) pedirSenha();
+    CONFERIDA = new Date(); render();
+    return mudou && tinha ? 'novo' : 'igual';
   } finally { carregando = false; }
 }
 function entrar(d) {
@@ -711,7 +722,10 @@ function render() {
   $('perfilIni').textContent = P.nome[0]; $('perfilNome').textContent = P.nome + ' · ' + P.turno;
   $('btSair').hidden = false;
   const g = META && META.gerado_em ? new Date(META.gerado_em) : null;
-  $('sub').textContent = g && !isNaN(g) ? 'Atualizada em ' + g.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) : 'Centro Veterinário Cisper';
+  const dg = g && !isNaN(g) ? g.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + ' às ' + g.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '';
+  $('sub').textContent = dg ? 'Lista de ' + dg : 'Centro Veterinário Cisper';
+  $('barraAtt').hidden = false;
+  $('infoAtt').innerHTML = (dg ? 'Lista feita em <b>' + dg + '</b>' : 'Lista atual') + '<br>' + (CONFERIDA ? 'Conferido às ' + CONFERIDA.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) + ' · confere sozinho a cada 2 min' : 'Conferindo se tem lista nova…');
   // modos: Mensagens | Estoque
   $('modos').hidden = false; badgeEst();
   document.querySelectorAll('#modos button').forEach((b) => b.classList.toggle('on', b.dataset.m === modo));
@@ -1181,7 +1195,7 @@ $('arquivo').addEventListener('change', async (ev) => {
   } finally { btn.disabled = false; btn.textContent = '📤 Publicar lista nova'; }
 });
 
-document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && ls.get('cisper-senha', '')) carregar(false); });
+document.addEventListener('visibilitychange', async () => { if (document.visibilityState === 'visible' && ls.get('cisper-senha', '') && await carregar(false) === 'novo') avisarNova(); });
 setInterval(() => { if (document.visibilityState === 'visible' && ehAdm() && TOKM) puxar(); }, 60000);
 ondas($('ondasBase'), 14, 120, '#1B2A6B', 0.5);
 if ('serviceWorker' in navigator) {
@@ -1189,6 +1203,23 @@ if ('serviceWorker' in navigator) {
   // sem recarregar a tela sozinho: a versão nova entra na próxima vez que o app abrir
 }
 carregar(false);
+function avisarNova() {
+  const g = META && META.gerado_em ? new Date(META.gerado_em) : null;
+  const dg = g && !isNaN(g) ? ' (feita em ' + g.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + ' às ' + g.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) + ')' : '';
+  alertaTopo('✅ Chegou lista nova' + dg + '. Você já está vendo a lista atualizada.', true);
+  const b = $('barraAtt'); b.classList.add('novo'); setTimeout(() => b.classList.remove('novo'), 10000);
+}
+$('btAtualizar').addEventListener('click', async () => {
+  const bt = $('btAtualizar'); bt.disabled = true; bt.textContent = 'Atualizando…';
+  try {
+    const r = await carregar(true);
+    if (r === 'novo') avisarNova();
+    else if (r === 'igual') { alertaTopo('✅ Atualizado. Você já está com a lista mais nova.', true); const b = $('barraAtt'); b.classList.add('novo'); setTimeout(() => b.classList.remove('novo'), 4000); }
+    else if (r === 'erro') alertaTopo('Sem internet agora. Continua mostrando a última lista que chegou.');
+  } finally { bt.disabled = false; bt.textContent = '🔄 Atualizar'; }
+});
+// confere sozinho a cada 2 minutos com o app aberto, e avisa quando chegar lista nova
+setInterval(async () => { if (document.visibilityState === 'visible' && ls.get('cisper-senha', '') && DADOS) { if (await carregar(false) === 'novo') avisarNova(); } }, 2 * 60 * 1000);
 
 // ===== jeito de aplicativo
 (() => {

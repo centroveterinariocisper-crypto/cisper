@@ -131,7 +131,7 @@ def publicar(caminho, chave, coletado, alertas_novos, produtos=None):
     with tempfile.TemporaryDirectory() as t:
         ent, al = os.path.join(t, "s.json"), os.path.join(t, "a.json")
         prod = json.load(open(produtos, encoding="utf-8")) if produtos else corpo.get("produtos")
-        json.dump({"dias": dias, "historico": h, "manual": corpo.get("manual"), "produtos": prod}, open(ent, "w"), ensure_ascii=False)
+        json.dump({"dias": dias, "historico": h, "manual": corpo.get("manual"), "produtos": prod, "equipe": corpo.get("equipe")}, open(ent, "w"), ensure_ascii=False)
         json.dump(todos_al, open(al, "w"), ensure_ascii=False)
         saida = os.path.join(t, "dados.enc")
         publicar_main(ent, saida, "base=" + caminho, "auto=" + chave, "alertas=" + al)
@@ -145,7 +145,7 @@ def manual(caminho, chave, arquivo_manual):
     corpo, alertas = abrir(caminho, chave)
     with tempfile.TemporaryDirectory() as t:
         ent, al, saida = os.path.join(t, "s.json"), os.path.join(t, "a.json"), os.path.join(t, "dados.enc")
-        json.dump({"dias": corpo.get("dias") or {}, "historico": corpo.get("historico") or {}, "manual": json.load(open(arquivo_manual, encoding="utf-8")), "produtos": corpo.get("produtos")}, open(ent, "w"), ensure_ascii=False)
+        json.dump({"dias": corpo.get("dias") or {}, "historico": corpo.get("historico") or {}, "manual": json.load(open(arquivo_manual, encoding="utf-8")), "produtos": corpo.get("produtos"), "equipe": corpo.get("equipe")}, open(ent, "w"), ensure_ascii=False)
         json.dump(alertas, open(al, "w"), ensure_ascii=False)
         publicar_main(ent, saida, "base=" + caminho, "auto=" + chave, "alertas=" + al)
         open(caminho, "w").write(open(saida).read())
@@ -156,7 +156,7 @@ def produtos(caminho, chave, arquivo_produtos):
     corpo, alertas = abrir(caminho, chave)
     with tempfile.TemporaryDirectory() as t:
         ent, al, saida = os.path.join(t, "s.json"), os.path.join(t, "a.json"), os.path.join(t, "dados.enc")
-        corpo = {k: corpo.get(k) for k in ("dias", "historico", "manual")}
+        corpo = {k: corpo.get(k) for k in ("dias", "historico", "manual", "equipe")}
         corpo["produtos"] = json.load(open(arquivo_produtos, encoding="utf-8"))
         json.dump(corpo, open(ent, "w"), ensure_ascii=False)
         json.dump(alertas, open(al, "w"), ensure_ascii=False)

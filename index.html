@@ -231,7 +231,8 @@ button.link { background: none; border: 0; color: var(--muted); text-decoration:
 #trava h1 { margin: 4px 0 0; font-size: 22px; color: var(--navy); }
 #trava p { margin: 0; color: var(--muted); font-size: 15px; }
 #trava .campo { position: relative; width: 100%; }
-#trava .quem3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; }
+#trava .quem3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 10px; width: 100%; }
+.bola.comFoto, .ini.comFoto { background-size: cover !important; background-position: center !important; color: transparent; }
 #trava .pessoa { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 4px 10px; border-radius: 16px; border: 2px solid var(--line); background: #fff; color: var(--ink); font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
 #trava .pessoa .bola { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 20px; background: linear-gradient(135deg, var(--c1), var(--c2)); }
 #trava .pessoa small { font-weight: 500; color: var(--muted); font-size: 12px; }
@@ -292,6 +293,30 @@ button.grande { border-radius: 14px; font-weight: 700; }
 /* abas do administrador */
 .abas { display: grid; grid-template-columns: 1fr 1fr; background: var(--surface); border-radius: 14px; padding: 4px; gap: 4px; }
 .abas button { border: 0; background: transparent; border-radius: 11px; padding: 10px 6px; font-weight: 600; color: var(--muted); }
+.equipe { display: flex; flex-direction: column; gap: 10px; }
+.equipe h3 { margin: 4px 0 0; font-size: 17px; color: var(--navy); }
+.equipe p { margin: 0; color: var(--muted); font-size: 14px; }
+.membro { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.membro.fora { opacity: .55; }
+.membro .topo { display: flex; align-items: center; gap: 12px; }
+.membro .foto { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 26px; font-weight: 700; background: linear-gradient(135deg, var(--c1), var(--c2)); background-size: cover; background-position: center; flex: 0 0 auto; border: 0; position: relative; }
+.membro .foto::after { content: '📷'; position: absolute; right: -4px; bottom: -4px; width: 26px; height: 26px; border-radius: 50%; background: #fff; border: 1px solid var(--line); display: grid; place-items: center; font-size: 13px; }
+.membro label { display: flex; flex-direction: column; gap: 3px; font-size: 12px; color: var(--muted); font-weight: 600; }
+.membro .campos, .membro .dois > label, .membro label { min-width: 0; }
+.membro input { width: 100%; box-sizing: border-box; min-width: 0; font: inherit; font-size: 15px; padding: 9px 10px; border-radius: 10px; border: 1px solid var(--line); background: #fff; color: var(--ink); }
+.membro .campos { flex: 1; display: grid; gap: 6px; }
+.membro .dois { display: grid; grid-template-columns: 1fr 1.7fr; gap: 6px; }
+.membro .cores { display: flex; gap: 6px; flex-wrap: wrap; }
+.membro .cores button { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px var(--line); padding: 0; }
+.membro .cores button.on { box-shadow: 0 0 0 3px var(--navy); }
+.membro .acoes { display: flex; gap: 8px; flex-wrap: wrap; }
+.membro .acoes button { border: 1px solid var(--line); background: #fff; border-radius: 12px; padding: 8px 12px; font-weight: 600; font-size: 13.5px; color: var(--ink); }
+.membro .acoes button.perigo { color: var(--bad); border-color: #f3c4bd; }
+.equipe .novo { border: 2px dashed var(--line); background: transparent; border-radius: 18px; padding: 14px; font-weight: 700; color: var(--navy); font-size: 15px; }
+.equipe .salvar { border: 0; border-radius: 16px; padding: 15px; font-weight: 800; font-size: 16px; color: #fff; background: linear-gradient(135deg, var(--adm), var(--adm-2)); }
+.equipe .salvar:disabled { opacity: .45; }
+.equipe .chave { display: flex; flex-direction: column; gap: 6px; background: #FFF6EC; border: 1px solid #F07C1E; border-radius: 14px; padding: 12px; font-size: 14px; }
+.equipe .chave input { font: inherit; padding: 10px; border-radius: 10px; border: 1px solid var(--line); }
 .escala { display: flex; flex-direction: column; gap: 10px; }
 .escala h3 { margin: 4px 0 0; font-size: 17px; color: var(--navy); }
 .escala p { margin: 0; color: var(--muted); font-size: 14px; }
@@ -490,9 +515,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; touch-action: man
     <p>Centro Veterinário Cisper</p>
     <p id="pergQuem">Quem vai usar agora? Toque no seu nome.</p>
     <div class="quem3" id="quem3">
-      <button type="button" class="pessoa" data-p="debora" style="--c1:var(--debora);--c2:var(--debora-2)" aria-pressed="false"><span class="bola">D</span>Débora<small>Tarde</small></button>
-      <button type="button" class="pessoa" data-p="duda" style="--c1:var(--duda);--c2:var(--duda-2)" aria-pressed="false"><span class="bola">D</span>Duda<small>Manhã</small></button>
-      <button type="button" class="pessoa" data-p="adm" style="--c1:var(--adm);--c2:var(--adm-2)" aria-pressed="false"><span class="bola">P</span>Paulo<small>Adm</small></button>
+
     </div>
     <p id="txtSenha">Digite a <b>sua</b> senha para entrar.</p>
     <div class="campo">
@@ -607,10 +630,11 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; touch-action: man
 
   <section class="adm" id="adm" hidden>
     <b class="t">Área do administrador</b>
-    <div class="abas" role="tablist"><button type="button" id="abaLista" class="on">📋 Lista</button><button type="button" id="abaAcomp">📊 Acompanhamento</button><button type="button" id="abaRx">💊 Receitas</button><button type="button" id="abaEscala">📅 Sábados</button></div>
+    <div class="abas" role="tablist"><button type="button" id="abaLista" class="on">📋 Lista</button><button type="button" id="abaAcomp">📊 Acompanhamento</button><button type="button" id="abaRx">💊 Receitas</button><button type="button" id="abaEscala">📅 Sábados</button><button type="button" id="abaEquipe">👥 Equipe</button></div>
     <div class="sinc" id="sinc"></div>
     <div class="rx" id="rxAlertas" hidden></div>
     <div class="escala" id="escalaBox" hidden></div>
+    <div class="equipe" id="equipeBox" hidden></div>
     <button type="button" class="grande" id="btPublicar" hidden>📤 Publicar lista nova</button>
     <input type="file" id="arquivo" accept=".cisper,.json,.txt,application/json,text/plain,*/*" hidden>
     <form id="fToken" autocomplete="off"><div id="admToken" hidden>
@@ -668,16 +692,30 @@ const TIPOS = {
   par:  { rot: '👋 Cliente sumido', cor: '#8a94a8', soft: '#eef1f5', ink: '#55607a' }
 };
 const ORDEM = ['pos', 'vac', 'orc2', 'orc7', 'par'];
-const PESSOAS = {
-  debora: { nome: 'Débora', turno: 'Tarde', horario: 'Envie das 14h às 20h.', cor: 'var(--debora)', cor2: 'var(--debora-2)' },
-  duda:   { nome: 'Duda', turno: 'Manhã', horario: 'Envie das 8h às 14h.', cor: 'var(--duda)', cor2: 'var(--duda-2)' },
-  todos:  { nome: 'Paulo', turno: 'Adm', horario: 'Você está vendo a lista das duas.', cor: 'var(--adm)', cor2: 'var(--adm-2)' }
-};
-const QUEM = [['todos', 'As duas'], ['debora', 'Débora'], ['duda', 'Duda']];
+// ---- equipe: vem dentro da lista (o Paulo edita na aba 👥 Equipe); a ordem das atendentes decide a divisão das mensagens
+const PALETA = [['#E5488A', '#B8337A'], ['#F07C1E', '#E9573F'], ['#2fa9a3', '#1f7f7a'], ['#4f6bd8', '#1B2A6B'], ['#8a5cd6', '#5b3aa8'], ['#25A35A', '#1a7a42'], ['#d4a017', '#a67c00']];
+const EQUIPE_PADRAO = [
+  { id: 'duda', nome: 'Duda', papel: 'atendente', turno: 'Manhã', horario: 'Envie das 8h às 14h.', c1: '#E5488A', c2: '#B8337A' },
+  { id: 'debora', nome: 'Débora', papel: 'atendente', turno: 'Tarde', horario: 'Envie das 14h às 20h.', c1: '#F07C1E', c2: '#E9573F' },
+  { id: 'adm', nome: 'Paulo', papel: 'adm', turno: 'Adm', c1: '#1B2A6B', c2: '#2fa9a3' }
+];
+let EQUIPE = [], PESSOAS = {}, QUEM = [], ATD = [], NOMES = {};
+function montarEquipe(eq) {
+  EQUIPE = (Array.isArray(eq) && eq.some((e) => e.id === 'adm')) ? eq : EQUIPE_PADRAO;
+  PESSOAS = {}; NOMES = {};
+  for (const e of EQUIPE) { PESSOAS[e.id] = { nome: e.nome, turno: e.turno || '', horario: e.horario || '', cor: e.c1, cor2: e.c2, foto: e.foto || '', papel: e.papel, ativo: e.ativo !== false }; NOMES[e.id] = e.nome; }
+  ATD = EQUIPE.filter((e) => e.papel === 'atendente' && e.ativo !== false).map((e) => e.id);
+  const A = PESSOAS.adm; PESSOAS.todos = { ...A, horario: ATD.length === 2 ? 'Você está vendo a lista das duas.' : 'Você está vendo a lista de todas.' };
+  QUEM = [['todos', ATD.length === 2 ? 'As duas' : 'Todas'], ...ATD.map((id) => [id, PESSOAS[id].nome])];
+  if (window.__loginPronto) desenharLogin();
+}
+// bolinha com foto (ou a inicial)
+function bolinha(node, id) { const P = PESSOAS[id] || PESSOAS.todos; node.style.setProperty('--c1', P.cor); node.style.setProperty('--c2', P.cor2); if (P.foto) { node.style.backgroundImage = `url(${P.foto})`; node.classList.add('comFoto'); node.textContent = ''; } else { node.style.backgroundImage = ''; node.classList.remove('comFoto'); node.textContent = (P.nome || '?')[0]; } }
 const $ = (id) => document.getElementById(id);
 const el = (t, c, x) => { const e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; };
 const ls = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : v; } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }, del(k) { try { localStorage.removeItem(k); } catch (e) {} } };
 const cap = (s) => { const w = String(s || '').trim().split(/\s+/)[0] || ''; return w ? w[0].toUpperCase() + w.slice(1).toLowerCase() : ''; };
+try { montarEquipe(JSON.parse(localStorage.getItem('cisper-equipe') || 'null')); } catch (e) { montarEquipe(null); }
 const capNome = (s) => String(s || '').trim().toLowerCase().replace(/(^|\s)(\p{L})/gu, (m, a, b) => a + b.toUpperCase()).replace(/\b(De|Da|Do|Dos|Das|E)\b/g, (m) => m.toLowerCase());
 const rs = (v) => 'R$ ' + Math.round(v || 0).toLocaleString('pt-BR');
 const hojeISO = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
@@ -713,11 +751,11 @@ function det(i) {
 const ESCALA_PADRAO = { '2026-11-28': 'debora', '2026-12-05': 'duda', '2026-12-12': 'duda', '2026-12-19': 'debora' };
 let ESCALA = { ...ESCALA_PADRAO }; try { Object.assign(ESCALA, JSON.parse(ls.get('cisper-escala', '{}')) || {}); } catch (e) {}
 const ehSabado = (d) => !!d && new Date(d + 'T12:00:00').getDay() === 6;
-const plantao = (d) => (ehSabado(d) && (ESCALA[d] === 'debora' || ESCALA[d] === 'duda')) ? ESCALA[d] : '';
+const plantao = (d) => (ehSabado(d) && ATD.includes(ESCALA[d])) ? ESCALA[d] : '';
 const dona = (i, lista, dia) => {
   const pl = plantao(dia); if (pl) return pl;
   const p = lista.filter((x) => x.t === i.t).indexOf(i); // cada tipo de mensagem alterna: Duda, Débora, Duda…
-  return p % 2 === 0 ? 'duda' : 'debora';
+  return ATD.length ? ATD[p % ATD.length] : 'adm';
 };
 
 // ---- dados criptografados: cada pessoa abre com a própria senha
@@ -764,7 +802,7 @@ let KDADOS = '';           // chave da lista, usada para criptografar as marcaç
 let ultimaSinc = 0, sincErro = '';
 const feitoEm = (k) => feitos[k] || (REM[k] && REM[k].ts) || 0;
 async function chaveAES(kb64) { return crypto.subtle.importKey('raw', b64(kb64), 'AES-GCM', false, ['encrypt', 'decrypt']); }
-const paraB64 = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf)));
+const paraB64 = (buf) => { const u = new Uint8Array(buf); let t = ''; for (let i = 0; i < u.length; i += 0x8000) t += String.fromCharCode.apply(null, u.subarray(i, i + 0x8000)); return btoa(t); };
 async function cifrar(kb64, obj) { const iv = crypto.getRandomValues(new Uint8Array(12)); const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, await chaveAES(kb64), new TextEncoder().encode(JSON.stringify(obj))); return { iv: paraB64(iv), ct: paraB64(ct) }; }
 async function decifrar(kb64, o) { const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(o.iv) }, await chaveAES(kb64), b64(o.ct)); return JSON.parse(new TextDecoder().decode(pt)); }
 async function prepararSinc(d) {
@@ -816,7 +854,7 @@ function desenharEscala() {
     if (!atualP) t.appendChild(el('small', null, 'Ninguém marcado: as duas dividem'));
     linha.appendChild(t);
     const bts = el('div', 'bts');
-    for (const p of ['debora', 'duda']) {
+    for (const p of ATD) {
       const b = el('button', p === atualP ? 'on' : '', PESSOAS[p].nome); b.type = 'button';
       b.style.setProperty('--c1', PESSOAS[p].cor); b.style.setProperty('--c2', PESSOAS[p].cor2);
       b.onclick = () => { if (ESCALA[iso] === p) delete ESCALA[iso]; else ESCALA[iso] = p; ls.set('cisper-escala', JSON.stringify(ESCALA)); render(); if (TOKM) salvarEscala(); };
@@ -830,7 +868,7 @@ async function puxar() {
   if (!TOKM || !KDADOS) return;
   const novo = {};
   try {
-    for (const p of ['debora', 'duda', 'adm']) {
+    for (const p of EQUIPE.map((e) => e.id)) {
       const r = await fetch(`https://api.github.com/repos/${REPO_M}/contents/${p}.json?t=` + Date.now(), { headers: { ...hM(), Accept: 'application/vnd.github.raw' }, cache: 'no-store' });
       if (r.status === 404) continue;
       if (r.status === 401 || r.status === 403) throw new Error('chave');
@@ -1064,8 +1102,13 @@ function manualPrimeiraVez() {
   if (ls.get(chave, '') !== M.versao) { ls.set(chave, M.versao); setTimeout(abrirManual, 600); }
 }
 function entrar(d) {
+  if (Array.isArray(d.equipe)) {
+    montarEquipe(d.equipe); ls.set('cisper-equipe', JSON.stringify(d.equipe));
+    const e = d.equipe.find((x) => x.id === d.quem);
+    if (e && e.ativo === false) { ls.del('cisper-senha'); ls.del('cisper-eu'); eu = ''; DADOS = null; pedirSenha('Esse acesso foi removido. Fale com o Paulo.'); return; }
+  }
   eu = d.quem === 'adm' ? 'adm' : d.quem; ls.set('cisper-eu', eu);
-  if (!ehAdm()) quem = eu; else if (!['todos', 'debora', 'duda'].includes(quem)) quem = 'todos';
+  if (!ehAdm()) quem = eu; else if (!['todos', ...ATD].includes(quem)) quem = 'todos';
   ls.set('cisper-quem', quem);
   carregarEstMeu();
   aplicar(d);
@@ -1097,7 +1140,7 @@ function render() {
   const vendo = PESSOAS[quem] || P;
   // cabeçalho: quem está usando
   $('perfil').hidden = false; $('perfil').style.setProperty('--cor', P.cor); $('perfil').style.setProperty('--cor2', P.cor2);
-  $('perfilIni').textContent = P.nome[0]; $('perfilNome').textContent = P.nome + ' · ' + P.turno;
+  bolinha($('perfilIni'), ehAdm() ? 'adm' : eu); $('perfilNome').textContent = P.nome + ' · ' + P.turno;
   $('btSair').hidden = false;
   const g = META && META.gerado_em ? new Date(META.gerado_em) : null;
   const dg = g && !isNaN(g) ? g.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + ' às ' + g.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '';
@@ -1121,7 +1164,7 @@ function render() {
     $('admToken').hidden = true; $('btPublicar').hidden = true; $('btTrocarToken').hidden = true;
     const qx = $('quem'); qx.replaceChildren();
     for (const [id, nome] of QUEM) { const b = el('button', id === quem ? 'on' : '', nome); b.type = 'button'; b.onclick = () => { quem = id; ls.set('cisper-quem', id); render(); }; qx.appendChild(b); }
-    $('abaLista').classList.toggle('on', aba === 'lista'); $('abaAcomp').classList.toggle('on', aba === 'acomp'); $('abaRx').classList.toggle('on', aba === 'rx'); $('abaEscala').classList.toggle('on', aba === 'escala'); $('sinc').hidden = aba === 'rx' || aba === 'escala';
+    $('abaLista').classList.toggle('on', aba === 'lista'); $('abaAcomp').classList.toggle('on', aba === 'acomp'); $('abaRx').classList.toggle('on', aba === 'rx'); $('abaEscala').classList.toggle('on', aba === 'escala'); $('abaEquipe').classList.toggle('on', aba === 'equipe'); $('sinc').hidden = aba === 'rx' || aba === 'escala' || aba === 'equipe';
     $('quem').parentElement.hidden = aba !== 'lista';
     $('admMarcas').hidden = true;
     desenharAlertas();
@@ -1131,9 +1174,10 @@ function render() {
     else if (ls.get('cisper-token-marcas', '') && !(ENV && ENV.mk)) { sx.className = 'sinc'; sx.textContent = 'Publique a lista de novo para ligar as marcações nos celulares delas.'; }
     else { sx.className = 'sinc'; sx.textContent = 'Por enquanto você vê só as marcações feitas neste celular.'; }
   }
-  const verEsc = ehAdm() && aba === 'escala';
+  const verEsc = ehAdm() && aba === 'escala', verEq = ehAdm() && aba === 'equipe';
   $('escalaBox').hidden = !verEsc; if (verEsc) desenharEscala();
-  const verAcomp = ehAdm() && aba === 'acomp', verRx = (ehAdm() && aba === 'rx') || verEsc;
+  $('equipeBox').hidden = !verEq; if (verEq) desenharEquipe();
+  const verAcomp = ehAdm() && aba === 'acomp', verRx = (ehAdm() && aba === 'rx') || verEsc || verEq;
   $('acomp').hidden = !verAcomp; $('lista').hidden = verAcomp || verRx; $('painel').hidden = verAcomp || verRx;
   ondas($('ondasPainel'), 7, 64, '#ffffff', 0.55);
   // dias
@@ -1192,13 +1236,12 @@ function acompanhamento() {
   const h = hojeISO(), dias = Object.keys(DADOS).sort();
   const rotDia = (d) => d === h ? 'hoje' : new Date(d + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'numeric' });
   const doDia = DADOS[atual] || [];
-  const cores = { debora: ['var(--debora)', 'var(--debora-2)'], duda: ['var(--duda)', 'var(--duda-2)'] };
-  for (const p of ['debora', 'duda']) {
+  for (const p of ATD) {
     const P = PESSOAS[p];
     const its = doDia.filter((i) => dona(i, doDia, atual) === p).sort((a, b) => ORDEM.indexOf(a.t) - ORDEM.indexOf(b.t));
     const ok = its.filter((i) => feitoEm(i.k)), nao = its.filter((i) => !feitoEm(i.k));
-    const c = el('section', 'pessoaCard'); c.style.setProperty('--c1', cores[p][0]); c.style.setProperty('--c2', cores[p][1]);
-    const cab = el('div', 'cab'); cab.appendChild(el('span', 'bola', P.nome[0]));
+    const c = el('section', 'pessoaCard'); c.style.setProperty('--c1', P.cor); c.style.setProperty('--c2', P.cor2);
+    const cab = el('div', 'cab'); { const bo = el('span', 'bola'); bolinha(bo, p); cab.appendChild(bo); }
     const q = el('div', 'quem'); q.appendChild(el('b', null, P.nome)); q.appendChild(el('small', null, P.turno + ' · ' + rotDia(atual))); cab.appendChild(q);
     const n = el('div', 'num', String(ok.length)); n.appendChild(el('span', null, ' de ' + its.length)); cab.appendChild(n);
     c.appendChild(cab);
@@ -1227,13 +1270,13 @@ function acompanhamento() {
   // total da semana
   const S = el('section', 'semana'); S.appendChild(el('h2', null, 'Total da semana'));
   const tb = document.createElement('table');
-  tb.innerHTML = '<thead><tr><th>Dia</th><th class="n">Débora</th><th class="n">Duda</th></tr></thead>';
+  { const th = document.createElement('thead'), tr = document.createElement('tr'); tr.appendChild(el('th', null, 'Dia')); for (const p of ATD) tr.appendChild(el('th', 'n', PESSOAS[p].nome)); th.appendChild(tr); tb.appendChild(th); }
   const body = document.createElement('tbody');
-  const tot = { debora: [0, 0, 0], duda: [0, 0, 0] }; // feitas, total até hoje, não fez (dias passados)
+  const tot = Object.fromEntries(ATD.map((p) => [p, [0, 0, 0]])); // feitas, total até hoje, não fez (dias passados)
   for (const d of dias) {
     const L = DADOS[d] || [], tr = document.createElement('tr');
     const td0 = el('td', null, d === h ? 'Hoje' : new Date(d + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit' })); tr.appendChild(td0);
-    for (const p of ['debora', 'duda']) {
+    for (const p of ATD) {
       const its = L.filter((i) => dona(i, L, d) === p), ok = its.filter((i) => feitoEm(i.k)).length;
       let cls = 'n', txt = its.length ? `${ok}/${its.length}` : '—';
       if (d <= h) { tot[p][0] += ok; tot[p][1] += its.length; }
@@ -1246,9 +1289,9 @@ function acompanhamento() {
   }
   tb.appendChild(body);
   const tf = document.createElement('tfoot'); const trf = document.createElement('tr'); trf.appendChild(el('td', null, 'Até hoje'));
-  for (const p of ['debora', 'duda']) { const [ok, t] = tot[p]; trf.appendChild(el('td', 'n', t ? `${ok}/${t} · ${Math.round(ok / t * 100)}%` : '—')); }
+  for (const p of ATD) { const [ok, t] = tot[p]; trf.appendChild(el('td', 'n', t ? `${ok}/${t} · ${Math.round(ok / t * 100)}%` : '—')); }
   tf.appendChild(trf); const trn = document.createElement('tr'); trn.appendChild(el('td', null, 'Não fez (dias passados)'));
-  for (const p of ['debora', 'duda']) trn.appendChild(el('td', 'n' + (tot[p][2] ? ' ruim' : ' bom'), String(tot[p][2])));
+  for (const p of ATD) trn.appendChild(el('td', 'n' + (tot[p][2] ? ' ruim' : ' bom'), String(tot[p][2])));
   tf.appendChild(trn); tb.appendChild(tf); S.appendChild(tb);
   S.appendChild(el('p', 'nota', 'Toque num dia para ver o detalhe. Os números contam o que elas marcaram como enviado no app.'));
   A.appendChild(S);
@@ -1300,7 +1343,6 @@ let estHistRem = []; // [{i, f, t, n, por}] de todos
 let estVista = 'compras', histQuem = 'todos';
 const kEst = () => 'cisper-est-' + (eu || 'x');
 function carregarEstMeu() { try { estMeu = JSON.parse(ls.get(kEst(), '{}')) || {}; } catch (e) { estMeu = {}; } try { estLogMeu = JSON.parse(ls.get(kEst() + '-log', '[]')) || []; } catch (e) { estLogMeu = []; } }
-const NOMES = { debora: 'Débora', duda: 'Duda', adm: 'Paulo' };
 function estado() {
   const out = {};
   for (const [id, v] of Object.entries(estRem)) out[id] = v;
@@ -1347,7 +1389,7 @@ async function puxarEst() {
   if (!TOKM || !KDADOS) return;
   const novo = {}, hist = [];
   try {
-    for (const p of ['debora', 'duda', 'adm']) {
+    for (const p of EQUIPE.map((e) => e.id)) {
       const r = await fetch(`https://api.github.com/repos/${REPO_M}/contents/estoque-${p}.json?t=` + Date.now(), { headers: { ...hM(), Accept: 'application/vnd.github.raw' }, cache: 'no-store' });
       if (r.status === 404) continue;
       if (r.status === 401 || r.status === 403) throw new Error('chave');
@@ -1382,7 +1424,7 @@ function historico() {
 }
 function renderHist() {
   const qx = $('histQuem'); qx.replaceChildren(); qx.classList.add('histQuem');
-  for (const [id, nome] of [['todos', 'Todos'], ['debora', 'Débora'], ['duda', 'Duda'], ['adm', 'Paulo']]) { const b = el('button', id === histQuem ? 'on' : '', nome); b.type = 'button'; b.onclick = () => { histQuem = id; renderHist(); }; qx.appendChild(b); }
+  for (const [id, nome] of [['todos', 'Todos'], ...EQUIPE.map((e) => [e.id, e.nome])]) { const b = el('button', id === histQuem ? 'on' : '', nome); b.type = 'button'; b.onclick = () => { histQuem = id; renderHist(); }; qx.appendChild(b); }
   const L = $('histLista'); L.replaceChildren();
   const hs = historico().filter((x) => histQuem === 'todos' || x.por === histQuem);
   if (!hs.length) { const v = el('div', 'estVazio'); v.appendChild(el('b', null, 'Nada registrado ainda')); v.appendChild(document.createTextNode('Tudo o que for avisado ou tirado da lista aparece aqui.')); L.appendChild(v); return; }
@@ -1552,6 +1594,110 @@ function adminContagem(B, P, c, feitos_) {
   cp.onclick = () => { const t = `Contagem do estoque · ${new Date(contSab + 'T12:00:00').toLocaleDateString('pt-BR')}` + (por ? ` · ${por}` : '') + '\n' + P.map((p) => `${p.nome}: ${q[p.id] ?? '—'}` + (typeof p.sis === 'number' && q[p.id] !== undefined && q[p.id] !== p.sis ? ` (sistema ${p.sis})` : '')).join('\n'); navigator.clipboard.writeText(t).then(() => toast('Copiado')); };
   B.appendChild(cp);
 }
+// ===== 👥 Equipe (só o adm): foto, nome, turno, adicionar e remover pessoas. Publica direto a lista (dados.enc) no GitHub.
+let RASC = null, eqMsg = '';
+const slug = (t) => String(t).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '').slice(0, 14) || 'pessoa';
+function rascunho() { if (!RASC) RASC = JSON.parse(JSON.stringify(EQUIPE)); return RASC; }
+function fotoDeArquivo(f) {
+  return new Promise((ok, erro) => {
+    const im = new Image(); const u = URL.createObjectURL(f);
+    im.onload = () => { const L = 320, c = document.createElement('canvas'); c.width = c.height = L; const g = c.getContext('2d'); const lado = Math.min(im.width, im.height); g.drawImage(im, (im.width - lado) / 2, (im.height - lado) / 2, lado, lado, 0, 0, L, L); URL.revokeObjectURL(u); ok(c.toDataURL('image/jpeg', 0.82)); };
+    im.onerror = () => erro(new Error('foto')); im.src = u;
+  });
+}
+function desenharEquipe() {
+  const B = $('equipeBox'); B.replaceChildren(); const R = rascunho();
+  B.appendChild(el('h3', null, '👥 Equipe'));
+  B.appendChild(el('p', null, 'Toque na bolinha para colocar a foto. A ordem das atendentes é a ordem da divisão das mensagens.'));
+  if (eqMsg) B.appendChild(el('p', /^✓/.test(eqMsg) ? 'okmsg' : 'aviso', eqMsg));
+  R.forEach((e, idx) => {
+    const m = el('div', 'membro' + (e.ativo === false ? ' fora' : '')); m.style.setProperty('--c1', e.c1); m.style.setProperty('--c2', e.c2);
+    const topo = el('div', 'topo');
+    const ft = el('button', 'foto'); ft.type = 'button'; ft.setAttribute('aria-label', 'Trocar foto de ' + e.nome);
+    if (e.foto) ft.style.backgroundImage = `url(${e.foto})`; else ft.textContent = (e.nome || '?')[0];
+    const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*'; inp.hidden = true;
+    inp.onchange = async () => { const f = inp.files && inp.files[0]; if (!f) return; try { e.foto = await fotoDeArquivo(f); eqMsg = ''; } catch (x) { eqMsg = 'Não consegui abrir essa foto.'; } desenharEquipe(); };
+    ft.onclick = () => inp.click(); topo.append(ft, inp);
+    const campos = el('div', 'campos');
+    const campo = (rot, chave, ph) => { const l = el('label', null, rot); const i = document.createElement('input'); i.value = e[chave] || ''; i.placeholder = ph || ''; i.oninput = () => { e[chave] = i.value; }; l.appendChild(i); return l; };
+    campos.appendChild(campo('Nome', 'nome'));
+    if (e.papel !== 'adm') { const d = el('div', 'dois'); d.append(campo('Turno', 'turno', 'Manhã'), campo('Horário de envio', 'horario', 'Envie das 8h às 14h.')); campos.appendChild(d); }
+    if (e.novo) { const l = el('label', null, 'Senha dela (mínimo 4 letras ou números)'); const i = document.createElement('input'); i.value = e.senha || ''; i.autocomplete = 'off'; i.oninput = () => { e.senha = i.value.trim(); }; l.appendChild(i); campos.appendChild(l); }
+    topo.appendChild(campos); m.appendChild(topo);
+    const cores = el('div', 'cores');
+    for (const [c1, c2] of PALETA) { const b = el('button', e.c1 === c1 ? 'on' : ''); b.type = 'button'; b.style.background = `linear-gradient(135deg, ${c1}, ${c2})`; b.setAttribute('aria-label', 'Cor'); b.onclick = () => { e.c1 = c1; e.c2 = c2; desenharEquipe(); }; cores.appendChild(b); }
+    m.appendChild(cores);
+    const ac = el('div', 'acoes');
+    if (e.papel !== 'adm') {
+      if (idx > 0 && R[idx - 1].papel !== 'adm') { const b = el('button', null, '↑ Subir'); b.type = 'button'; b.onclick = () => { [R[idx - 1], R[idx]] = [R[idx], R[idx - 1]]; desenharEquipe(); }; ac.appendChild(b); }
+      if (e.foto) { const b = el('button', null, 'Tirar foto'); b.type = 'button'; b.onclick = () => { delete e.foto; desenharEquipe(); }; ac.appendChild(b); }
+      const rm = el('button', 'perigo', e.ativo === false ? '↩ Devolver acesso' : (e.novo ? 'Cancelar' : '🗑️ Remover')); rm.type = 'button';
+      rm.onclick = () => { if (e.novo) R.splice(idx, 1); else if (e.ativo === false) delete e.ativo; else if (window.confirm(`Remover ${e.nome}? Ela não vai conseguir mais entrar no app.`)) e.ativo = false; desenharEquipe(); };
+      ac.appendChild(rm);
+    } else if (e.foto) { const b = el('button', null, 'Tirar foto'); b.type = 'button'; b.onclick = () => { delete e.foto; desenharEquipe(); }; ac.appendChild(b); }
+    if (ac.childNodes.length) m.appendChild(ac);
+    B.appendChild(m);
+  });
+  const novo = el('button', 'novo', '＋ Adicionar pessoa'); novo.type = 'button';
+  novo.onclick = () => { const usadas = new Set(R.map((x) => x.c1)); const [c1, c2] = PALETA.find(([a]) => !usadas.has(a)) || PALETA[0]; const pos = R.findIndex((x) => x.papel === 'adm'); R.splice(pos < 0 ? R.length : pos, 0, { id: '', nome: '', papel: 'atendente', turno: '', horario: '', c1, c2, novo: true }); desenharEquipe(); };
+  B.appendChild(novo);
+  if (!ls.get('cisper-token', '')) {
+    const ch = el('div', 'chave'); ch.appendChild(el('b', null, '🔑 Para salvar daqui, cole a chave do GitHub (só uma vez neste celular)'));
+    ch.appendChild(el('span', null, 'Ela precisa ter permissão de escrita (Contents: Read and write) no repositório cisper.'));
+    const i = document.createElement('input'); i.type = 'password'; i.placeholder = 'github_pat_…'; i.autocomplete = 'off'; ch.appendChild(i);
+    const b = el('button', 'salvar', 'Guardar chave'); b.type = 'button'; b.onclick = () => { const v = i.value.trim(); if (!v) return; ls.set('cisper-token', v); eqMsg = '✓ Chave guardada neste celular.'; desenharEquipe(); }; ch.appendChild(b);
+    B.appendChild(ch);
+  }
+  const sv = el('button', 'salvar', '💾 Salvar e publicar para todas'); sv.type = 'button'; sv.disabled = !ls.get('cisper-token', '');
+  sv.onclick = () => publicarEquipe(sv); B.appendChild(sv);
+  B.appendChild(el('p', null, 'Depois de salvar, a equipe nova aparece no celular delas quando abrirem o app ou tocarem em 🔄 Atualizar.'));
+}
+async function publicarEquipe(bt) {
+  const R = rascunho(), tok = ls.get('cisper-token', ''), K = META && META._k;
+  if (!tok || !K) return;
+  for (const e of R) {
+    e.nome = String(e.nome || '').trim();
+    if (!e.nome) { eqMsg = 'Tem pessoa sem nome.'; return desenharEquipe(); }
+    if (e.novo && (!e.senha || e.senha.length < 4)) { eqMsg = `Coloque uma senha de pelo menos 4 letras ou números para ${e.nome}.`; return desenharEquipe(); }
+  }
+  bt.disabled = true; bt.textContent = 'Salvando…';
+  try {
+    const H = { Authorization: 'Bearer ' + tok, Accept: 'application/vnd.github+json' };
+    const url = `https://api.github.com/repos/${REPO}/contents/dados.enc`;
+    const g = await fetch(url + '?t=' + Date.now(), { headers: H, cache: 'no-store' });
+    if (g.status === 401 || g.status === 403) throw new Error('chave');
+    if (!g.ok) throw new Error('rede');
+    const info = await g.json();
+    const env = JSON.parse(decodeURIComponent(escape(atob(info.content.replace(/\n/g, '')))));
+    const corpo = await decifrar(K, { iv: env.iv, ct: env.ct });
+    // senhas novas não podem repetir nenhuma senha que já entra
+    for (const e of R.filter((x) => x.novo)) { try { await abrir(env, e.senha); eqMsg = `A senha de ${e.nome} já é usada por outra pessoa. Escolha outra.`; bt.disabled = false; return desenharEquipe(); } catch (x) {} }
+    const usados = new Set(R.map((x) => x.id).filter(Boolean));
+    for (const e of R.filter((x) => x.novo)) {
+      let id = slug(e.nome), n = 2; while (usados.has(id) || id === 'todos' || id === 'adm') id = slug(e.nome) + n++; usados.add(id); e.id = id;
+      const salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12));
+      const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(e.senha), 'PBKDF2', false, ['deriveKey']);
+      const ks = await crypto.subtle.deriveKey({ name: 'PBKDF2', salt, iterations: env.iter, hash: 'SHA-256' }, base, { name: 'AES-GCM', length: 256 }, false, ['encrypt']);
+      const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, ks, new TextEncoder().encode(JSON.stringify({ quem: id, k: K })));
+      env.vagas.push({ salt: paraB64(salt), iv: paraB64(iv), ct: paraB64(ct), p: id });
+    }
+    // quem foi removido perde a vaga (quando ela tem etiqueta) e fica marcada como fora
+    const fora = new Set(R.filter((x) => x.ativo === false).map((x) => x.id));
+    env.vagas = env.vagas.filter((v) => !(v.p && fora.has(v.p)));
+    corpo.equipe = R.map(({ novo, senha, ...e }) => e);
+    const enc = await cifrar(K, corpo); env.iv = enc.iv; env.ct = enc.ct;
+    const txt = JSON.stringify(env);
+    const r = await fetch(url, { method: 'PUT', headers: { ...H, 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'Equipe atualizada pelo app', content: btoa(unescape(encodeURIComponent(txt))), sha: info.sha }) });
+    if (r.status === 409) throw new Error('conflito');
+    if (!r.ok) throw new Error(r.status === 401 || r.status === 403 || r.status === 404 ? 'chave' : 'rede');
+    ENV = env; ls.set('cisper-lista', txt); META.equipe = corpo.equipe; montarEquipe(corpo.equipe); ls.set('cisper-equipe', JSON.stringify(corpo.equipe));
+    RASC = null; eqMsg = '✓ Equipe salva e publicada.';
+  } catch (e) {
+    eqMsg = e.message === 'chave' ? 'A chave do GitHub não deixou salvar. Confira se ela tem permissão de escrita no repositório cisper.' : e.message === 'conflito' ? 'A lista mudou agora há pouco. Toque em Salvar de novo.' : 'Não consegui salvar (sem internet?). Tente de novo.';
+    if (e.message === 'chave') ls.del('cisper-token');
+  }
+  render();
+}
 function badgeEst() { const n = faltando().length; const b = $('nFalta'); b.hidden = !n; b.textContent = n; }
 function trocarModo(m) { modo = m; ls.set('cisper-modo', m); history.replaceState(null, '', m === 'estoque' ? '#estoque' : location.pathname + location.search); if (m === 'estoque') puxarEst(); render(); window.scrollTo(0, 0); }
 document.querySelectorAll('#modos button').forEach((b) => b.addEventListener('click', () => trocarModo(b.dataset.m)));
@@ -1606,8 +1752,7 @@ ls.del('cisper-salvas');
 let escolhido = '';
 function marcarPessoas() {
   document.querySelectorAll('#quem3 .pessoa').forEach((b) => b.setAttribute('aria-pressed', b.dataset.p === escolhido ? 'true' : 'false'));
-  const nomes = { debora: 'da Débora', duda: 'da Duda', adm: 'do Paulo' };
-  $('txtSenha').innerHTML = escolhido ? 'Digite a senha <b>' + nomes[escolhido] + '</b>.' : 'Digite a <b>sua</b> senha para entrar.';
+  $('txtSenha').innerHTML = escolhido && PESSOAS[escolhido] ? 'Digite a senha de <b>' + PESSOAS[escolhido].nome.replace(/</g, '') + '</b>.' : 'Digite a <b>sua</b> senha para entrar.';
 }
 async function entrarCom(s, quemEsperado) {
   if (!ENV) ENV = await baixar();
@@ -1615,14 +1760,24 @@ async function entrarCom(s, quemEsperado) {
   try { d = await abrir(env, s); } catch (e) { env = await baixar(); d = await abrir(env, s); }
   // cada pessoa só entra com a PRÓPRIA senha: senha de outra pessoa não abre
   if (quemEsperado && d.quem !== quemEsperado) throw new Error('senha de outra pessoa');
+  if (Array.isArray(d.equipe)) { const e = d.equipe.find((x) => x.id === d.quem); if (e && e.ativo === false) throw new Error('removido'); }
   ENV = env; ls.set('cisper-senha', s); ls.set('cisper-lista', JSON.stringify(ENV));
   $('trava').hidden = true; $('senha').value = ''; $('senha').type = 'password'; $('btOlho').setAttribute('aria-pressed', 'false');
   if (d.quem === 'adm') quem = 'todos';
   entrar(d); window.scrollTo(0, 0);
 }
-document.querySelectorAll('#quem3 .pessoa').forEach((b) => b.addEventListener('click', () => {
-  escolhido = b.dataset.p; marcarPessoas(); $('erroSenha').textContent = ''; $('senha').value = ''; $('senha').focus();
-}));
+function desenharLogin() {
+  const Q = $('quem3'); if (!Q) return; Q.replaceChildren();
+  for (const e of EQUIPE.filter((x) => x.ativo !== false)) {
+    const b = el('button', 'pessoa'); b.type = 'button'; b.dataset.p = e.id; b.setAttribute('aria-pressed', 'false');
+    b.style.setProperty('--c1', e.c1); b.style.setProperty('--c2', e.c2);
+    const bo = el('span', 'bola'); bolinha(bo, e.id); b.appendChild(bo); b.appendChild(document.createTextNode(e.nome)); b.appendChild(el('small', null, e.turno || ''));
+    b.onclick = () => { escolhido = e.id; marcarPessoas(); $('erroSenha').textContent = ''; $('senha').value = ''; $('senha').focus(); };
+    Q.appendChild(b);
+  }
+  marcarPessoas();
+}
+window.__loginPronto = true; desenharLogin();
 function pedirSenha(erro) { if (!$('trava').hidden) { if (erro) $('erroSenha').textContent = erro; pronto(); return; } escolhido = ''; marcarPessoas(); $('senha').value = ''; $('senha').type = 'password'; $('btOlho').setAttribute('aria-pressed', 'false'); $('trava').hidden = false; $('trava').scrollTop = 0; $('erroSenha').textContent = erro || ''; pronto(); }
 $('fTrava').addEventListener('submit', async (ev) => {
   ev.preventDefault();
@@ -1631,7 +1786,7 @@ $('fTrava').addEventListener('submit', async (ev) => {
   $('erroSenha').textContent = 'Abrindo…';
   if (!ENV) { try { ENV = await baixar(); } catch (e) { $('erroSenha').textContent = 'A lista ainda não foi publicada. Se você é o administrador, toque no link abaixo.'; $('btAdmArquivo').hidden = false; return; } }
   try { await entrarCom(s, escolhido); $('erroSenha').textContent = ''; }
-  catch (e) { $('erroSenha').textContent = 'Senha errada. Toque no olhinho para conferir e tente de novo.'; }
+  catch (e) { $('erroSenha').textContent = e.message === 'removido' ? 'Esse acesso foi removido. Fale com o Paulo.' : 'Senha errada. Toque no olhinho para conferir e tente de novo.'; }
 });
 $('btOlho').addEventListener('click', () => { const i = $('senha'); const ver = i.type === 'password'; i.type = ver ? 'text' : 'password'; $('btOlho').setAttribute('aria-pressed', ver ? 'true' : 'false'); $('btOlho').setAttribute('aria-label', ver ? 'Esconder senha' : 'Mostrar senha'); i.focus(); });
 const sair = () => { ALERTAS = []; TOKM = ''; KDADOS = ''; REM = {}; estRem = {}; estMeu = {}; estLogMeu = []; estHistRem = []; estVista = 'compras'; $('modos').hidden = true; $('estoque').hidden = true; document.body.classList.remove('est'); aba = 'lista'; $('acomp').hidden = true; $('lista').hidden = false; ls.del('cisper-senha'); ls.del('cisper-eu'); eu = ''; $('perfil').hidden = true; $('painel').hidden = true; $('adm').hidden = true; $('btSair').hidden = true; pedirSenha(); };
@@ -1663,6 +1818,7 @@ $('btTrocarToken').addEventListener('click', () => { ls.del('cisper-token'); ren
 $('abaLista').addEventListener('click', () => { aba = 'lista'; render(); });
 $('abaAcomp').addEventListener('click', () => { aba = 'acomp'; puxar(); render(); });
 $('abaRx').addEventListener('click', () => { aba = 'rx'; render(); window.scrollTo(0, 0); });
+$('abaEquipe').addEventListener('click', () => { aba = 'equipe'; RASC = null; render(); window.scrollTo(0, 0); });
 $('abaEscala').addEventListener('click', () => { aba = 'escala'; puxarEscala(); render(); window.scrollTo(0, 0); });
 $('fMarcas').addEventListener('submit', (ev) => {
   ev.preventDefault(); const v = $('tokenMarcas').value.trim(); if (!v) return;

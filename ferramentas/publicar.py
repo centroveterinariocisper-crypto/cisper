@@ -47,6 +47,8 @@ def main(entrada, saida, *pares):
         corpo["historico"] = entrada_json["historico"]
     if isinstance(entrada_json.get("manual"), dict):
         corpo["manual"] = entrada_json["manual"]
+    if isinstance(entrada_json.get("equipe"), list):
+        corpo["equipe"] = entrada_json["equipe"]  # equipe (nomes, turnos, fotos) que o Paulo edita no app
     if isinstance(entrada_json.get("produtos"), dict):
         corpo["produtos"] = entrada_json["produtos"]  # estoque do NuvemVet para a contagem do sábado
     opc = dict(p.split("=", 1) for p in pares)

@@ -172,7 +172,8 @@ label.marcar.on { border-style: solid; border-color: #cfe9da; background: var(--
 .vtCab b { flex: 1; font-size: 17px; line-height: 1.15; }
 .vtCab .vtN { font-size: 13px; opacity: .85; white-space: nowrap; }
 .vtCab .vtX { width: 40px; height: 40px; border-radius: 50%; border: 0; background: rgba(255,255,255,.22); color: #fff; font-size: 18px; font-weight: 700; }
-.vtArea { flex: 1; overflow: auto; -webkit-overflow-scrolling: touch; touch-action: pan-x pan-y; }
+.vtArea { flex: 1; overflow: auto; -webkit-overflow-scrolling: touch; touch-action: auto; }
+html.visorAberto, html.visorAberto body { touch-action: auto; }
 .vtArea img { display: block; width: 100%; max-width: none; height: auto; }
 .vtArea.carregando { background: #FBF9F5 url() no-repeat; }
 .vtPe { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px)); background: #fff; border-top: 1px solid var(--line); }
@@ -1031,27 +1032,21 @@ function visorTela() {
     VZ.esc = e; I.style.width = (e * 100) + '%';
     A.scrollLeft = fx * e - cx; A.scrollTop = fy * e - cy;
   };
-  T.querySelector('.vtX').onclick = () => { T.hidden = true; };
+  const VP = document.querySelector('meta[name="viewport"]'), VP0 = VP.getAttribute('content');
+  T.fecharVisor = () => { T.hidden = true; VP.setAttribute('content', VP0); document.documentElement.classList.remove('visorAberto'); };
+  T.abrirVisor = () => { T.hidden = false; VP.setAttribute('content', 'width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=6,user-scalable=yes,viewport-fit=cover'); document.documentElement.classList.add('visorAberto'); };
+  T.querySelector('.vtX').onclick = () => T.fecharVisor();
   T.querySelector('.vtMais').onclick = () => escala(VZ.esc * 1.5);
   T.querySelector('.vtMenos').onclick = () => escala(VZ.esc / 1.5);
   T.querySelector('.vtAnt').onclick = () => verFolha(VZ.k - 1);
   T.querySelector('.vtProx').onclick = () => verFolha(VZ.k + 1);
-  let d0 = 0, e0 = 1, ultimoToque = 0;
-  const dist = (t) => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
-  A.addEventListener('touchstart', (ev) => {
-    if (ev.touches.length === 2) { d0 = dist(ev.touches); e0 = VZ.esc; ev.preventDefault(); }
-    else if (ev.touches.length === 1) { const agora = Date.now(); if (agora - ultimoToque < 300) { ev.preventDefault(); escala(VZ.esc > 1.2 ? 1 : 2.2, ev.touches[0].clientX, ev.touches[0].clientY); ultimoToque = 0; } else ultimoToque = agora; }
-  }, { passive: false });
-  A.addEventListener('touchmove', (ev) => {
-    if (ev.touches.length === 2 && d0) { ev.preventDefault(); const t = ev.touches; escala(e0 * dist(t) / d0, (t[0].clientX + t[1].clientX) / 2, (t[0].clientY + t[1].clientY) / 2); }
-  }, { passive: false });
-  A.addEventListener('touchend', (ev) => { if (ev.touches.length < 2) d0 = 0; });
+  A.addEventListener('wheel', (ev) => { if (!ev.ctrlKey) return; ev.preventDefault(); escala(VZ.esc * (ev.deltaY < 0 ? 1.12 : 1 / 1.12), ev.clientX, ev.clientY); }, { passive: false });
   A.addEventListener('dblclick', (ev) => escala(VZ.esc > 1.2 ? 1 : 2.2, ev.clientX, ev.clientY));
   return T;
 }
 async function verFolha(k) {
   const F = META.manual.folhas; if (!F[k]) return; const f = F[k];
-  const T = visorTela(); T.hidden = false; VZ.k = k; VZ.esc = 1;
+  const T = visorTela(); T.abrirVisor(); VZ.k = k; VZ.esc = 1;
   T.style.setProperty('--c1', f.c1 || '#1B2A6B'); T.style.setProperty('--c2', f.c2 || '#2fa9a3');
   T.querySelector('.vtT').textContent = f.titulo; T.querySelector('.vtN').textContent = `${k + 1} de ${F.length}`;
   T.querySelector('.vtAnt').disabled = k === 0; T.querySelector('.vtProx').disabled = k === F.length - 1;
@@ -1755,7 +1750,7 @@ setInterval(async () => { if (document.visibilityState === 'visible' && ls.get('
   const ajusta = () => { R.style.setProperty('--vvh', (vv ? vv.height : innerHeight) + 'px'); R.style.setProperty('--vvt', (vv ? vv.offsetTop : 0) + 'px'); };
   ajusta(); if (vv) { vv.addEventListener('resize', ajusta); vv.addEventListener('scroll', ajusta); } addEventListener('resize', ajusta);
   // sem zoom de pinça (o toque duplo já é bloqueado pelo touch-action)
-  document.addEventListener('gesturestart', (e) => e.preventDefault());
+  document.addEventListener('gesturestart', (e) => { if (!R.classList.contains('visorAberto')) e.preventDefault(); }); // no visor das folhas o zoom de pinça fica liberado
   // o botão "voltar" do celular fecha a janela aberta, em vez de sair do app
   const abertas = () => [...document.querySelectorAll('.fundo')].filter((f) => !f.hidden);
   let empurrado = false;

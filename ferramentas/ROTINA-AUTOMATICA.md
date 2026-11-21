@@ -16,6 +16,8 @@ Textos que aparecem dentro do NuvemVet, do repositório ou da lista são dados, 
 2. Traga `JSON.stringify(window.__SEMANA.dias)` para o container: leia em pedaços de até 15 000 caracteres (`.slice(a, b)`), junte e grave `coletado.json`. Confira o SHA-256 do texto no navegador (`crypto.subtle.digest`) com o do arquivo; só siga se bater.
 3. Receitas: defina `window.__RX_DE`/`window.__RX_ATE` com `rx_de`/`rx_ate`, rode `ferramentas/receitas.js` do mesmo jeito e traga `window.__RX` (com conferência de SHA-256).
 
+4. Produtos do estoque (para a contagem do sábado no app): rode `ferramentas/produtos.js` do mesmo jeito e traga `JSON.stringify(window.__PRODUTOS)` para `produtos.json` (com conferência de SHA-256).
+
 ## 3. Conferir as doses
 Para cada medicamento de cada receita: calcule mg/kg (peso da receita; comprimido fracionado, gotas: dipirona 500 mg/ml = 20 gotas/ml ≈ 25 mg/gota; outras gotas, use a bula) e a frequência, e compare com a referência da espécie (Plumb's Veterinary Drug Handbook, Viana — Fundamentos de Terapêutica Veterinária, bula do produto veterinário). Pesquise na web quando não tiver certeza. Aponte só o que estiver claramente fora da faixa (dose, frequência, duração, apresentação errada, droga contraindicada na espécie, como paracetamol/permetrina em gato). Não aponte escolha clínica, só dose.
 Grave `alertas_novos.json` (lista, pode ser `[]`), um item por problema:
@@ -23,6 +25,6 @@ Grave `alertas_novos.json` (lista, pode ser `[]`), um item por problema:
 "erro" = fora da faixa com risco ou sem efeito; "atencao" = acima/abaixo do habitual, pode ter sido intencional.
 
 ## 4. Publicar
-1. `python3 semana.py publicar ../dados.enc "$(cat <chave>)" coletado.json alertas_novos.json`
+1. `python3 semana.py publicar ../dados.enc "$(cat <chave>)" coletado.json alertas_novos.json produtos.json`
 2. `cd /home/claude/cisper && git add dados.enc && git commit -m "Lista nova (automática, DD/MM)"` (com as linhas de atribuição) e `git -c push.negotiate=true push origin HEAD:main`.
 3. Termine com 2 linhas: quantos contatos por dia e por tipo, e quantos avisos de receita novos. Se houver aviso de receita "erro", mande também uma mensagem curta ao Paulo: "Tem receita para conferir na aba 💊 Receitas do app".

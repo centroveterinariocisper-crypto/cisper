@@ -79,7 +79,7 @@ def preparar(caminho, chave):
                       "rx_de": dt.date.fromisoformat(rx_desde).strftime("%d-%m-%Y"), "rx_ate": HOJE.strftime("%d-%m-%Y")}))
 
 
-def publicar(caminho, chave, coletado, alertas_novos):
+def publicar(caminho, chave, coletado, alertas_novos, produtos=None):
     corpo, alertas = abrir(caminho, chave)
     velho = corpo.get("dias") or {}
     novo_col = json.load(open(coletado, encoding="utf-8"))
@@ -129,7 +129,8 @@ def publicar(caminho, chave, coletado, alertas_novos):
     todos_al = [a for a in alertas if a["id"] not in ids and recente(a)] + novos_al
     with tempfile.TemporaryDirectory() as t:
         ent, al = os.path.join(t, "s.json"), os.path.join(t, "a.json")
-        json.dump({"dias": dias, "historico": h, "manual": corpo.get("manual")}, open(ent, "w"), ensure_ascii=False)
+        prod = json.load(open(produtos, encoding="utf-8")) if produtos else corpo.get("produtos")
+        json.dump({"dias": dias, "historico": h, "manual": corpo.get("manual"), "produtos": prod}, open(ent, "w"), ensure_ascii=False)
         json.dump(todos_al, open(al, "w"), ensure_ascii=False)
         saida = os.path.join(t, "dados.enc")
         publicar_main(ent, saida, "base=" + caminho, "auto=" + chave, "alertas=" + al)
@@ -143,12 +144,26 @@ def manual(caminho, chave, arquivo_manual):
     corpo, alertas = abrir(caminho, chave)
     with tempfile.TemporaryDirectory() as t:
         ent, al, saida = os.path.join(t, "s.json"), os.path.join(t, "a.json"), os.path.join(t, "dados.enc")
-        json.dump({"dias": corpo.get("dias") or {}, "historico": corpo.get("historico") or {}, "manual": json.load(open(arquivo_manual, encoding="utf-8"))}, open(ent, "w"), ensure_ascii=False)
+        json.dump({"dias": corpo.get("dias") or {}, "historico": corpo.get("historico") or {}, "manual": json.load(open(arquivo_manual, encoding="utf-8")), "produtos": corpo.get("produtos")}, open(ent, "w"), ensure_ascii=False)
         json.dump(alertas, open(al, "w"), ensure_ascii=False)
         publicar_main(ent, saida, "base=" + caminho, "auto=" + chave, "alertas=" + al)
         open(caminho, "w").write(open(saida).read())
 
 
+def produtos(caminho, chave, arquivo_produtos):
+    """Troca só a lista de produtos do estoque (para a contagem do sábado), sem mexer no resto."""
+    corpo, alertas = abrir(caminho, chave)
+    with tempfile.TemporaryDirectory() as t:
+        ent, al, saida = os.path.join(t, "s.json"), os.path.join(t, "a.json"), os.path.join(t, "dados.enc")
+        corpo = {k: corpo.get(k) for k in ("dias", "historico", "manual")}
+        corpo["produtos"] = json.load(open(arquivo_produtos, encoding="utf-8"))
+        json.dump(corpo, open(ent, "w"), ensure_ascii=False)
+        json.dump(alertas, open(al, "w"), ensure_ascii=False)
+        publicar_main(ent, saida, "base=" + caminho, "auto=" + chave, "alertas=" + al)
+        open(caminho, "w").write(open(saida).read())
+    print(json.dumps({"produtos": len(corpo["produtos"].get("itens", []))}, ensure_ascii=False))
+
+
 if __name__ == "__main__":
     acao, *args = sys.argv[1:]
-    {"preparar": preparar, "publicar": publicar, "manual": manual}[acao](*args)
+    {"preparar": preparar, "publicar": publicar, "manual": manual, "produtos": produtos}[acao](*args)

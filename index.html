@@ -266,6 +266,16 @@ button.grande { border-radius: 14px; font-weight: 700; }
 /* abas do administrador */
 .abas { display: grid; grid-template-columns: 1fr 1fr; background: var(--surface); border-radius: 14px; padding: 4px; gap: 4px; }
 .abas button { border: 0; background: transparent; border-radius: 11px; padding: 10px 6px; font-weight: 600; color: var(--muted); }
+.escala { display: flex; flex-direction: column; gap: 10px; }
+.escala h3 { margin: 4px 0 0; font-size: 17px; color: var(--navy); }
+.escala p { margin: 0; color: var(--muted); font-size: 14px; }
+.escala .sab { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 10px 12px; }
+.escala .sab.sem { border-color: #E9573F; }
+.escala .sab b { font-size: 15px; color: var(--navy); }
+.escala .sab small { display: block; color: #E9573F; font-size: 12px; }
+.escala .bts { display: flex; gap: 6px; }
+.escala .bts button { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 8px 14px; font-weight: 600; color: var(--muted); }
+.escala .bts button.on { color: #fff; border-color: transparent; background: linear-gradient(135deg, var(--c1), var(--c2)); }
 .abas button.on { background: var(--card); color: var(--navy); box-shadow: 0 2px 8px rgba(22,32,74,.10); }
 .sinc { font-size: 12.5px; color: var(--muted); }
 .sinc.ok { color: var(--ok); }
@@ -345,6 +355,23 @@ body.est .topo h1 em { color: var(--est-2); }
 .avisar { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; border: 0; border-radius: 18px; padding: 17px; font-weight: 700; font-size: 17.5px; color: #fff; background: linear-gradient(135deg, var(--est-2), var(--est)); box-shadow: 0 12px 22px -14px var(--est); }
 .avisar .mais { width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,.22); display: grid; place-items: center; font-size: 20px; line-height: 1; }
 .compras { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 4px 16px; box-shadow: 0 10px 24px -20px rgba(22,32,74,.3); }
+.cont { display: flex; flex-direction: column; gap: 12px; }
+.cont input[type=search] { width: 100%; border: 1.5px solid var(--line); border-radius: 14px; padding: 12px 14px; font: inherit; font-size: 16px; background: #fff; }
+.cont .cItem { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
+.cont h3 + .cItem { border-top: 0; }
+.cont .cItem .tx { flex: 1; min-width: 0; }
+.cont .cItem .tx b { display: block; font-weight: 600; font-size: 15.5px; overflow-wrap: anywhere; }
+.cont .cItem .tx small { color: var(--muted); font-size: 12.5px; }
+.cont .cItem input { width: 78px; text-align: center; font: inherit; font-size: 18px; font-weight: 700; border: 1.5px solid var(--line); border-radius: 12px; padding: 9px 4px; background: #fff; font-variant-numeric: tabular-nums; }
+.cont .cItem.ok input { border-color: #2fa9a3; background: #EAF7F6; }
+.cont .cItem .dif { font-size: 13px; font-weight: 700; color: var(--bad); white-space: nowrap; }
+.cont .cItem .dif.igual { color: #2fa9a3; }
+.cont .prog { font-weight: 700; color: var(--navy); }
+.cont .fim { border: 0; border-radius: 16px; padding: 15px; font-weight: 700; font-size: 16.5px; color: #fff; background: linear-gradient(135deg, var(--est-2), var(--est)); }
+.cont .feito { background: #EAF7F6; color: #1f7f7a; border-radius: 14px; padding: 12px; font-weight: 600; }
+.avisoCont { display: flex; flex-direction: column; gap: 8px; background: #FFF6EC; border: 1.5px solid #F07C1E; border-radius: 18px; padding: 14px; }
+.avisoCont b { font-size: 16px; color: var(--navy); }
+.avisoCont button { border: 0; border-radius: 14px; padding: 12px; font-weight: 700; color: #fff; background: linear-gradient(135deg, var(--debora-2), var(--debora)); }
 .compras h3 { margin: 14px 0 2px; letter-spacing: .12em; text-transform: uppercase; font-size: 11px; font-weight: 700; color: var(--muted); }
 .fItem { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
 .compras h3 + .fItem { border-top: 0; }
@@ -437,8 +464,8 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; touch-action: man
     <p>Centro Veterinário Cisper</p>
     <p id="pergQuem">Quem vai usar agora? Toque no seu nome.</p>
     <div class="quem3" id="quem3">
-      <button type="button" class="pessoa" data-p="debora" style="--c1:var(--debora);--c2:var(--debora-2)" aria-pressed="false"><span class="bola">D</span>Débora<small>Manhã</small></button>
-      <button type="button" class="pessoa" data-p="duda" style="--c1:var(--duda);--c2:var(--duda-2)" aria-pressed="false"><span class="bola">D</span>Duda<small>Tarde</small></button>
+      <button type="button" class="pessoa" data-p="debora" style="--c1:var(--debora);--c2:var(--debora-2)" aria-pressed="false"><span class="bola">D</span>Débora<small>Tarde</small></button>
+      <button type="button" class="pessoa" data-p="duda" style="--c1:var(--duda);--c2:var(--duda-2)" aria-pressed="false"><span class="bola">D</span>Duda<small>Manhã</small></button>
       <button type="button" class="pessoa" data-p="adm" style="--c1:var(--adm);--c2:var(--adm-2)" aria-pressed="false"><span class="bola">P</span>Paulo<small>Adm</small></button>
     </div>
     <p id="txtSenha">Digite a <b>sua</b> senha para entrar.</p>
@@ -530,7 +557,8 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; touch-action: man
       <p class="info" id="estInfo"></p>
       <svg class="ondas" id="ondasEst" viewBox="0 0 400 64" preserveAspectRatio="none" aria-hidden="true"></svg>
     </section>
-    <div class="abas estAbas" id="estAbas" hidden><button type="button" data-v="compras" class="on">🛒 Para comprar</button><button type="button" data-v="hist">🕓 Histórico</button></div>
+    <div class="abas estAbas" id="estAbas" hidden><button type="button" data-v="compras" class="on">🛒 Para comprar</button><button type="button" data-v="cont">🔢 Contagem</button><button type="button" data-v="hist" id="btEstHist">🕓 Histórico</button></div>
+    <div class="cont" id="estCont" hidden></div>
     <div id="estCompras" style="display:flex;flex-direction:column;gap:14px">
     <button type="button" class="avisar" id="btAvisar"><span class="mais">+</span>Avisar que acabou algo</button>
     <div class="secao">Para comprar <span class="n" id="estN">0</span></div>
@@ -553,9 +581,10 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; touch-action: man
 
   <section class="adm" id="adm" hidden>
     <b class="t">Área do administrador</b>
-    <div class="abas" role="tablist"><button type="button" id="abaLista" class="on">📋 Lista</button><button type="button" id="abaAcomp">📊 Acompanhamento</button><button type="button" id="abaRx">💊 Receitas</button></div>
+    <div class="abas" role="tablist"><button type="button" id="abaLista" class="on">📋 Lista</button><button type="button" id="abaAcomp">📊 Acompanhamento</button><button type="button" id="abaRx">💊 Receitas</button><button type="button" id="abaEscala">📅 Sábados</button></div>
     <div class="sinc" id="sinc"></div>
     <div class="rx" id="rxAlertas" hidden></div>
+    <div class="escala" id="escalaBox" hidden></div>
     <button type="button" class="grande" id="btPublicar" hidden>📤 Publicar lista nova</button>
     <input type="file" id="arquivo" accept=".cisper,.json,.txt,application/json,text/plain,*/*" hidden>
     <form id="fToken" autocomplete="off"><div id="admToken" hidden>
@@ -614,8 +643,8 @@ const TIPOS = {
 };
 const ORDEM = ['pos', 'vac', 'orc2', 'orc7', 'par'];
 const PESSOAS = {
-  debora: { nome: 'Débora', turno: 'Manhã', horario: 'Envie das 9h às 11h30.', cor: 'var(--debora)', cor2: 'var(--debora-2)' },
-  duda:   { nome: 'Duda', turno: 'Tarde', horario: 'Envie das 14h às 17h e responda quem escrever à tarde.', cor: 'var(--duda)', cor2: 'var(--duda-2)' },
+  debora: { nome: 'Débora', turno: 'Tarde', horario: 'Envie das 14h às 20h.', cor: 'var(--debora)', cor2: 'var(--debora-2)' },
+  duda:   { nome: 'Duda', turno: 'Manhã', horario: 'Envie das 8h às 14h.', cor: 'var(--duda)', cor2: 'var(--duda-2)' },
   todos:  { nome: 'Paulo', turno: 'Adm', horario: 'Você está vendo a lista das duas.', cor: 'var(--adm)', cor2: 'var(--adm-2)' }
 };
 const QUEM = [['todos', 'As duas'], ['debora', 'Débora'], ['duda', 'Duda']];
@@ -654,7 +683,16 @@ function det(i) {
   if (i.t === 'pos') return `${i.a} · ${i.x} em ${String(i.d).slice(0, 5)}` + ((i.med || []).length ? ` · 💊 ${juntaE(i.med)}` : '');
   return `${i.a} · orçamento de ${rs(i.v)} em ${String(i.d).slice(0, 5)}`;
 }
-const dona = (i, lista) => { if (i.t !== 'par') return 'debora'; const p = lista.filter((x) => x.t === 'par').indexOf(i); return p < 10 ? 'debora' : 'duda'; };
+// ---- escala: segunda a sexta as duas dividem tudo meio a meio; sábado a lista toda é de quem está de plantão
+const ESCALA_PADRAO = { '2026-11-28': 'debora', '2026-12-05': 'duda', '2026-12-12': 'duda', '2026-12-19': 'debora' };
+let ESCALA = { ...ESCALA_PADRAO }; try { Object.assign(ESCALA, JSON.parse(ls.get('cisper-escala', '{}')) || {}); } catch (e) {}
+const ehSabado = (d) => !!d && new Date(d + 'T12:00:00').getDay() === 6;
+const plantao = (d) => (ehSabado(d) && (ESCALA[d] === 'debora' || ESCALA[d] === 'duda')) ? ESCALA[d] : '';
+const dona = (i, lista, dia) => {
+  const pl = plantao(dia); if (pl) return pl;
+  const p = lista.filter((x) => x.t === i.t).indexOf(i); // cada tipo de mensagem alterna: Duda, Débora, Duda…
+  return p % 2 === 0 ? 'duda' : 'debora';
+};
 
 // ---- dados criptografados: cada pessoa abre com a própria senha
 const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
@@ -708,7 +746,58 @@ async function prepararSinc(d) {
   if (d.quem === 'adm' && ls.get('cisper-token-marcas', '')) TOKM = ls.get('cisper-token-marcas', '');
   else if (ENV && ENV.mk && KDADOS) { try { TOKM = (await decifrar(KDADOS, ENV.mk)).t || ''; } catch (e) {} }
   carregarEstMeu();
-  if (TOKM) { puxar(); puxarEst(); }
+  if (TOKM) { puxar(); puxarEst(); puxarEscala(); if (fimDeSemana() || d.quem === 'adm') puxarCont(); }
+}
+// escala dos sábados: o Paulo marca no app e fica gravada em escala.json no repositório das marcações
+let escalaErro = '';
+async function puxarEscala() {
+  if (!TOKM) return;
+  try {
+    const r = await fetch(`https://api.github.com/repos/${REPO_M}/contents/escala.json?t=` + Date.now(), { headers: { ...hM(), Accept: 'application/vnd.github.raw' }, cache: 'no-store' });
+    if (r.status === 404) return;
+    if (!r.ok) throw 0;
+    const e = (await r.json()).sabados || {};
+    const novo = { ...ESCALA_PADRAO, ...e };
+    if (JSON.stringify(novo) === JSON.stringify(ESCALA)) return;
+    ESCALA = novo; ls.set('cisper-escala', JSON.stringify(e)); render();
+  } catch (e) {}
+}
+async function salvarEscala(tent) {
+  try {
+    const caminho = `https://api.github.com/repos/${REPO_M}/contents/escala.json`;
+    let sha; const g = await fetch(caminho + '?t=' + Date.now(), { headers: hM(), cache: 'no-store' });
+    if (g.ok) sha = (await g.json()).sha;
+    const corpo = JSON.stringify({ sabados: ESCALA }, null, 1);
+    const r = await fetch(caminho, { method: 'PUT', headers: { ...hM(), 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'escala dos sábados', content: btoa(unescape(encodeURIComponent(corpo))), sha }) });
+    if (r.status === 409 && !tent) return salvarEscala(1);
+    if (!r.ok) throw 0;
+    escalaErro = ''; toast('✓ Escala salva');
+  } catch (e) { escalaErro = 'Não consegui salvar na internet. Tente de novo.'; }
+  render();
+}
+function desenharEscala() {
+  const B = $('escalaBox'); B.replaceChildren();
+  B.appendChild(el('h3', null, '📅 Quem trabalha em cada sábado'));
+  B.appendChild(el('p', null, 'No sábado, a lista inteira do dia vai para quem está de plantão. De segunda a sexta elas dividem tudo meio a meio.'));
+  if (escalaErro) B.appendChild(el('p', 'aviso', '⚠ ' + escalaErro));
+  if (!TOKM) B.appendChild(el('p', 'aviso', 'Sem a chave das marcações, a escala fica só neste celular.'));
+  const d = new Date(); d.setHours(12, 0, 0, 0); d.setDate(d.getDate() + ((6 - d.getDay() + 7) % 7));
+  for (let n = 0; n < 10; n++, d.setDate(d.getDate() + 7)) {
+    const iso = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    const atualP = ESCALA[iso] || '';
+    const linha = el('div', 'sab' + (atualP ? '' : ' sem'));
+    const t = el('div'); t.appendChild(el('b', null, d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + (iso === hojeISO() ? ' · hoje' : '')));
+    if (!atualP) t.appendChild(el('small', null, 'Ninguém marcado: as duas dividem'));
+    linha.appendChild(t);
+    const bts = el('div', 'bts');
+    for (const p of ['debora', 'duda']) {
+      const b = el('button', p === atualP ? 'on' : '', PESSOAS[p].nome); b.type = 'button';
+      b.style.setProperty('--c1', PESSOAS[p].cor); b.style.setProperty('--c2', PESSOAS[p].cor2);
+      b.onclick = () => { if (ESCALA[iso] === p) delete ESCALA[iso]; else ESCALA[iso] = p; ls.set('cisper-escala', JSON.stringify(ESCALA)); render(); if (TOKM) salvarEscala(); };
+      bts.appendChild(b);
+    }
+    linha.appendChild(bts); B.appendChild(linha);
+  }
 }
 const hM = () => ({ Authorization: 'Bearer ' + TOKM, Accept: 'application/vnd.github+json' });
 async function puxar() {
@@ -949,7 +1038,7 @@ function render() {
     $('admToken').hidden = true; $('btPublicar').hidden = true; $('btTrocarToken').hidden = true;
     const qx = $('quem'); qx.replaceChildren();
     for (const [id, nome] of QUEM) { const b = el('button', id === quem ? 'on' : '', nome); b.type = 'button'; b.onclick = () => { quem = id; ls.set('cisper-quem', id); render(); }; qx.appendChild(b); }
-    $('abaLista').classList.toggle('on', aba === 'lista'); $('abaAcomp').classList.toggle('on', aba === 'acomp'); $('abaRx').classList.toggle('on', aba === 'rx'); $('sinc').hidden = aba === 'rx';
+    $('abaLista').classList.toggle('on', aba === 'lista'); $('abaAcomp').classList.toggle('on', aba === 'acomp'); $('abaRx').classList.toggle('on', aba === 'rx'); $('abaEscala').classList.toggle('on', aba === 'escala'); $('sinc').hidden = aba === 'rx' || aba === 'escala';
     $('quem').parentElement.hidden = aba !== 'lista';
     $('admMarcas').hidden = true;
     desenharAlertas();
@@ -959,7 +1048,9 @@ function render() {
     else if (ls.get('cisper-token-marcas', '') && !(ENV && ENV.mk)) { sx.className = 'sinc'; sx.textContent = 'Publique a lista de novo para ligar as marcações nos celulares delas.'; }
     else { sx.className = 'sinc'; sx.textContent = 'Por enquanto você vê só as marcações feitas neste celular.'; }
   }
-  const verAcomp = ehAdm() && aba === 'acomp', verRx = ehAdm() && aba === 'rx';
+  const verEsc = ehAdm() && aba === 'escala';
+  $('escalaBox').hidden = !verEsc; if (verEsc) desenharEscala();
+  const verAcomp = ehAdm() && aba === 'acomp', verRx = (ehAdm() && aba === 'rx') || verEsc;
   $('acomp').hidden = !verAcomp; $('lista').hidden = verAcomp || verRx; $('painel').hidden = verAcomp || verRx;
   ondas($('ondasPainel'), 7, 64, '#ffffff', 0.55);
   // dias
@@ -975,7 +1066,7 @@ function render() {
   if (verAcomp) { acompanhamento(); return; }
   // lista de quem está sendo visto
   const doDia = DADOS[atual] || [];
-  const itens = doDia.filter((i) => quem === 'todos' || dona(i, doDia) === quem).sort((a, b) => ORDEM.indexOf(a.t) - ORDEM.indexOf(b.t));
+  const itens = doDia.filter((i) => quem === 'todos' || dona(i, doDia, atual) === quem).sort((a, b) => ORDEM.indexOf(a.t) - ORDEM.indexOf(b.t));
   const fazer = itens.filter((i) => !feitoEm(i.k));
   const prontos = itens.filter((i) => feitoEm(i.k)).sort((a, b) => feitoEm(b.k) - feitoEm(a.k));
   // painel
@@ -989,11 +1080,18 @@ function render() {
   if (ehAdm() && quem !== 'todos') $('ola').textContent = 'Lista da ' + vendo.nome + ' · ' + vendo.turno;
   else if (ehAdm()) $('ola').textContent = 'Olá, Paulo!';
   else $('ola').textContent = itens.length && !fazer.length ? `Tudo feito, ${P.nome}! 🎉` : `Olá, ${P.nome}! 👋`;
-  $('info').textContent = !itens.length ? `Nada para ${nomeDia}.` : (fazer.length ? `${ehAdm() && quem === 'todos' ? 'Mensagens de ' + nomeDia + ' das duas' : 'Sua lista de ' + nomeDia}: faltam ${fazer.length}. ${vendo.horario}` : `Todas as mensagens de ${nomeDia} foram enviadas.`);
+  const pl = plantao(atual), sabTxt = pl ? (ehAdm() ? ` Sábado de plantão da ${PESSOAS[pl].nome}: a lista toda é dela.` : (pl === eu ? ' Sábado de plantão: a lista toda do dia é sua.' : ' Sábado de folga: a lista do dia está com a ' + PESSOAS[pl].nome + '.')) : '';
+  $('info').textContent = (!itens.length ? `Nada para ${nomeDia}.` : (fazer.length ? `${ehAdm() && quem === 'todos' ? 'Mensagens de ' + nomeDia + ' das duas' : 'Sua lista de ' + nomeDia}: faltam ${fazer.length}. ${vendo.horario}` : `Todas as mensagens de ${nomeDia} foram enviadas.`)) + sabTxt;
   $('nFeitos').textContent = prontos.length; $('nTotal').textContent = `de ${itens.length} ${itens.length === 1 ? 'mensagem enviada' : 'mensagens enviadas'}`;
   $('barra').style.width = itens.length ? Math.round(prontos.length / itens.length * 100) + '%' : '0';
   // cartões
   const L = $('lista'); L.replaceChildren();
+  if (precisaContar()) {
+    const a = el('div', 'avisoCont'); a.appendChild(el('b', null, '🔢 Hoje tem contagem do estoque'));
+    a.appendChild(el('span', null, 'Conte os produtos e digite a quantidade no app. Não precisa mais da folha.'));
+    const b = el('button', null, 'Fazer a contagem'); b.type = 'button'; b.onclick = () => { estVista = 'cont'; puxarCont(); trocarModo('estoque'); }; a.appendChild(b);
+    L.appendChild(a);
+  }
   const dl = dias[dias.length - 1];
   if (dl < hojeISO()) L.appendChild(el('p', 'aviso', 'Esta é a última lista publicada. A nova aparece quando o Paulo publicar.'));
   if (!itens.length) { L.appendChild(el('div', 'vazio', `Nada para ${nomeDia}.`)); return; }
@@ -1014,7 +1112,7 @@ function acompanhamento() {
   const cores = { debora: ['var(--debora)', 'var(--debora-2)'], duda: ['var(--duda)', 'var(--duda-2)'] };
   for (const p of ['debora', 'duda']) {
     const P = PESSOAS[p];
-    const its = doDia.filter((i) => dona(i, doDia) === p).sort((a, b) => ORDEM.indexOf(a.t) - ORDEM.indexOf(b.t));
+    const its = doDia.filter((i) => dona(i, doDia, atual) === p).sort((a, b) => ORDEM.indexOf(a.t) - ORDEM.indexOf(b.t));
     const ok = its.filter((i) => feitoEm(i.k)), nao = its.filter((i) => !feitoEm(i.k));
     const c = el('section', 'pessoaCard'); c.style.setProperty('--c1', cores[p][0]); c.style.setProperty('--c2', cores[p][1]);
     const cab = el('div', 'cab'); cab.appendChild(el('span', 'bola', P.nome[0]));
@@ -1022,7 +1120,8 @@ function acompanhamento() {
     const n = el('div', 'num', String(ok.length)); n.appendChild(el('span', null, ' de ' + its.length)); cab.appendChild(n);
     c.appendChild(cab);
     const tr = el('div', 'trilho'); const ti = el('i'); ti.style.width = its.length ? Math.round(ok.length / its.length * 100) + '%' : '0'; tr.appendChild(ti); c.appendChild(tr);
-    if (!its.length) c.appendChild(el('span', 'selo ok', 'Nada para esse dia'));
+    if (plantao(atual) && plantao(atual) !== p) c.appendChild(el('span', 'selo ok', 'Folga neste sábado'));
+    else if (!its.length) c.appendChild(el('span', 'selo ok', 'Nada para esse dia'));
     else if (!nao.length) c.appendChild(el('span', 'selo ok', '✓ Fez tudo'));
     else if (atual < h) c.appendChild(el('span', 'selo falta', `Não fez ${nao.length}`));
     else if (atual === h) c.appendChild(el('span', 'selo hoje', `Faltam ${nao.length} hoje`));
@@ -1052,7 +1151,7 @@ function acompanhamento() {
     const L = DADOS[d] || [], tr = document.createElement('tr');
     const td0 = el('td', null, d === h ? 'Hoje' : new Date(d + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit' })); tr.appendChild(td0);
     for (const p of ['debora', 'duda']) {
-      const its = L.filter((i) => dona(i, L) === p), ok = its.filter((i) => feitoEm(i.k)).length;
+      const its = L.filter((i) => dona(i, L, d) === p), ok = its.filter((i) => feitoEm(i.k)).length;
       let cls = 'n', txt = its.length ? `${ok}/${its.length}` : '—';
       if (d <= h) { tot[p][0] += ok; tot[p][1] += its.length; }
       if (d < h && its.length) { tot[p][2] += its.length - ok; cls += ok < its.length ? ' ruim' : ' bom'; if (ok === its.length) txt += ' ✓'; }
@@ -1218,14 +1317,15 @@ function renderHist() {
     row.appendChild(tx); L.appendChild(row);
   }
 }
-document.querySelectorAll('#estAbas button').forEach((b) => b.addEventListener('click', () => { estVista = b.dataset.v; if (estVista === 'hist') puxarEst(); render(); }));
+document.querySelectorAll('#estAbas button').forEach((b) => b.addEventListener('click', () => { estVista = b.dataset.v; if (estVista === 'hist') puxarEst(); if (estVista === 'cont') puxarCont(); render(); }));
 function renderEstoque() {
   const fal = faltando(), n = fal.length;
-  const verHist = ehAdm() && estVista === 'hist';
-  $('estAbas').hidden = !ehAdm();
-  document.querySelectorAll('#estAbas button').forEach((b) => b.classList.toggle('on', b.dataset.v === (verHist ? 'hist' : 'compras')));
-  $('estCompras').hidden = verHist; $('estHist').hidden = !verHist;
+  const verHist = ehAdm() && estVista === 'hist', verCont = estVista === 'cont';
+  $('estAbas').hidden = false; $('btEstHist').hidden = !ehAdm();
+  document.querySelectorAll('#estAbas button').forEach((b) => b.classList.toggle('on', b.dataset.v === (verHist ? 'hist' : verCont ? 'cont' : 'compras')));
+  $('estCompras').hidden = verHist || verCont; $('estHist').hidden = !verHist; $('estCont').hidden = !verCont;
   if (verHist) renderHist();
+  if (verCont) { renderContagem(); $('estOla').textContent = '🔢 Contagem do estoque'; $('estInfo').textContent = contInfo(); ondas($('ondasEst'), 7, 64, '#ffffff', 0.5); return; }
   $('estOla').textContent = n ? (n === 1 ? 'Falta 1 item' : `Faltam ${n} itens`) : 'Estoque em dia';
   $('estInfo').textContent = n ? 'Quando o produto chegar, toque em Chegou.' : 'Acabou alguma coisa? Toque no botão abaixo e avise.';
   ondas($('ondasEst'), 7, 64, '#ffffff', 0.5);
@@ -1253,6 +1353,117 @@ function renderEstoque() {
   else if (estErro === 'chave') nota.textContent = '⚠ A chave das marcações não funcionou.';
   else if (estErro) nota.textContent = '⚠ Sem internet agora. Fica salvo aqui e envia depois.';
   else nota.textContent = estSinc ? 'Atualizado às ' + hora(estSinc) : '';
+}
+// ===== contagem do estoque (sábado): quem está de plantão digita a quantidade de cada produto do NuvemVet
+const isoD = (d) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+function sabadoAtual() { const d = new Date(); d.setHours(12, 0, 0, 0); const w = d.getDay(); d.setDate(d.getDate() + (w === 0 ? -1 : 6 - w)); return isoD(d); } // domingo ainda vale o sábado de ontem
+const fimDeSemana = () => { const w = new Date().getDay(); return w === 6 || w === 0; };
+const contadora = (sab) => plantao(sab) || '';
+const podeContar = (sab) => ehAdm() || (fimDeSemana() && (!contadora(sab) || contadora(sab) === eu));
+const PRODUTOS = () => (META && META.produtos && META.produtos.itens) || [];
+let contSab = '', CONT = {}; // CONT[sab] = { por, q: {id: n}, ts, fim }
+let contErro = '', contBusca = '';
+const kCont = (sab) => 'cisper-contagem-' + sab;
+function contDe(sab) { if (!CONT[sab]) { try { CONT[sab] = JSON.parse(ls.get(kCont(sab), 'null')) || { q: {} }; } catch (e) { CONT[sab] = { q: {} }; } } return CONT[sab]; }
+function precisaContar() { if (ehAdm() || !fimDeSemana() || !PRODUTOS().length) return false; const s = sabadoAtual(); return podeContar(s) && !contDe(s).fim; }
+function contInfo() {
+  const s = contSab || sabadoAtual(), dd = new Date(s + 'T12:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+  const c = contadora(s);
+  if (ehAdm()) return `Sábado ${dd}` + (c ? ` · quem conta: ${PESSOAS[c].nome}` : ' · ninguém marcado na escala');
+  if (!fimDeSemana()) return `A próxima contagem é no sábado ${dd}` + (c ? `, com a ${PESSOAS[c].nome}.` : '.');
+  if (!podeContar(s)) return `A contagem deste sábado está com a ${PESSOAS[c].nome}.`;
+  return 'Digite quantas unidades tem de cada produto. Se não tiver nenhum, digite 0.';
+}
+async function puxarCont(sab) {
+  sab = sab || contSab || sabadoAtual(); if (!TOKM || !KDADOS) return;
+  try {
+    const r = await fetch(`https://api.github.com/repos/${REPO_M}/contents/contagem-${sab}.json?t=` + Date.now(), { headers: { ...hM(), Accept: 'application/vnd.github.raw' }, cache: 'no-store' });
+    if (r.status === 404) { if (ehAdm()) { CONT[sab] = { q: {} }; render(); } return; }
+    if (!r.ok) throw 0;
+    const remoto = await decifrar(KDADOS, await r.json());
+    const loc = contDe(sab);
+    if (ehAdm() || (remoto.ts || 0) > (loc.ts || 0)) { CONT[sab] = remoto; if (!ehAdm()) ls.set(kCont(sab), JSON.stringify(remoto)); }
+    contErro = ''; render();
+  } catch (e) {}
+}
+let tCont = null;
+function salvarContDepois(sab) { const c = contDe(sab); c.ts = Date.now(); c.por = eu; ls.set(kCont(sab), JSON.stringify(c)); if (!TOKM || !KDADOS) return; clearTimeout(tCont); tCont = setTimeout(() => empurrarCont(sab), 1500); }
+async function empurrarCont(sab, tent) {
+  try {
+    const caminho = `https://api.github.com/repos/${REPO_M}/contents/contagem-${sab}.json`;
+    let sha; const g = await fetch(caminho + '?t=' + Date.now(), { headers: hM(), cache: 'no-store' });
+    if (g.ok) sha = (await g.json()).sha;
+    const corpo = JSON.stringify(await cifrar(KDADOS, contDe(sab)));
+    const r = await fetch(caminho, { method: 'PUT', headers: { ...hM(), 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'contagem ' + sab, content: btoa(corpo), sha }) });
+    if (r.status === 409 && !tent) return empurrarCont(sab, 1);
+    if (!r.ok) throw 0;
+    contErro = '';
+  } catch (e) { contErro = 'Sem internet agora. A contagem fica salva neste celular e envia depois.'; }
+  const n = $('contNota'); if (n) n.textContent = contErro || '✓ Salvo';
+}
+const semAcento = (t) => String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+function renderContagem() {
+  const B = $('estCont'); B.replaceChildren();
+  const P = PRODUTOS();
+  if (ehAdm()) {
+    const ch = el('div', 'chips'); const d = new Date(sabadoAtual() + 'T12:00:00');
+    if (!contSab) contSab = sabadoAtual();
+    for (let n = 0; n < 6; n++, d.setDate(d.getDate() - 7)) { const s = isoD(d); const b = el('button', s === contSab ? 'on' : '', d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })); b.type = 'button'; b.onclick = () => { contSab = s; puxarCont(s); render(); }; ch.appendChild(b); }
+    B.appendChild(ch);
+  } else contSab = sabadoAtual();
+  const sab = contSab;
+  if (!P.length) { B.appendChild(el('p', 'aviso', 'A lista de produtos do NuvemVet ainda não chegou. Ela vem junto com a próxima lista publicada.')); return; }
+  const c = contDe(sab), q = c.q || {};
+  const feitos_ = P.filter((p) => q[p.id] !== undefined && q[p.id] !== '').length;
+  if (ehAdm()) { adminContagem(B, P, c, feitos_); return; }
+  if (!podeContar(sab)) { B.appendChild(el('p', null, contInfo())); return; }
+  if (c.fim) B.appendChild(el('div', 'feito', '✓ Contagem enviada para o Paulo às ' + hora(c.fim) + '. Se precisar, ainda dá para corrigir.'));
+  B.appendChild(el('div', 'prog', `${feitos_} de ${P.length} produtos contados`));
+  const busca = document.createElement('input'); busca.type = 'search'; busca.placeholder = 'Procurar produto'; busca.value = contBusca;
+  const lista = el('div');
+  const desenhar = () => {
+    lista.replaceChildren(); const t = semAcento(contBusca); let grupo = null;
+    for (const p of P) {
+      if (t && !semAcento(p.nome).includes(t)) continue;
+      if (p.grupo !== grupo) { grupo = p.grupo; if (grupo) lista.appendChild(el('h3', null, grupo)); }
+      const row = el('div', 'cItem' + (q[p.id] !== undefined && q[p.id] !== '' ? ' ok' : ''));
+      const tx = el('div', 'tx'); tx.appendChild(el('b', null, p.nome)); if (p.un) tx.appendChild(el('small', null, p.un)); row.appendChild(tx);
+      const inp = document.createElement('input'); inp.type = 'number'; inp.inputMode = 'decimal'; inp.min = '0'; inp.step = 'any'; inp.placeholder = '—'; inp.setAttribute('aria-label', 'Quantidade de ' + p.nome);
+      if (q[p.id] !== undefined) inp.value = q[p.id];
+      inp.oninput = () => { const v = inp.value.trim(); if (v === '') delete q[p.id]; else q[p.id] = Number(v.replace(',', '.')); c.q = q; row.classList.toggle('ok', v !== ''); salvarContDepois(sab); B.querySelector('.prog').textContent = `${P.filter((x) => q[x.id] !== undefined).length} de ${P.length} produtos contados`; };
+      row.appendChild(inp); lista.appendChild(row);
+    }
+  };
+  busca.oninput = () => { contBusca = busca.value; desenhar(); };
+  B.appendChild(busca); B.appendChild(lista); desenhar();
+  const fim = el('button', 'fim', c.fim ? '✓ Enviar de novo' : '✅ Terminei a contagem'); fim.type = 'button';
+  fim.onclick = async () => {
+    const falta = P.filter((p) => q[p.id] === undefined).length;
+    if (falta && !window.confirm(`Ainda faltam ${falta} produtos sem número. Quer enviar mesmo assim?`)) return;
+    c.fim = Date.now(); salvarContDepois(sab); clearTimeout(tCont); await empurrarCont(sab); toast('✓ Contagem enviada'); render();
+  };
+  B.appendChild(fim);
+  B.appendChild(el('p', 'nota', '', null)).id = 'contNota';
+  $('contNota').textContent = contErro;
+}
+function adminContagem(B, P, c, feitos_) {
+  const q = c.q || {};
+  const por = c.por && PESSOAS[c.por] ? PESSOAS[c.por].nome : '';
+  B.appendChild(el('div', 'prog', !feitos_ ? 'Ninguém contou ainda neste sábado.' : `${feitos_} de ${P.length} contados` + (por ? ` por ${por}` : '') + (c.fim ? ' · terminou às ' + hora(c.fim) : ' · ainda não terminou')));
+  if (!feitos_) return;
+  const linhas = P.filter((p) => q[p.id] !== undefined).map((p) => ({ p, n: q[p.id], d: typeof p.sis === 'number' ? q[p.id] - p.sis : null }));
+  const dif = linhas.filter((x) => x.d !== null && Math.abs(x.d) > 1e-9).sort((a, b) => Math.abs(b.d) - Math.abs(a.d));
+  const zer = linhas.filter((x) => x.n === 0), falt = P.filter((p) => q[p.id] === undefined);
+  const bloco = (tit, arr, fn) => { if (!arr.length) return; B.appendChild(el('h3', null, `${tit} (${arr.length})`)); for (const x of arr) B.appendChild(fn(x)); };
+  const linha = (nome, sub, dir, cls) => { const r = el('div', 'cItem'); const tx = el('div', 'tx'); tx.appendChild(el('b', null, nome)); if (sub) tx.appendChild(el('small', null, sub)); r.appendChild(tx); if (dir != null) r.appendChild(el('span', 'dif' + (cls ? ' ' + cls : ''), dir)); return r; };
+  bloco('Diferente do NuvemVet', dif, (x) => linha(x.p.nome, `contado ${x.n} · no sistema ${x.p.sis}`, (x.d > 0 ? '+' : '') + x.d));
+  bloco('Zerados', zer, (x) => linha(x.p.nome, x.p.un || '', '0'));
+  bloco('Sem número', falt, (p) => linha(p.nome, 'não contado', '—', 'igual'));
+  const ig = linhas.length - dif.length;
+  if (ig) B.appendChild(el('p', 'nota', `${ig} produtos bateram com o NuvemVet.`));
+  const cp = el('button', 'cobrar', '📋 Copiar contagem completa'); cp.type = 'button';
+  cp.onclick = () => { const t = `Contagem do estoque · ${new Date(contSab + 'T12:00:00').toLocaleDateString('pt-BR')}` + (por ? ` · ${por}` : '') + '\n' + P.map((p) => `${p.nome}: ${q[p.id] ?? '—'}` + (typeof p.sis === 'number' && q[p.id] !== undefined && q[p.id] !== p.sis ? ` (sistema ${p.sis})` : '')).join('\n'); navigator.clipboard.writeText(t).then(() => toast('Copiado')); };
+  B.appendChild(cp);
 }
 function badgeEst() { const n = faltando().length; const b = $('nFalta'); b.hidden = !n; b.textContent = n; }
 function trocarModo(m) { modo = m; ls.set('cisper-modo', m); history.replaceState(null, '', m === 'estoque' ? '#estoque' : location.pathname + location.search); if (m === 'estoque') puxarEst(); render(); window.scrollTo(0, 0); }
@@ -1299,7 +1510,7 @@ $('btCopiar').addEventListener('click', async () => {
   try { await navigator.clipboard.writeText(t); toast('Lista copiada'); } catch (e) { toast('Não deu para copiar neste celular'); }
 });
 setInterval(() => { if (document.visibilityState === 'visible' && TOKM && eu) puxarEst(); }, 20000);
-document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && TOKM && eu) puxarEst(); });
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && TOKM && eu) { puxarEst(); puxarEscala(); } });
 window.addEventListener('pageshow', () => { if (TOKM && eu) puxarEst(); });
 
 // ---- entrada e troca de pessoa
@@ -1365,6 +1576,7 @@ $('btTrocarToken').addEventListener('click', () => { ls.del('cisper-token'); ren
 $('abaLista').addEventListener('click', () => { aba = 'lista'; render(); });
 $('abaAcomp').addEventListener('click', () => { aba = 'acomp'; puxar(); render(); });
 $('abaRx').addEventListener('click', () => { aba = 'rx'; render(); window.scrollTo(0, 0); });
+$('abaEscala').addEventListener('click', () => { aba = 'escala'; puxarEscala(); render(); window.scrollTo(0, 0); });
 $('fMarcas').addEventListener('submit', (ev) => {
   ev.preventDefault(); const v = $('tokenMarcas').value.trim(); if (!v) return;
   ls.set('cisper-token-marcas', v); $('tokenMarcas').value = ''; TOKM = v; puxar();

@@ -47,6 +47,8 @@ def main(entrada, saida, *pares):
         corpo["historico"] = entrada_json["historico"]
     if isinstance(entrada_json.get("manual"), dict):
         corpo["manual"] = entrada_json["manual"]
+    if isinstance(entrada_json.get("produtos"), dict):
+        corpo["produtos"] = entrada_json["produtos"]  # estoque do NuvemVet para a contagem do sábado
     opc = dict(p.split("=", 1) for p in pares)
     base = opc.pop("base", None)
     if base:

@@ -3,7 +3,7 @@
 App da recepção com as mensagens de WhatsApp do dia (pós-atendimento, vacinas, depois do orçamento e clientes sumidos).
 
 - **Endereço do app:** https://centroveterinariocisper-crypto.github.io/cisper/
-- **Quem usa:** Débora (manhã), Duda (tarde) e Paulo (administrador). Cada um entra com a própria senha.
+- **Quem usa:** Duda (manhã, 8h às 14h), Débora (tarde, 14h às 20h) e Paulo (administrador). Cada um entra com a própria senha.
 - **Senhas e chave do GitHub:** não ficam aqui. Ficam só com o Paulo.
 
 ## Rotina
@@ -12,6 +12,8 @@ App da recepção com as mensagens de WhatsApp do dia (pós-atendimento, vacinas
 2. O Claude lê o NuvemVet (só leitura), gera a lista criptografada e publica direto neste repositório (`dados.enc`). Basta a senha do Paulo: a lista reaproveita a chave da lista publicada, então Débora e Duda continuam com as mesmas senhas. As três senhas só são necessárias para trocar alguma delas.
 3. A lista aparece sozinha no app da Débora, da Duda e do Paulo. O app não pede mais chave do GitHub: confere sozinho a cada 2 minutos, tem o botão **🔄 Atualizar** e avisa em verde quando chega lista nova.
 4. Na mesma hora o Claude roda `ferramentas/receitas.js` no NuvemVet, confere as doses das receitas desde a última lista (mg/kg × literatura) e manda o que estiver fora da faixa em `alertas.json` (`publicar.py … alertas=alertas.json`). Esses avisos aparecem **só no perfil do Paulo** ("💊 Receitas para conferir"), criptografados com uma chave que só a senha dele abre.
+
+5. **Contagem do estoque (sábado):** a mesma tarefa puxa os produtos do NuvemVet (`ferramentas/produtos.js`, relatório "Produtos e Estoque") e manda junto com a lista. No sábado, quem está de plantão vê o aviso "🔢 Hoje tem contagem do estoque" e digita a quantidade de cada produto no app (Estoque → 🔢 Contagem), sem folha. A contagem fica gravada, criptografada, em `contagem-AAAA-MM-DD.json` no `cisper-marcas`. O Paulo vê na mesma aba o que bateu, o que ficou diferente do NuvemVet e o que zerou.
 
 ## O que tem neste repositório
 
@@ -32,7 +34,7 @@ App da recepção com as mensagens de WhatsApp do dia (pós-atendimento, vacinas
 - **Cliente sumido:** sem visita entre 6 meses e 2 anos, quem mais gastou primeiro, 20 por dia.
 - **Pós-atendimento com receita:** a mensagem cita os remédios da receita do dia e pergunta se o tutor está conseguindo dar certinho.
 - **Para todos:** sem animal com óbito ou eutanásia; no máximo uma mensagem por semana por cliente; cliente parado só a cada 4 meses; quem tem "NÃO ENVIAR WHATSAPP" nas anotações do NuvemVet nunca entra.
-- **Divisão:** Débora fica com pós-atendimento, vacinas, depois do orçamento e os 10 primeiros clientes sumidos. Duda fica com os outros clientes sumidos.
+- **Divisão:** de segunda a sexta, cada tipo de mensagem é dividido meio a meio entre as duas. No sábado só uma trabalha e a lista inteira do dia é dela. Quem faz cada sábado o Paulo marca no app, na aba "📅 Sábados" (fica gravado em `escala.json` no repositório `cisper-marcas`). Sábado sem ninguém marcado: as duas dividem.
 
 ## Lembretes
 

@@ -166,6 +166,19 @@ label.marcar.on { border-style: solid; border-color: #cfe9da; background: var(--
 .manChk label.ok { color: var(--muted); text-decoration: line-through; }
 .folhaMan button.limpa { background: var(--surface); color: var(--navy); font-size: 13.5px; padding: 10px; }
 .manNota { font-size: 12px; color: var(--muted); }
+.folhasT { margin: 4px 0 0; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: var(--muted); }
+.folhas { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.folhaMan button.fl { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; text-align: left; border: 0; border-radius: 16px; padding: 12px; color: #fff; min-height: 84px; background: linear-gradient(135deg, var(--c1), var(--c2)); box-shadow: 0 8px 16px -12px var(--c1); }
+.fl .n { width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,.2); border: 1.5px solid rgba(255,255,255,.6); display: grid; place-items: center; font-weight: 800; font-size: 14px; }
+.fl b { font-size: 14.5px; line-height: 1.15; }
+.visor { display: flex; flex-direction: column; gap: 10px; }
+.visor .quadro { overflow: auto; border-radius: 12px; border: 1px solid var(--line); background: #fff; max-height: 70vh; touch-action: pan-x pan-y pinch-zoom; }
+.visor .quadro img { display: block; width: 100%; height: auto; }
+.visor .quadro.zoom img { width: 230%; max-width: none; }
+.visor .bts { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; }
+.folhaMan .visor .bts button { border: 1px solid var(--line); background: #fff; border-radius: 12px; padding: 11px 8px; font-weight: 700; color: var(--navy); font-size: 14px; }
+.folhaMan .visor .bts button:disabled { opacity: .35; }
+.visor .carregando { padding: 40px 10px; text-align: center; color: var(--muted); }
 .folhaCel .celLink { background: var(--surface); border-radius: 12px; padding: 10px; font-weight: 800; color: var(--navy); word-break: break-all; font-size: 14px; user-select: all; -webkit-user-select: all; }
 .folha.folhaCel { text-align: left; }
 .folhaCel { text-align: left; max-height: calc(100vh - 40px - env(safe-area-inset-top, 0px)); overflow-y: auto; }
@@ -957,6 +970,13 @@ function manLista() {
   $('tManual').textContent = 'Manual'; $('btManVoltar').hidden = true;
   const C = $('corpoMan'); C.replaceChildren(); C.scrollTop = 0;
   C.appendChild(el('div', 'manNota', M.titulo + ' · uso interno'));
+  if ((M.folhas || []).length) {
+    C.appendChild(el('p', 'folhasT', '🖼️ Folhas (as mesmas da parede)'));
+    const G = el('div', 'folhas');
+    M.folhas.forEach((f, k) => { const b = el('button', 'fl'); b.type = 'button'; b.style.setProperty('--c1', f.c1 || '#1B2A6B'); b.style.setProperty('--c2', f.c2 || '#2fa9a3'); b.appendChild(el('span', 'n', String(k + 1))); b.appendChild(el('b', null, f.titulo)); b.onclick = () => verFolha(k); G.appendChild(b); });
+    C.appendChild(G);
+    C.appendChild(el('p', 'folhasT', '📝 Em texto'));
+  }
   const L = el('div', 'protos');
   for (const p of M.protocolos) { const b = el('button', 'proto'); b.type = 'button'; b.appendChild(el('span', 'num', String(p.n))); const t = el('div'); t.appendChild(el('b', '', p.titulo)); t.appendChild(el('span', 's', p.sub)); b.appendChild(t); b.onclick = () => manProto(p); L.appendChild(b); }
   C.appendChild(L);
@@ -972,6 +992,34 @@ function manProto(p) {
     for (const b of s.blocos) sec.appendChild(b.tipo === 'check' ? manCheck(b, p.n, si) : manBloco(b, M));
     d.appendChild(sec); C.appendChild(d);
   });
+}
+// folhas em imagem: vêm criptografadas (manual/folha-N.enc) e só abrem com a chave da lista
+const FOLHA_URL = {};
+async function imgFolha(f) {
+  if (FOLHA_URL[f.arq]) return FOLHA_URL[f.arq];
+  const k = (META && META._k) || KDADOS; if (!k) throw new Error('sem chave');
+  const r = await fetch(f.arq + '?t=' + (META.manual.versao || ''), { cache: 'no-cache' });
+  if (!r.ok) throw new Error('rede');
+  const o = await r.json();
+  const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(o.iv) }, await chaveAES(k), b64(o.ct));
+  return (FOLHA_URL[f.arq] = URL.createObjectURL(new Blob([pt], { type: 'image/jpeg' })));
+}
+async function verFolha(k) {
+  const F = META.manual.folhas, f = F[k];
+  $('tManual').textContent = f.titulo; $('btManVoltar').hidden = false;
+  const C = $('corpoMan'); C.replaceChildren(); C.scrollTop = 0;
+  const V = el('div', 'visor'); const Q = el('div', 'quadro'); const car = el('div', 'carregando', 'Abrindo a folha…'); Q.appendChild(car); V.appendChild(Q);
+  const bts = el('div', 'bts');
+  const ant = el('button', null, '‹ Anterior'); ant.type = 'button'; ant.disabled = k === 0; ant.onclick = () => verFolha(k - 1);
+  const zm = el('button', null, '🔍 Ampliar'); zm.type = 'button'; zm.onclick = () => { const z = Q.classList.toggle('zoom'); zm.textContent = z ? '↩ Tela toda' : '🔍 Ampliar'; };
+  const prox = el('button', null, 'Próxima ›'); prox.type = 'button'; prox.disabled = k === F.length - 1; prox.onclick = () => verFolha(k + 1);
+  bts.append(ant, zm, prox); V.appendChild(bts);
+  V.appendChild(el('div', 'manNota', `Folha ${k + 1} de ${F.length} · toque em Ampliar e arraste para ler os detalhes`));
+  C.appendChild(V);
+  try { const u = await imgFolha(f); const im = new Image(); im.alt = f.titulo; im.src = u; Q.replaceChildren(im); }
+  catch (e) { car.textContent = 'Não consegui abrir a folha agora. Confira a internet e tente de novo.'; }
+  // já deixa a próxima pronta
+  if (F[k + 1]) imgFolha(F[k + 1]).catch(() => {});
 }
 function abrirManual() { if (!META || !META.manual) return; manLista(); $('fManual').hidden = false; document.body.style.overflow = 'hidden'; }
 function fecharManual() { $('fManual').hidden = true; document.body.style.overflow = ''; }

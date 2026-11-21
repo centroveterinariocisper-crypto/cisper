@@ -1417,7 +1417,7 @@ function renderContagem() {
   const feitos_ = P.filter((p) => q[p.id] !== undefined && q[p.id] !== '').length;
   if (ehAdm()) { adminContagem(B, P, c, feitos_); return; }
   if (!podeContar(sab)) { B.appendChild(el('p', null, contInfo())); return; }
-  if (c.fim) B.appendChild(el('div', 'feito', '✓ Contagem enviada para o Paulo às ' + hora(c.fim) + '. Se precisar, ainda dá para corrigir.'));
+  if (c.fim) B.appendChild(el('div', 'feito', '✓ Contagem terminada às ' + hora(c.fim) + '. Se precisar, ainda dá para corrigir e mandar de novo.'));
   B.appendChild(el('div', 'prog', `${feitos_} de ${P.length} produtos contados`));
   const busca = document.createElement('input'); busca.type = 'search'; busca.placeholder = 'Procurar produto'; busca.value = contBusca;
   const lista = el('div');
@@ -1436,11 +1436,15 @@ function renderContagem() {
   };
   busca.oninput = () => { contBusca = busca.value; desenhar(); };
   B.appendChild(busca); B.appendChild(lista); desenhar();
-  const fim = el('button', 'fim', c.fim ? '✓ Enviar de novo' : '✅ Terminei a contagem'); fim.type = 'button';
+  const fim = el('button', 'fim', c.fim ? '✓ Enviar de novo' : (TOKM ? '✅ Terminei a contagem' : '✅ Terminei · mandar para o Paulo no WhatsApp')); fim.type = 'button';
   fim.onclick = async () => {
     const falta = P.filter((p) => q[p.id] === undefined).length;
     if (falta && !window.confirm(`Ainda faltam ${falta} produtos sem número. Quer enviar mesmo assim?`)) return;
-    c.fim = Date.now(); salvarContDepois(sab); clearTimeout(tCont); await empurrarCont(sab); toast('✓ Contagem enviada'); render();
+    c.fim = Date.now(); salvarContDepois(sab); clearTimeout(tCont);
+    if (TOKM && KDADOS) { await empurrarCont(sab); toast('✓ Contagem enviada'); render(); return; }
+    // sem a chave das marcações: manda pelo WhatsApp para o Paulo
+    const txt = `Contagem do estoque · ${new Date(sab + 'T12:00:00').toLocaleDateString('pt-BR')} · ${PESSOAS[eu] ? PESSOAS[eu].nome : ''}\n` + P.map((p) => `${p.nome}: ${q[p.id] ?? '—'}`).join('\n');
+    location.href = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(txt); render();
   };
   B.appendChild(fim);
   B.appendChild(el('p', 'nota', '', null)).id = 'contNota';

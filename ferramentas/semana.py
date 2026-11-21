@@ -91,6 +91,7 @@ def publicar(caminho, chave, coletado, alertas_novos, produtos=None):
         dias[hoje] = velho[hoje]  # o dia de hoje continua como está (marcações delas)
     for d in novos:
         dias[d] = list(velho.get(d, []))
+    tinha_par = {d for d in novos if any(x["t"] == "par" for x in dias[d])}  # dias que já tinham sumidos ANTES desta coleta
     ja = set().union(*[chaves(i) for l in dias.values() for i in l]) if dias else set()
     cid_dia = {(i["cid"], d) for d, l in dias.items() for i in l}
     # vacinas atrasadas há mais de 14 dias: espalha pelos dias novos, as mais recentes primeiro
@@ -102,7 +103,7 @@ def publicar(caminho, chave, coletado, alertas_novos, produtos=None):
             if i["t"] == "vac" and (i.get("atraso") or 0) > 14:
                 vac_velhas.append(i)
                 continue
-            if i["t"] == "par" and any(x["t"] == "par" for x in dias[d]):
+            if i["t"] == "par" and d in tinha_par:
                 continue  # dia que já tinha clientes sumidos: mantém os de antes
             if (i["cid"], d) in cid_dia:
                 continue

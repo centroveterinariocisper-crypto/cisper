@@ -695,15 +695,15 @@ const ORDEM = ['pos', 'vac', 'orc2', 'orc7', 'par'];
 // ---- equipe: vem dentro da lista (o Paulo edita na aba 👥 Equipe); a ordem das atendentes decide a divisão das mensagens
 const PALETA = [['#E5488A', '#B8337A'], ['#F07C1E', '#E9573F'], ['#2fa9a3', '#1f7f7a'], ['#4f6bd8', '#1B2A6B'], ['#8a5cd6', '#5b3aa8'], ['#25A35A', '#1a7a42'], ['#d4a017', '#a67c00']];
 const EQUIPE_PADRAO = [
-  { id: 'duda', nome: 'Duda', papel: 'atendente', turno: 'Manhã', horario: 'Envie das 8h às 14h.', c1: '#E5488A', c2: '#B8337A' },
-  { id: 'debora', nome: 'Débora', papel: 'atendente', turno: 'Tarde', horario: 'Envie das 14h às 20h.', c1: '#F07C1E', c2: '#E9573F' },
+  { id: 'duda', nome: 'Duda', papel: 'atendente', turno: 'Manhã', horario: 'Envie das 8h às 14h.', c1: '#E5488A', c2: '#B8337A', emoji: '🐰🩺', assina: 'Eduarda' },
+  { id: 'debora', nome: 'Débora', papel: 'atendente', turno: 'Tarde', horario: 'Envie das 14h às 20h.', c1: '#F07C1E', c2: '#E9573F', emoji: '🦊💉', assina: 'Débora' },
   { id: 'adm', nome: 'Paulo', papel: 'adm', turno: 'Adm', c1: '#1B2A6B', c2: '#2fa9a3' }
 ];
 let EQUIPE = [], PESSOAS = {}, QUEM = [], ATD = [], NOMES = {};
 function montarEquipe(eq) {
   EQUIPE = (Array.isArray(eq) && eq.some((e) => e.id === 'adm')) ? eq : EQUIPE_PADRAO;
   PESSOAS = {}; NOMES = {};
-  for (const e of EQUIPE) { PESSOAS[e.id] = { nome: e.nome, turno: e.turno || '', horario: e.horario || '', cor: e.c1, cor2: e.c2, foto: e.foto || '', papel: e.papel, ativo: e.ativo !== false }; NOMES[e.id] = e.nome; }
+  for (const e of EQUIPE) { PESSOAS[e.id] = { nome: e.nome, turno: e.turno || '', horario: e.horario || '', cor: e.c1, cor2: e.c2, foto: e.foto || '', papel: e.papel, ativo: e.ativo !== false, emoji: e.emoji || '', assina: e.assina || '' }; NOMES[e.id] = e.nome; }
   ATD = EQUIPE.filter((e) => e.papel === 'atendente' && e.ativo !== false).map((e) => e.id);
   const A = PESSOAS.adm; PESSOAS.todos = { ...A, horario: ATD.length === 2 ? 'Você está vendo a lista das duas.' : 'Você está vendo a lista de todas.' };
   QUEM = [['todos', ATD.length === 2 ? 'As duas' : 'Todas'], ...ATD.map((id) => [id, PESSOAS[id].nome])];
@@ -740,6 +740,11 @@ function msg(i) {
   }
   if (i.t === 'orc2' || i.t === 'orc7') return `Oi, ${n}! Aqui é do Centro Veterinário Cisper 🐾 Passando para saber como ${G ? G.o + ' ' : ''}${a} está. Se precisar de qualquer coisa, é só responder aqui. ❤️`;
   return `Oi, ${n}! Aqui é do Centro Veterinário Cisper 🐾 Faz tempo que não vemos ${G ? G.o + ' ' : ''}${a} por aqui. Como ${G ? G.ele + ' ' : ''}está? Vacina e check-up em dia ajudam a pegar problemas cedo. ${vir} ❤️`;
+}
+function assinatura() {
+  const P = PESSOAS[eu]; if (!P || eu === 'adm') return '';
+  const nome = (P.assina || P.nome || '').trim(); if (!nome) return '';
+  return `${P.emoji ? P.emoji + ' ' : ''}*${nome}:*\n`;
 }
 function det(i) {
   if (i.t === 'vac') return `${i.a} · vacina ${String(i.x || '').replace(/RAIVA/gi, 'antirrábica')} · vence ${String(i.d).slice(0, 5)}`;
@@ -1303,7 +1308,7 @@ function cartao(i) {
   const nm = el('div', 'nome', capNome(i.c));
   if (i.t === 'vac' && (i.atraso || 0) > 0) nm.appendChild(el('span', 'alerta', 'vencida'));
   c.appendChild(nm); c.appendChild(el('div', 'det', det(i)));
-  const m = msg(i);
+  const m = assinatura() + msg(i);
   const ps = el('div', 'passos');
   if (i.tel) {
     const a = el('a', 'wa'); a.appendChild(document.createTextNode('Abrir WhatsApp'));
@@ -1621,7 +1626,8 @@ function desenharEquipe() {
     const campos = el('div', 'campos');
     const campo = (rot, chave, ph) => { const l = el('label', null, rot); const i = document.createElement('input'); i.value = e[chave] || ''; i.placeholder = ph || ''; i.oninput = () => { e[chave] = i.value; }; l.appendChild(i); return l; };
     campos.appendChild(campo('Nome', 'nome'));
-    if (e.papel !== 'adm') { const d = el('div', 'dois'); d.append(campo('Turno', 'turno', 'Manhã'), campo('Horário de envio', 'horario', 'Envie das 8h às 14h.')); campos.appendChild(d); }
+    if (e.papel !== 'adm') { const d = el('div', 'dois'); d.append(campo('Turno', 'turno', 'Manhã'), campo('Horário de envio', 'horario', 'Envie das 8h às 14h.')); campos.appendChild(d);
+      const d2 = el('div', 'dois'); d2.append(campo('Emojis', 'emoji', '🐰🩺'), campo('Nome na assinatura', 'assina', e.nome || '')); campos.appendChild(d2); }
     if (e.novo) { const l = el('label', null, 'Senha dela (mínimo 4 letras ou números)'); const i = document.createElement('input'); i.value = e.senha || ''; i.autocomplete = 'off'; i.oninput = () => { e.senha = i.value.trim(); }; l.appendChild(i); campos.appendChild(l); }
     topo.appendChild(campos); m.appendChild(topo);
     const cores = el('div', 'cores');

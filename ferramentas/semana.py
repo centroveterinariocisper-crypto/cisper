@@ -34,6 +34,30 @@ def abrir(caminho, chave):
     return corpo, alertas
 
 
+def obitos(caminho, chave):
+    """Óbitos que a recepção informou no app (obitos.json no cisper-marcas). Devolve ["cid|animal"] para a coleta pular."""
+    import urllib.request
+    try:
+        n, k, vaga, env = vaga_adm(caminho, chave)
+        if not env.get("mk"):
+            return [], {}
+        K = d64(vaga["k"])
+        tok = json.loads(AESGCM(K).decrypt(d64(env["mk"]["iv"]), d64(env["mk"]["ct"]), None))["t"]
+        req = urllib.request.Request("https://api.github.com/repos/centroveterinariocisper-crypto/cisper-marcas/contents/obitos.json",
+                                     headers={"Authorization": "Bearer " + tok, "Accept": "application/vnd.github.raw"})
+        try:
+            raw = json.loads(urllib.request.urlopen(req, timeout=20).read())
+        except urllib.error.HTTPError as e:
+            if e.code == 404:
+                return [], {}
+            raise
+        o = json.loads(AESGCM(K).decrypt(d64(raw["iv"]), d64(raw["ct"]), None)).get("o") or {}
+        return sorted(o.keys()), o
+    except Exception as e:  # sem internet ou sem chave: segue sem os óbitos, mas avisa
+        print("aviso: não consegui ler os óbitos do app:", e, file=sys.stderr)
+        return [], {}
+
+
 def chaves(i):
     return set((i.get("ks") or []) + [i["k"]])
 
@@ -75,7 +99,9 @@ def preparar(caminho, chave):
     gerado = (corpo.get("gerado_em") or "")[:10]
     rx_desde = max(gerado or (HOJE - dt.timedelta(days=7)).isoformat(), (HOJE - dt.timedelta(days=14)).isoformat())
     json.dump({"dias_novos": novos, "rx_desde": rx_desde}, open("estado.json", "w"))
-    print(json.dumps({"dias": novos, "excl": excl, "recentes": sorted(recentes),
+    obs, det = obitos(caminho, chave)
+    print(json.dumps({"dias": novos, "excl": excl, "recentes": sorted(recentes), "obitos": obs,
+                      "obitos_pendentes": [f"{v.get('a')} ({v.get('c')}) cid {v.get('cid')}" for v in det.values() if not v.get("nv")],
                       "rx_de": dt.date.fromisoformat(rx_desde).strftime("%d-%m-%Y"), "rx_ate": HOJE.strftime("%d-%m-%Y")}))
 
 

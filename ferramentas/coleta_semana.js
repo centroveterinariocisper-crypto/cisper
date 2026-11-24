@@ -42,6 +42,7 @@
   }
   if (!S.length) return 'NuvemVet não devolveu serviços (base_servicos=0)';
   const morto = new Set(S.filter(s => MORTE.test(s.svc)).map(s => s.cid + '|' + s.an.toLowerCase()));
+  for (const x of (window.__OBITOS || [])) morto.add(String(x).toLowerCase()); // óbitos informados pela recepção no app
   const cli = new Map();
   for (const s of S) {
     const o = cli.get(s.cid) || { cid: s.cid, nome: s.cli, ult: s.d, total: 0, dias: new Set(), an: new Map() };

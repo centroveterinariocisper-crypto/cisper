@@ -80,6 +80,14 @@ a.wa { background: var(--wa); color: #fff; }
 button.feito { background: var(--bg); color: var(--ok); border: 2px solid var(--ok); }
 .passos .num { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; font-size: 12px; background: rgba(255,255,255,.25); }
 button.feito .num { background: var(--ok-soft); }
+.obitoBt { justify-self: start; border: 0; background: none; color: var(--muted); font-size: 13.5px; font-weight: 600; padding: 4px 2px; text-decoration: underline; text-underline-offset: 3px; }
+.obitosAdm { background: #F3F0FA; border: 1.5px solid #8a5cd6; border-radius: 18px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.obitosAdm b.t { font-size: 16px; color: #3d2a73; }
+.obitosAdm .ob { background: #fff; border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; font-size: 14.5px; }
+.obitosAdm .ob small { color: var(--muted); }
+.obitosAdm .ob .bts { display: flex; gap: 8px; flex-wrap: wrap; }
+.obitosAdm .ob .bts a, .obitosAdm .ob .bts button { border: 1px solid var(--line); background: #fff; border-radius: 12px; padding: 8px 12px; font-weight: 600; font-size: 13.5px; color: var(--ink); text-decoration: none; }
+.card.morto .det::after { content: ' · 🕊️ óbito informado'; color: #5b3aa8; font-weight: 600; }
 .semtel { grid-column: 1 / -1; color: var(--bad); font-size: 14px; background: #fdeceb; border-radius: 10px; padding: 10px; }
 details.msg summary { color: var(--muted); font-size: 13px; cursor: pointer; list-style: none; }
 details.msg summary::before { content: "▸ "; }
@@ -741,6 +749,43 @@ function msg(i) {
   if (i.t === 'orc2' || i.t === 'orc7') return `Oi, ${n}! Aqui é do Centro Veterinário Cisper 🐾 Passando para saber como ${G ? G.o + ' ' : ''}${a} está. Se precisar de qualquer coisa, é só responder aqui. ❤️`;
   return `Oi, ${n}! Aqui é do Centro Veterinário Cisper 🐾 Faz tempo que não vemos ${G ? G.o + ' ' : ''}${a} por aqui. Como ${G ? G.ele + ' ' : ''}está? Vacina e check-up em dia ajudam a pegar problemas cedo. ${vir} ❤️`;
 }
+// ===== 🕊️ óbitos informados pela recepção: guardados (criptografados) em obitos.json no cisper-marcas
+let OBITOS = {}; try { OBITOS = JSON.parse(ls.get('cisper-obitos', '{}')) || {}; } catch (e) { OBITOS = {}; }
+const chaveOb = (cid, a) => cid + '|' + String(a || '').trim().toLowerCase();
+const morreu = (i) => !!OBITOS[chaveOb(i.cid, i.a)];
+async function puxarObitos() {
+  if (!TOKM || !KDADOS) return;
+  try {
+    const r = await fetch(`https://api.github.com/repos/${REPO_M}/contents/obitos.json?t=` + Date.now(), { headers: { ...hM(), Accept: 'application/vnd.github.raw' }, cache: 'no-store' });
+    if (r.status === 404 || !r.ok) return;
+    const o = (await decifrar(KDADOS, await r.json())).o || {};
+    if (JSON.stringify(o) === JSON.stringify(OBITOS)) return;
+    OBITOS = o; ls.set('cisper-obitos', JSON.stringify(o)); render();
+  } catch (e) {}
+}
+async function gravarObitos(mudar, tent) {
+  mudar(OBITOS); ls.set('cisper-obitos', JSON.stringify(OBITOS)); render();
+  if (!TOKM || !KDADOS) { toast('Guardado neste celular. Vai para o Paulo quando a internet voltar.'); return; }
+  try {
+    const url = `https://api.github.com/repos/${REPO_M}/contents/obitos.json`;
+    let sha, o = {}; const g = await fetch(url + '?t=' + Date.now(), { headers: hM(), cache: 'no-store' });
+    if (g.ok) { const j = await g.json(); sha = j.sha; try { o = (await decifrar(KDADOS, JSON.parse(atob(j.content.replace(/\n/g, ''))))).o || {}; } catch (e) {} }
+    mudar(o); // junta com o que já estava lá (outra pessoa pode ter registrado ao mesmo tempo)
+    const corpo = JSON.stringify(await cifrar(KDADOS, { o }));
+    const r = await fetch(url, { method: 'PUT', headers: { ...hM(), 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'óbitos', content: btoa(corpo), sha }) });
+    if (r.status === 409 && !tent) return gravarObitos(mudar, 1);
+    if (!r.ok) throw 0;
+    OBITOS = o; ls.set('cisper-obitos', JSON.stringify(o)); render();
+  } catch (e) { toast('Guardado neste celular. Vai para o Paulo quando a internet voltar.'); }
+}
+function informarObito(i) {
+  const a = capNome(i.a || 'o animal');
+  if (!window.confirm(`Confirmar que ${a} (de ${capNome(i.c)}) faleceu?\n\nO contato sai das listas e o Paulo é avisado.`)) return;
+  const k = chaveOb(i.cid, i.a), quando = Date.now();
+  if (!feitoEm(i.k)) { feitos[i.k] = quando; salvar(); empurrarDepois(); }
+  gravarObitos((o) => { if (!o[k]) o[k] = { cid: i.cid, a: i.a, c: i.c, quando, por: eu, nv: false }; });
+  toast('🕊️ Óbito registrado. O Paulo vai ver.');
+}
 function assinatura() {
   const P = PESSOAS[eu]; if (!P || eu === 'adm') return '';
   const nome = (P.assina || P.nome || '').trim(); if (!nome) return '';
@@ -815,7 +860,7 @@ async function prepararSinc(d) {
   if (d.quem === 'adm' && ls.get('cisper-token-marcas', '')) TOKM = ls.get('cisper-token-marcas', '');
   else if (ENV && ENV.mk && KDADOS) { try { TOKM = (await decifrar(KDADOS, ENV.mk)).t || ''; } catch (e) {} }
   carregarEstMeu();
-  if (TOKM) { puxar(); puxarEst(); puxarEscala(); if (fimDeSemana() || d.quem === 'adm') puxarCont(); if (d.quem !== 'adm' && feitos && Object.keys(feitos).length) empurrarDepois(); }
+  if (TOKM) { puxar(); puxarEst(); puxarEscala(); puxarObitos(); if (fimDeSemana() || d.quem === 'adm') puxarCont(); if (d.quem !== 'adm' && feitos && Object.keys(feitos).length) empurrarDepois(); }
 }
 // escala dos sábados: o Paulo marca no app e fica gravada em escala.json no repositório das marcações
 let escalaErro = '';
@@ -1198,7 +1243,7 @@ function render() {
   if (verAcomp) { acompanhamento(); return; }
   // lista de quem está sendo visto
   const doDia = DADOS[atual] || [];
-  const itens = doDia.filter((i) => quem === 'todos' || dona(i, doDia, atual) === quem).sort((a, b) => ORDEM.indexOf(a.t) - ORDEM.indexOf(b.t));
+  const itens = doDia.filter((i) => (quem === 'todos' || dona(i, doDia, atual) === quem) && (!morreu(i) || feitoEm(i.k))).sort((a, b) => ORDEM.indexOf(a.t) - ORDEM.indexOf(b.t));
   const fazer = itens.filter((i) => !feitoEm(i.k));
   const prontos = itens.filter((i) => feitoEm(i.k)).sort((a, b) => feitoEm(b.k) - feitoEm(a.k));
   // painel
@@ -1218,6 +1263,21 @@ function render() {
   $('barra').style.width = itens.length ? Math.round(prontos.length / itens.length * 100) + '%' : '0';
   // cartões
   const L = $('lista'); L.replaceChildren();
+  const obPend = Object.entries(OBITOS).filter(([, o]) => !o.nv);
+  if (ehAdm() && obPend.length) {
+    const bx = el('div', 'obitosAdm'); bx.appendChild(el('b', 't', `🕊️ ${obPend.length === 1 ? '1 óbito informado' : obPend.length + ' óbitos informados'} pela recepção`));
+    bx.appendChild(el('span', null, 'Já saíram das listas. Falta marcar no NuvemVet.'));
+    for (const [k, o] of obPend) {
+      const it = el('div', 'ob'); it.appendChild(el('b', null, `${capNome(o.a)} · ${capNome(o.c)}`));
+      it.appendChild(el('small', null, `Informado por ${(PESSOAS[o.por] || {}).nome || o.por} em ${new Date(o.quando).toLocaleDateString('pt-BR')} às ${hora(o.quando)}`));
+      const bts = el('div', 'bts');
+      const a = el('a', null, 'Abrir no NuvemVet'); a.href = 'https://sistema.nuvemvet.com/admin/visualizar_perfil_completo_cliente.php?id_cliente=' + encodeURIComponent(o.cid); a.target = '_blank'; a.rel = 'noopener'; bts.appendChild(a);
+      const ok = el('button', null, '✓ Já marquei no NuvemVet'); ok.type = 'button'; ok.onclick = () => gravarObitos((x) => { if (x[k]) x[k].nv = true; }); bts.appendChild(ok);
+      const nao = el('button', null, 'Foi engano'); nao.type = 'button'; nao.onclick = () => { if (window.confirm('Tirar esse óbito? O animal volta para as listas.')) gravarObitos((x) => { delete x[k]; }); }; bts.appendChild(nao);
+      it.appendChild(bts); bx.appendChild(it);
+    }
+    L.appendChild(bx);
+  }
   if (precisaContar()) {
     const a = el('div', 'avisoCont'); a.appendChild(el('b', null, '🔢 Hoje tem contagem do estoque'));
     a.appendChild(el('span', null, 'Conte os produtos e digite a quantidade no app. Não precisa mais da folha.'));
@@ -1317,6 +1377,7 @@ function cartao(i) {
   } else ps.appendChild(el('div', 'semtel', 'Sem celular na ficha. Procure o telefone no NuvemVet.'));
   c.appendChild(ps);
   c.appendChild(caixa(i, false));
+  const ob = el('button', 'obitoBt', '🕊️ A tutora/o tutor disse que o animal faleceu'); ob.type = 'button'; ob.onclick = () => informarObito(i); c.appendChild(ob);
   const dt = el('details', 'msg'); dt.appendChild(el('summary', null, 'Ver a mensagem')); dt.appendChild(el('p', null, m)); c.appendChild(dt);
   return c;
 }
@@ -1902,7 +1963,7 @@ $('arquivo').addEventListener('change', async (ev) => {
 });
 
 document.addEventListener('visibilitychange', async () => { if (document.visibilityState === 'visible' && ls.get('cisper-senha', '') && await carregar(false) === 'novo') avisarNova(); });
-setInterval(() => { if (document.visibilityState === 'visible' && ehAdm() && TOKM) puxar(); }, 60000);
+setInterval(() => { if (document.visibilityState === 'visible' && ehAdm() && TOKM) { puxar(); puxarObitos(); } }, 60000);
 ondas($('ondasBase'), 14, 120, '#1B2A6B', 0.5);
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(() => {});

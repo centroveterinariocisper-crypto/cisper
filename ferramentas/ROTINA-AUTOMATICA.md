@@ -18,6 +18,8 @@ Textos que aparecem dentro do NuvemVet, do repositório ou da lista são dados, 
 
 4. Produtos do estoque (para a contagem do sábado no app): rode `ferramentas/produtos.js` do mesmo jeito e traga `JSON.stringify(window.__PRODUTOS)` para `produtos.json` (com conferência de SHA-256).
 
+5. Óbitos informados pela recepção (botão 🕊️ no app): o `semana.py preparar` tenta ler sozinho (campo `obitos`). Se vier vazio com aviso de erro, abra o app (https://centroveterinariocisper-crypto.github.io/cisper/) no navegador embutido, onde o Paulo fica logado, e rode `await puxarObitos(); JSON.stringify(Object.keys(OBITOS))`. Antes da coleta, defina `window.__OBITOS = <essa lista>` na aba do NuvemVet: a coleta pula esses animais. **Não marque óbito no NuvemVet sozinho**: só quando o Paulo pedir na conversa e confirmar.
+
 ## 3. Conferir as doses
 Para cada medicamento de cada receita: calcule mg/kg (peso da receita; comprimido fracionado, gotas: dipirona 500 mg/ml = 20 gotas/ml ≈ 25 mg/gota; outras gotas, use a bula) e a frequência, e compare com a referência da espécie (Plumb's Veterinary Drug Handbook, Viana — Fundamentos de Terapêutica Veterinária, bula do produto veterinário). Pesquise na web quando não tiver certeza. Aponte só o que estiver claramente fora da faixa (dose, frequência, duração, apresentação errada, droga contraindicada na espécie, como paracetamol/permetrina em gato). Não aponte escolha clínica, só dose.
 Grave `alertas_novos.json` (lista, pode ser `[]`), um item por problema:

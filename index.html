@@ -81,7 +81,17 @@ button.feito { background: var(--bg); color: var(--ok); border: 2px solid var(--
 .passos .num { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; font-size: 12px; background: rgba(255,255,255,.25); }
 button.feito .num { background: var(--ok-soft); }
 .obitoBt { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; margin-top: 2px; border: 2px solid #8a5cd6; background: #F3F0FA; color: #3d2a73; border-radius: 14px; padding: 12px; font-size: 15.5px; font-weight: 700; }
-.obitoBt:active { background: #e6dff7; }
+.obitoBt:active { background: #e6dff7; transform: scale(.98); }
+.obConf { display: flex; flex-direction: column; gap: 6px; border: 2px solid #8a5cd6; background: #F3F0FA; color: #3d2a73; border-radius: 14px; padding: 12px; }
+.obConf b { font-size: 16.5px; }
+.obConf span { font-size: 14px; }
+.obBts { display: grid; grid-template-columns: 1.4fr 1fr; gap: 8px; margin-top: 4px; }
+.obBts button { border-radius: 12px; padding: 12px 8px; font-weight: 800; font-size: 15px; }
+.obSim { border: 0; color: #fff; background: linear-gradient(135deg, #8a5cd6, #5b3aa8); }
+.obNao { border: 1.5px solid var(--line); background: #fff; color: var(--ink); }
+.card.obAberto { box-shadow: 0 0 0 3px #8a5cd6; }
+.card.obFeito { background: #F3F0FA; box-shadow: 0 0 0 3px #8a5cd6; transition: background .3s; }
+.card.obFeito .obConf { background: #fff; }
 .obitosAdm { background: #F3F0FA; border: 1.5px solid #8a5cd6; border-radius: 18px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
 .obitosAdm b.t { font-size: 16px; color: #3d2a73; }
 .obitosAdm .ob { background: #fff; border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; font-size: 14.5px; }
@@ -780,12 +790,16 @@ async function gravarObitos(mudar, tent) {
   } catch (e) { toast('Guardado neste celular. Vai para o Paulo quando a internet voltar.'); }
 }
 function informarObito(i) {
-  const a = capNome(i.a || 'o animal');
-  if (!window.confirm(`Confirmar que ${a} (de ${capNome(i.c)}) faleceu?\n\nO contato sai das listas e o Paulo é avisado.`)) return;
   const k = chaveOb(i.cid, i.a), quando = Date.now();
   if (!feitoEm(i.k)) { feitos[i.k] = quando; salvar(); empurrarDepois(); }
   gravarObitos((o) => { if (!o[k]) o[k] = { cid: i.cid, a: i.a, c: i.c, quando, por: eu, nv: false }; });
   toast('🕊️ Óbito registrado. O Paulo vai ver.');
+}
+function desfazerObito(i) {
+  const k = chaveOb(i.cid, i.a);
+  delete feitos[i.k]; delete REM[i.k]; salvar(); empurrarDepois();
+  gravarObitos((o) => { delete o[k]; });
+  toast('↩ Desfeito. O contato voltou para a lista.');
 }
 function assinatura() {
   const P = PESSOAS[eu]; if (!P || eu === 'adm') return '';
@@ -1274,7 +1288,7 @@ function render() {
       const bts = el('div', 'bts');
       const a = el('a', null, 'Abrir no NuvemVet'); a.href = 'https://sistema.nuvemvet.com/admin/visualizar_perfil_completo_cliente.php?id_cliente=' + encodeURIComponent(o.cid); a.target = '_blank'; a.rel = 'noopener'; bts.appendChild(a);
       const ok = el('button', null, '✓ Já marquei no NuvemVet'); ok.type = 'button'; ok.onclick = () => gravarObitos((x) => { if (x[k]) x[k].nv = true; }); bts.appendChild(ok);
-      const nao = el('button', null, 'Foi engano'); nao.type = 'button'; nao.onclick = () => { if (window.confirm('Tirar esse óbito? O animal volta para as listas.')) gravarObitos((x) => { delete x[k]; }); }; bts.appendChild(nao);
+      const nao = el('button', null, 'Foi engano'); nao.type = 'button'; nao.onclick = () => { if (nao.dataset.ok) gravarObitos((x) => { delete x[k]; }); else { nao.dataset.ok = '1'; nao.textContent = 'Toque de novo para confirmar'; nao.style.borderColor = 'var(--bad)'; nao.style.color = 'var(--bad)'; } }; bts.appendChild(nao);
       it.appendChild(bts); bx.appendChild(it);
     }
     L.appendChild(bx);
@@ -1378,7 +1392,22 @@ function cartao(i) {
   } else ps.appendChild(el('div', 'semtel', 'Sem celular na ficha. Procure o telefone no NuvemVet.'));
   c.appendChild(ps);
   c.appendChild(caixa(i, false));
-  const ob = el('button', 'obitoBt', '🕊️ O animal faleceu'); ob.type = 'button'; ob.onclick = () => informarObito(i); c.appendChild(ob);
+  // óbito: 1º toque abre a confirmação dentro do próprio cartão (sem janela do navegador)
+  const ob = el('button', 'obitoBt', '🕊️ O animal faleceu'); ob.type = 'button';
+  const conf = el('div', 'obConf'); conf.hidden = true;
+  conf.appendChild(el('b', null, `${capNome(i.a || 'O animal')} faleceu?`));
+  conf.appendChild(el('span', null, 'O contato sai das listas e o Paulo é avisado.'));
+  const bts = el('div', 'obBts');
+  const sim = el('button', 'obSim', '🕊️ Sim, faleceu'); sim.type = 'button';
+  const nao = el('button', 'obNao', 'Cancelar'); nao.type = 'button';
+  bts.append(sim, nao); conf.appendChild(bts);
+  ob.onclick = () => { ob.hidden = true; conf.hidden = false; c.classList.add('obAberto'); conf.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); };
+  nao.onclick = () => { conf.hidden = true; ob.hidden = false; c.classList.remove('obAberto'); };
+  sim.onclick = () => {
+    c.classList.add('obFeito'); conf.replaceChildren(el('b', null, '🕊️ Óbito registrado'), el('span', null, 'O Paulo foi avisado. O contato foi para "Feitos", onde dá para desfazer.'));
+    setTimeout(() => informarObito(i), 1600);
+  };
+  c.appendChild(ob); c.appendChild(conf);
   const dt = el('details', 'msg'); dt.appendChild(el('summary', null, 'Ver a mensagem')); dt.appendChild(el('p', null, m)); c.appendChild(dt);
   return c;
 }
@@ -1391,6 +1420,17 @@ function caixa(i, marcada) {
   return lb;
 }
 function cartaoFeito(i) {
+  if (morreu(i)) {
+    // óbito informado: mostra bem claro e deixa desfazer se tocou errado
+    const c = el('article', 'card obFeito');
+    const conf = el('div', 'obConf');
+    conf.appendChild(el('b', null, `🕊️ Óbito informado · ${capNome(i.a || '')}`));
+    conf.appendChild(el('span', null, `${capNome(i.c)} · o Paulo foi avisado.`));
+    const des = el('button', 'obNao', '↩ Desfazer (toquei errado)'); des.type = 'button';
+    des.onclick = () => desfazerObito(i);
+    conf.appendChild(des); c.appendChild(conf);
+    return c;
+  }
   const c = el('article', 'card ok');
   const t = el('div', 'txt'); t.appendChild(el('div', 'nome', capNome(i.c))); t.appendChild(el('div', 'det', `Enviada às ${hora(feitoEm(i.k))} · ${i.a}`));
   const cx = caixa(i, true); cx.prepend(t); cx.querySelector('.txt:last-child').remove();
